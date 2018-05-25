@@ -88,6 +88,12 @@ search_server_api_index:
     defaults:
         _controller: apisearch_server.index_items_controller:indexItems
 
+search_server_api_update:
+    path: /v1/items
+    methods: ["PUT"]
+    defaults:
+        _controller: apisearch_server.update_items_controller:updateItems
+
 search_server_api_delete:
     path: /v1/items
     methods: ["DELETE"]

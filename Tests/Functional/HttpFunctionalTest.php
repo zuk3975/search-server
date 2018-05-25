@@ -21,6 +21,7 @@ use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Event\EventRepository;
 use Apisearch\Log\LogRepository;
+use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
@@ -98,6 +99,26 @@ abstract class HttpFunctionalTest extends ServiceFunctionalTest
             $repository->addItem($item);
         }
         $repository->flush();
+    }
+
+    /**
+     * Update using the bus.
+     *
+     * @param QueryModel $query
+     * @param Changes    $changes
+     * @param string     $appId
+     * @param string     $index
+     * @param Token      $token
+     */
+    public function updateItems(
+        QueryModel $query,
+        Changes $changes,
+        string $appId = null,
+        string $index = null,
+        Token $token = null
+    ) {
+        self::configureRepository($appId, $index, $token)
+            ->updateItems($query, $changes);
     }
 
     /**

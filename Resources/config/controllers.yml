@@ -59,17 +59,14 @@ services:
         arguments:
             - "@tactician.commandbus.command"
 
-    #
-    # Controllers with query bus
-    #
-    apisearch_server.query_controller:
-        class: Apisearch\Server\Controller\QueryController
-        arguments:
-            - "@tactician.commandbus.query"
-            - "@apisearch_server.events_repository"
-
     apisearch_server.index_items_controller:
         class: Apisearch\Server\Controller\IndexItemsController
+        arguments:
+            - "@tactician.commandbus.command"
+            - "@apisearch_server.events_repository"
+
+    apisearch_server.update_items_controller:
+        class: Apisearch\Server\Controller\UpdateItemsController
         arguments:
             - "@tactician.commandbus.command"
             - "@apisearch_server.events_repository"
@@ -78,6 +75,15 @@ services:
         class: Apisearch\Server\Controller\DeleteItemsController
         arguments:
             - "@tactician.commandbus.command"
+            - "@apisearch_server.events_repository"
+
+    #
+    # Controllers with query bus
+    #
+    apisearch_server.query_controller:
+        class: Apisearch\Server\Controller\QueryController
+        arguments:
+            - "@tactician.commandbus.query"
             - "@apisearch_server.events_repository"
 
     apisearch_server.events_controller:

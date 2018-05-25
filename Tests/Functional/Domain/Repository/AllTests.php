@@ -23,6 +23,7 @@ use Apisearch\Result\Result;
  */
 trait AllTests
 {
+    use UpdateItemsTest;
     use ScoreStrategyTest;
     use SearchTest;
     use HealthTest;
