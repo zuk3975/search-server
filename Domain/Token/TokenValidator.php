@@ -112,6 +112,7 @@ class TokenValidator
                 !in_array($referrer, $token->getHttpReferrers())
             ) ||
             (
+                !empty($indexId) &&
                 !empty($token->getIndices()) &&
                 !in_array($indexId, $token->getIndices())
             ) ||

@@ -38,6 +38,8 @@ class CreateIndexController extends ControllerWithBus
     public function createIndex(Request $request): JsonResponse
     {
         $query = $request->query;
+        $requestBody = $request->request;
+        $plainConfig = $requestBody->get(Http::CONFIG_FIELD, '{}');
 
         $this
             ->commandBus
@@ -47,7 +49,7 @@ class CreateIndexController extends ControllerWithBus
                     $query->get(Http::INDEX_FIELD)
                 ),
                 $query->get(Http::TOKEN_FIELD),
-                ImmutableConfig::createFromArray($query->get(Http::CONFIG_FIELD, []))
+                ImmutableConfig::createFromArray(json_decode($plainConfig, true))
             ));
 
         return new JsonResponse('Index created', 200);

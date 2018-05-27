@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller\Listener;
 
 use Apisearch\Exception\InvalidTokenException;
+use Apisearch\Http\Http;
 use Apisearch\Server\Domain\Token\TokenValidator;
 use Apisearch\Token\Token;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -52,7 +53,7 @@ class TokenValidationOverHTTP
     {
         $request = $event->getRequest();
         $query = $request->query;
-        $token = $query->get('token');
+        $token = $query->get(Http::TOKEN_FIELD);
         if (is_null($token)) {
             throw InvalidTokenException::createInvalidTokenPermissions('');
         }
@@ -67,8 +68,8 @@ class TokenValidationOverHTTP
         $token = $this
             ->tokenValidator
             ->validateToken(
-                $query->get('app_id', ''),
-                $query->get('index_id', ''),
+                $query->get(Http::APP_ID_FIELD, ''),
+                $query->get(Http::INDEX_FIELD, ''),
                 $tokenString,
                 $origin,
                 $request->getPathInfo(),
@@ -77,6 +78,6 @@ class TokenValidationOverHTTP
 
         $request
             ->query
-            ->set('token', $token);
+            ->set(Http::TOKEN_FIELD, $token);
     }
 }

@@ -15,6 +15,14 @@ config:
         php_errors:
             log: true
 
+    # config/services.yaml
+    services:
+        # default configuration for services in *this* file
+        _defaults:
+            autowire: false
+            autoconfigure: false
+            public: true
+
     monolog:
         handlers:
             main:

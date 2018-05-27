@@ -100,17 +100,15 @@ class AddTokenCommand extends CommandWithBusAndGodToken
     }
 
     /**
-     * Executes the current command.
+     * Dispatch domain event.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function dispatchDomainEvent(
+        InputInterface $input,
+        OutputInterface $output
+    ) {
         $this
             ->commandBus
             ->handle(new AddToken(
@@ -131,5 +129,33 @@ class AddTokenCommand extends CommandWithBusAndGodToken
                     (int) $input->getOption('ttl')
                 )
             ));
+    }
+
+    /**
+     * Dispatch domain event.
+     *
+     * @return string
+     */
+    protected function getHeader(): string
+    {
+        return 'Add token';
+    }
+
+    /**
+     * Get success message.
+     *
+     * @param InputInterface $input
+     * @param mixed          $result
+     *
+     * @return string
+     */
+    protected function getSuccessMessage(
+        InputInterface $input,
+        $result
+    ): string {
+        return sprintf(
+            'Token with UUID <%s> added properly',
+            $input->getArgument('uuid')
+        );
     }
 }

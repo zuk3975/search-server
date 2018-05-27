@@ -16,15 +16,18 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Command\ApisearchCommand;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
+use Exception;
 use League\Tactician\CommandBus;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CommandWithBusAndGodToken.
  */
-class CommandWithBusAndGodToken extends Command
+abstract class CommandWithBusAndGodToken extends ApisearchCommand
 {
     /**
      * @var CommandBus
@@ -88,4 +91,68 @@ class CommandWithBusAndGodToken extends Command
             $appId
         );
     }
+
+    /**
+     * Executes the current command.
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method.
+     *
+     * @return null|int null or 0 if everything went fine, or an error code
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->startCommand($output);
+        try {
+            $result = $this->dispatchDomainEvent(
+                $input,
+                $output
+            );
+            $this->printMessage(
+                $output,
+                $this->getHeader(),
+                $this->getSuccessMessage($input, $result)
+            );
+        } catch (Exception $e) {
+            $this->printMessageFail(
+                $output,
+                $this->getHeader(),
+                $e->getMessage()
+            );
+        }
+
+        $this->finishCommand($output);
+    }
+
+    /**
+     * Dispatch domain event.
+     *
+     * @return string
+     */
+    abstract protected function getHeader(): string;
+
+    /**
+     * Dispatch domain event.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    abstract protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output);
+
+    /**
+     * Get success message.
+     *
+     * @param InputInterface $input
+     * @param mixed          $result
+     *
+     * @return string
+     */
+    abstract protected function getSuccessMessage(
+        InputInterface $input,
+        $result
+    ): string;
 }

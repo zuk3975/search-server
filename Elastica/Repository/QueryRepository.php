@@ -167,7 +167,7 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
             );
         }
 
-        /**
+        /*
          * @var ElasticaResult
          */
         foreach ($elasticaResults['results'] as $elasticaResult) {
