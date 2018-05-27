@@ -49,16 +49,24 @@ class DeleteTokenCommand extends CommandWithBusAndGodToken
     }
 
     /**
-     * Executes the current command.
+     * Dispatch domain event.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
+     * @return string
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function getHeader(): string
+    {
+        return 'Create token';
+    }
+
+    /**
+     * Dispatch domain event.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
         $this
             ->commandBus
@@ -70,5 +78,23 @@ class DeleteTokenCommand extends CommandWithBusAndGodToken
                 $this->createGodToken($input->getArgument('app-id')),
                 TokenUUID::createById($input->getArgument('uuid'))
             ));
+    }
+
+    /**
+     * Get success message.
+     *
+     * @param InputInterface $input
+     * @param mixed          $result
+     *
+     * @return string
+     */
+    protected function getSuccessMessage(
+        InputInterface $input,
+        $result
+    ): string {
+        return sprintf(
+            'Token with UUID <%s> deleted properly',
+            $input->getArgument('uuid')
+        );
     }
 }

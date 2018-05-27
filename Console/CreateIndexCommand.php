@@ -84,16 +84,24 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
     }
 
     /**
-     * Executes the current command.
+     * Dispatch domain event.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
+     * @return string
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function getHeader(): string
+    {
+        return 'Create index';
+    }
+
+    /**
+     * Dispatch domain event.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
         try {
             $this
@@ -113,7 +121,11 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                     ])
                 ));
         } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Index is already created. Skipping.');
+            $this->printInfoMessage(
+                $output,
+                $this->getHeader(),
+                'Index is already created. Skipping.'
+            );
         }
 
         if ($input->getOption('with-events')) {
@@ -134,13 +146,28 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
     }
 
     /**
+     * Get success message.
+     *
+     * @param InputInterface $input
+     * @param mixed          $result
+     *
+     * @return string
+     */
+    protected function getSuccessMessage(
+        InputInterface $input,
+        $result
+    ): string {
+        return 'Indices created properly';
+    }
+
+    /**
      * Create events index.
      *
      * @param string          $appId
      * @param string          $index
      * @param OutputInterface $output
      */
-    private function createEvents(
+    protected function createEvents(
         string $appId,
         string $index,
         OutputInterface $output
@@ -156,7 +183,11 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                     $this->createGodToken($appId)
                 ));
         } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Events index is already created. Skipping.');
+            $this->printInfoMessage(
+                $output,
+                $this->getHeader(),
+                'Events index is already created. Skipping.'
+            );
         }
     }
 
@@ -167,7 +198,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      * @param string          $index
      * @param OutputInterface $output
      */
-    private function createLogs(
+    protected function createLogs(
         string $appId,
         string $index,
         OutputInterface $output
@@ -183,7 +214,11 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                     $this->createGodToken($appId)
                 ));
         } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Logs index is already created. Skipping.');
+            $this->printInfoMessage(
+                $output,
+                $this->getHeader(),
+                'Logs index is already created. Skipping.'
+            );
         }
     }
 }

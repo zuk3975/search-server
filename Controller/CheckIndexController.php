@@ -45,7 +45,7 @@ class CheckIndexController extends ControllerWithBus
                     $query->get(Http::APP_ID_FIELD),
                     $query->get(Http::INDEX_FIELD)
                 ),
-                $query->get('token')
+                $query->get(Http::TOKEN_FIELD)
             ));
 
         return true === $alive
