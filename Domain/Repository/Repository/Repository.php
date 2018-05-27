@@ -21,6 +21,7 @@ use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Exception\TransportableException;
+use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Query\Query;
@@ -142,5 +143,19 @@ class Repository extends BaseRepository
         $this
             ->getRepository(ConfigRepository::class)
             ->configureIndex($config);
+    }
+
+    /**
+     * Update items.
+     *
+     * @param Query   $query
+     * @param Changes $changes
+     */
+    public function updateItems(
+        Query $query,
+        Changes $changes
+    )
+    {
+        // TODO: Implement updateItems() method.
     }
 }
