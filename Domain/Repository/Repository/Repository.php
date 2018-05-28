@@ -76,6 +76,24 @@ class Repository extends BaseRepository
     }
 
     /**
+     * Update items.
+     *
+     * @param Query   $query
+     * @param Changes $changes
+     */
+    public function updateItems(
+        Query $query,
+        Changes $changes
+    ) {
+        $this
+            ->getRepository(UpdateRepository::class)
+            ->updateItems(
+                $query,
+                $changes
+            );
+    }
+
+    /**
      * Create an index.
      *
      * @param ImmutableConfig $config
@@ -143,19 +161,5 @@ class Repository extends BaseRepository
         $this
             ->getRepository(ConfigRepository::class)
             ->configureIndex($config);
-    }
-
-    /**
-     * Update items.
-     *
-     * @param Query   $query
-     * @param Changes $changes
-     */
-    public function updateItems(
-        Query $query,
-        Changes $changes
-    )
-    {
-        // TODO: Implement updateItems() method.
     }
 }

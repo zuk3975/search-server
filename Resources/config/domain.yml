@@ -62,6 +62,14 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\IndexItems }
 
+    apisearch_server.comand_handler.update_items:
+        class: Apisearch\Server\Domain\CommandHandler\UpdateItemsHandler
+        arguments:
+            - "@apisearch.repository_main.default"
+            - "@apisearch_server.event_publisher"
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\UpdateItems }
+
     apisearch_server.comand_handler.create_events_index:
         class: Apisearch\Server\Domain\CommandHandler\CreateEventsIndexHandler
         arguments:

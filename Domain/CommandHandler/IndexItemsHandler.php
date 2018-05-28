@@ -26,7 +26,7 @@ use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 class IndexItemsHandler extends WithRepositoryAndEventPublisher
 {
     /**
-     * Reset the index.
+     * Index items.
      *
      * @param IndexItems $indexItems
      */

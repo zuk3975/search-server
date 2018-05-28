@@ -110,7 +110,11 @@ class QueryWasMade extends DomainEvent
      */
     public function readableOnlyToArray(): array
     {
-        return [];
+        return [
+            'filters' => array_map(function (Filter $filter) {
+                return $filter->toArray();
+            }, $this->appliedFilters),
+        ];
     }
 
     /**
@@ -124,9 +128,6 @@ class QueryWasMade extends DomainEvent
             'q' => $this->queryText,
             'q_empty' => empty($this->queryText),
             'q_length' => strlen($this->queryText),
-            'filters' => array_map(function (Filter $filter) {
-                return $filter->toArray();
-            }, $this->appliedFilters),
             'sort_field' => $this->sortField,
             'sort_direction' => $this->sortDirection,
             'size' => $this->size,

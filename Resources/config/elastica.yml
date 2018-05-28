@@ -48,6 +48,14 @@ services:
         tags:
             - {name: "apisearch_server.items_repository"}
 
+    apisearch_server.update_repository:
+        class: Apisearch\Server\Elastica\Repository\UpdateRepository
+        parent: apisearch_server.item_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_server.query_builder"
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
     apisearch_server.elastica_delete_repository:
         class: Apisearch\Server\Elastica\Repository\DeleteRepository
         parent: apisearch_server.item_elastica_with_app_id_wrapper

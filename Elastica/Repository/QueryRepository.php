@@ -366,6 +366,7 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
                 }
             }
         }
+
         Campaign::MODE_BOOST === $enabledCampaign->getMode()
             ? $elasticaQuery->addShould($boolQuery)
             : $elasticaQuery->addMust($boolQuery);
