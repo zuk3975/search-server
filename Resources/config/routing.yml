@@ -1,6 +1,3 @@
-#
-# Write endpoints
-#
 search_server_api_create_index:
     path: /v1/index
     methods: ["POST"]
@@ -73,9 +70,6 @@ search_server_api_delete_token:
     defaults:
         _controller: apisearch_server.delete_token_controller:deleteToken
 
-#
-# Read endpoints
-#
 search_server_api_query:
     path: /v1
     methods: ["GET"]

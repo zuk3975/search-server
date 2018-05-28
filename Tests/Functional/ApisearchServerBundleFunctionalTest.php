@@ -216,7 +216,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                         ],
                         'search_socket' => [
                             'adapter' => 'http',
-                            'endpoint' => 'http://127.0.0.1:8999',
+                            'endpoint' => 'http://127.0.0.1:8200',
                             'app_id' => self::$appId,
                             'token' => self::$godToken,
                             'test' => true,
@@ -493,28 +493,13 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @param string     $index
      * @param Token      $token
      */
-    public function updateItems(
+    abstract public function updateItems(
         QueryModel $query,
         Changes $changes,
         string $appId = null,
         string $index = null,
         Token $token = null
-    ) {
-        self::getStatic('tactician.commandbus')
-            ->handle(new UpdateItems(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    ),
-                $query,
-                $changes
-            ));
-    }
+    );
 
     /**
      * Reset index using the bus.

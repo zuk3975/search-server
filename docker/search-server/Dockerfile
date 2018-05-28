@@ -23,6 +23,7 @@ RUN apt-get install -y curl && \
 
 RUN mkdir /var/www/apisearch
 VOLUME /var/www/apisearch
+VOLUME /var/log/supervisor
 
 COPY supervisor-search-server.conf /etc/supervisor/conf.d/search-server.conf
 COPY docker-entrypoint.sh /

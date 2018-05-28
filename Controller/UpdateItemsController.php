@@ -44,6 +44,7 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
         $this->configureEventRepository($request);
         $query = $request->query;
         $requestBody = $request->request;
+
         $plainQuery = $requestBody->get(Http::QUERY_FIELD, null);
         if (!is_string($plainQuery)) {
             throw InvalidFormatException::queryFormatNotValid(json_encode($plainQuery));
@@ -61,9 +62,9 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
                     $query->get(Http::APP_ID_FIELD),
                     $query->get(Http::INDEX_FIELD)
                 ),
-                $query->get('token'),
+                $query->get(Http::TOKEN_FIELD),
                 QueryModel::createFromArray(json_decode($plainQuery, true)),
-                Changes::createFromArray(json_decode($plainQuery, true))
+                Changes::createFromArray(json_decode($changes, true))
             ));
 
         return new JsonResponse('Items updated', 200);
