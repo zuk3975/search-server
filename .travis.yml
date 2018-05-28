@@ -20,7 +20,7 @@ before_script:
   - chmod +x docker/run-tests
 
 script:
-  - docker exec -i -t $(docker ps -qf "name=apisearch") /var/www/apisearch/docker/run-tests
+  - docker exec -i -t $(docker ps -qf "name=apisearch_server") /var/www/apisearch/docker/run-tests
 
 after_script:
   - docker-compose down

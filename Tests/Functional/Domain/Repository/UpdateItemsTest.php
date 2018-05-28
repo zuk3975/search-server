@@ -30,7 +30,6 @@ trait UpdateItemsTest
      */
     public function testUpdateBasicFields()
     {
-        $this->markTestSkipped('Enable when elastica UpdateByQuery commit is merged to master');
         $this->updateItems(
             Query::createMatchAll(),
             Changes::create()
@@ -115,7 +114,6 @@ trait UpdateItemsTest
      */
     public function testArrayUpdates()
     {
-        $this->markTestSkipped('Enable when elastica UpdateByQuery commit is merged to master');
         $this->updateItems(
             Query::createByUUID(ItemUUID::createByComposedUUID('4~bike')),
             Changes::create()

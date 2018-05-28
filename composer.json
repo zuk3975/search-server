@@ -15,7 +15,7 @@
         "symfony/http-kernel": "^3.4|^4.0",
         "symfony/monolog-bundle" : "^3.2",
         "symfony/dependency-injection" : "^3.4",
-        "ruflin/elastica": "^6.0",
+        "ruflin/elastica": "dev-master@dev",
         "league/tactician-bundle": "^1.1",
         "nesbot/carbon": "^1.22",
 

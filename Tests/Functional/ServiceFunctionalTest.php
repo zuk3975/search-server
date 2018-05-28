@@ -18,6 +18,7 @@ namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
+use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
@@ -38,6 +39,7 @@ use Apisearch\Server\Domain\Command\DeleteLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteToken;
 use Apisearch\Server\Domain\Command\IndexItems;
 use Apisearch\Server\Domain\Command\ResetIndex;
+use Apisearch\Server\Domain\Command\UpdateItems;
 use Apisearch\Server\Domain\Query\CheckHealth;
 use Apisearch\Server\Domain\Query\CheckIndex;
 use Apisearch\Server\Domain\Query\Ping;
@@ -139,6 +141,38 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appId ?? self::$appId
                     ),
                 $items
+            ));
+    }
+
+    /**
+     * Update using the bus.
+     *
+     * @param QueryModel $query
+     * @param Changes    $changes
+     * @param string     $appId
+     * @param string     $index
+     * @param Token      $token
+     */
+    public function updateItems(
+        QueryModel $query,
+        Changes $changes,
+        string $appId = null,
+        string $index = null,
+        Token $token = null
+    ) {
+        self::getStatic('tactician.commandbus')
+            ->handle(new UpdateItems(
+                RepositoryReference::create(
+                    $appId ?? self::$appId,
+                    $index ?? self::$index
+                ),
+                $token ??
+                    new Token(
+                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
+                        $appId ?? self::$appId
+                    ),
+                $query,
+                $changes
             ));
     }
 
