@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f918005c4728c986c48bbcfa6e96f90d",
+    "content-hash": "9dcfbb3c794fadaa63ae71c55bcd39a7",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -2824,16 +2824,16 @@
         },
         {
             "name": "ruflin/elastica",
-            "version": "dev-master",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ruflin/Elastica.git",
-                "reference": "1d169b643efdfecf5b5321fdbde08e97d2643694"
+                "reference": "8a6a3b2e71fdf7c96ad92fd2622bcc5904696fcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ruflin/Elastica/zipball/1d169b643efdfecf5b5321fdbde08e97d2643694",
-                "reference": "1d169b643efdfecf5b5321fdbde08e97d2643694",
+                "url": "https://api.github.com/repos/ruflin/Elastica/zipball/8a6a3b2e71fdf7c96ad92fd2622bcc5904696fcf",
+                "reference": "8a6a3b2e71fdf7c96ad92fd2622bcc5904696fcf",
                 "shasum": ""
             },
             "require": {
@@ -2878,7 +2878,7 @@
                 "client",
                 "search"
             ],
-            "time": "2018-05-28 10:54:56"
+            "time": "2018-05-29T08:31:52+00:00"
         },
         {
             "name": "symfony/cache",
@@ -6292,7 +6292,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ruflin/elastica": 20,
         "graphaware/neo4j-php-client": 15
     },
     "prefer-stable": true,
