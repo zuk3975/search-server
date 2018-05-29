@@ -70,7 +70,7 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
         $godToken = $this->createGodToken($appId);
 
         foreach ([
-            'admin' => Endpoints::readWrite(),
+            'admin' => [],
             'query only' => Endpoints::queryOnly(),
             'events' => Endpoints::eventsOnly(),
             'interaction' => Endpoints::interactionOnly(),
