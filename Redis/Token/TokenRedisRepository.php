@@ -100,6 +100,22 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     }
 
     /**
+     * Get tokens.
+     *
+     * @return Token[]
+     */
+    public function getTokens(): array
+    {
+        $tokens = $this
+            ->redisClient
+            ->hGetAll($this->composeRedisKey($this->getAppId()));
+
+        return array_map(function (string $token) {
+            return Token::createFromArray(json_decode($token, true));
+        }, $tokens);
+    }
+
+    /**
      * Get token by reference.
      *
      * @param string $appId

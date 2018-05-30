@@ -139,7 +139,7 @@ abstract class CommandWithBusAndGodToken extends ApisearchCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return mixed
+     * @return mixed|null
      */
     abstract protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output);
 

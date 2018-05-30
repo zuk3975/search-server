@@ -162,6 +162,14 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\QueryLogs }
 
+    apisearch_server.query_handler.get_tokens:
+        class: Apisearch\Server\Domain\QueryHandler\GetTokensHandler
+        arguments:
+            - "@apisearch.app_repository_main"
+            - "@apisearch_server.event_publisher"
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Query\GetTokens }
+
     apisearch_server.query_handler.check_health:
         class: Apisearch\Server\Domain\QueryHandler\CheckHealthHandler
         arguments:

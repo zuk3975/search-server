@@ -237,4 +237,34 @@ class TokenTest extends HttpFunctionalTest
             $token
         );
     }
+
+    /**
+     * Test get tokens.
+     *
+     * @group now
+     */
+    public function testGetTokens()
+    {
+        $tokenUUID = TokenUUID::createById('12345');
+        $token = new Token(
+            $tokenUUID,
+            self::$appId
+        );
+        $this->addToken($token);
+        $this->assertCount(1, $this->getTokens());
+        $this->deleteToken($tokenUUID);
+        $this->assertCount(0, $this->getTokens());
+        $this->addToken($token);
+        $this->addToken($token);
+        $this->addToken($token);
+        $this->addToken(new Token(
+            TokenUUID::createById('56789'),
+            self::$appId
+        ));
+        $this->addToken(new Token(
+            TokenUUID::createById('56789'),
+            self::$anotherAppId
+        ));
+        $this->assertCount(2, $this->getTokens());
+    }
 }

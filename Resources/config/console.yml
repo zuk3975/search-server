@@ -69,3 +69,10 @@ services:
         public: true
         tags:
             -  { name: console.command }
+
+    apisearch_server.print_tokens_command:
+        class: Apisearch\Server\Console\PrintTokensCommand
+        parent: apisearch_server.command_with_bus_and_god_token
+        public: true
+        tags:
+            -  { name: console.command }

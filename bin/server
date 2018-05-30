@@ -17,7 +17,7 @@
  * Errors to Exceptions
  */
 function error_to_exception($code, $message, $file, $line, $context) {
-    throw new Exception($code, $message, $file, $line, $context);
+    throw new Exception($message, $code);
 }
 set_error_handler( 'error_to_exception' );
 

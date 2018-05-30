@@ -52,7 +52,7 @@ class GenerateBasicTokensCommandTest extends CommandTest
         ), $output);
 
         $result = $output->fetch();
-        var_dump($result);
+
         preg_match('~UUID\s*(.*?)\s*generated for admin~', $result, $matches);
         $uuidAdmin = $matches[1];
         preg_match('~UUID\s*(.*?)\s*generated for query~', $result, $matches);

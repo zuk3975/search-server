@@ -52,4 +52,16 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
             ->getRepository(TokenRepository::class)
             ->deleteToken($tokenUUID);
     }
+
+    /**
+     * Get tokens.
+     *
+     * @return Token[]
+     */
+    public function getTokens(): array
+    {
+        return $this
+            ->getRepository(TokenRepository::class)
+            ->getTokens();
+    }
 }

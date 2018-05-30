@@ -112,6 +112,12 @@ services:
         arguments:
             - "@tactician.commandbus.query"
 
+    apisearch_server.get_tokens_controller:
+        class: Apisearch\Server\Controller\GetTokensController
+        arguments:
+            - "@tactician.commandbus.query"
+
+
     #
     # Controller listener
     #
