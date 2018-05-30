@@ -242,6 +242,22 @@ abstract class HttpFunctionalTest extends ServiceFunctionalTest
     }
 
     /**
+     * Get tokens.
+     *
+     * @param string $appId
+     * @param Token  $token
+     *
+     * @return Token[]
+     */
+    public static function getTokens(
+        string $appId = null,
+        Token $token = null
+    ) {
+        return self::configureAppRepository($appId, $token)
+            ->getTokens();
+    }
+
+    /**
      * Create event index using the bus.
      *
      * @param string $appId

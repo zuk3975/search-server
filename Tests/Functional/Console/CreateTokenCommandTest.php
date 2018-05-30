@@ -30,7 +30,7 @@ class CreateTokenCommandTest extends CommandTest
     {
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--quiet' => true,
@@ -41,7 +41,7 @@ class CreateTokenCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:add-token',
+                'command' => 'apisearch-server:add-token',
                 'uuid' => $this->token,
                 'app-id' => self::$appId,
                 '--index' => [self::$index],
@@ -53,7 +53,7 @@ class CreateTokenCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-token',
+                'command' => 'apisearch-server:delete-token',
                 'uuid' => $this->token,
                 'app-id' => self::$appId,
                 '--quiet' => true,
@@ -64,7 +64,7 @@ class CreateTokenCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--quiet' => true,

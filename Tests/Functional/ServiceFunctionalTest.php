@@ -42,6 +42,7 @@ use Apisearch\Server\Domain\Command\ResetIndex;
 use Apisearch\Server\Domain\Command\UpdateItems;
 use Apisearch\Server\Domain\Query\CheckHealth;
 use Apisearch\Server\Domain\Query\CheckIndex;
+use Apisearch\Server\Domain\Query\GetTokens;
 use Apisearch\Server\Domain\Query\Ping;
 use Apisearch\Server\Domain\Query\Query;
 use Apisearch\Server\Domain\Query\QueryEvents;
@@ -365,6 +366,32 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appId ?? self::$appId
                     ),
                 $tokenUUID
+            ));
+    }
+
+    /**
+     * Get tokens.
+     *
+     * @param string $appId
+     * @param Token  $token
+     *
+     * @return Token[]
+     */
+    public static function getTokens(
+        string $appId = null,
+        Token $token = null
+    ) {
+        self::getStatic('tactician.commandbus')
+            ->handle(new GetTokens(
+                RepositoryReference::create(
+                    $appId ?? self::$appId,
+                    ''
+                ),
+                $token ??
+                    new Token(
+                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
+                        $appId ?? self::$appId
+                    )
             ));
     }
 

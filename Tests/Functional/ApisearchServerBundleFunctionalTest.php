@@ -231,7 +231,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             [
                 '@ApisearchServerBundle/Resources/config/routing.yml',
             ],
-            'test', true
+            'prod', false
         );
     }
 
@@ -413,11 +413,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             static::deleteLogsIndex($appId);
         } catch (ResourceNotAvailableException $e) {
         }
-        try {
-            static::deleteAllInteractions($appId);
-        } catch (ResourceNotAvailableException $e) {
-        } catch (ErrorException $e) {
-        }
     }
 
     /**
@@ -594,6 +589,19 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      */
     abstract public static function deleteToken(
         TokenUUID $tokenUUID,
+        string $appId = null,
+        Token $token = null
+    );
+
+    /**
+     * Get tokens.
+     *
+     * @param string $appId
+     * @param Token  $token
+     *
+     * @return Token[]
+     */
+    abstract public static function getTokens(
         string $appId = null,
         Token $token = null
     );

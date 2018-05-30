@@ -12,6 +12,8 @@ config:
     framework:
         form: false
         assets: false
+        session:
+            handler_id: null
         php_errors:
             log: true
 

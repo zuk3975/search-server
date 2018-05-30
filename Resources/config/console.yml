@@ -10,7 +10,7 @@ services:
             - "@apisearch_server.event_store"
             - "@rs_queue.publisher"
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:domain-events-consumer }
 
     apisearch_server.logs_consumer:
         class: Apisearch\Server\Console\LogsConsumer
@@ -19,7 +19,7 @@ services:
             - "@apisearch.log_repository_main.default"
             - "@rs_queue.publisher"
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:logs-consumer }
 
     apisearch_server.command_with_bus_and_god_token:
         class: Apisearch\Server\Console\CommandWithBusAndGodToken
@@ -31,41 +31,41 @@ services:
     apisearch_server.create_index_command:
         class: Apisearch\Server\Console\CreateIndexCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:create-index }
 
     apisearch_server.delete_index_command:
         class: Apisearch\Server\Console\DeleteIndexCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:delete-index }
 
     apisearch_server.check_index_command:
         class: Apisearch\Server\Console\CheckIndexCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:check-index }
 
     apisearch_server.add_token_command:
         class: Apisearch\Server\Console\AddTokenCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:add-token }
 
     apisearch_server.delete_token_command:
         class: Apisearch\Server\Console\DeleteTokenCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch-server:delete-token }
 
     apisearch_server.generate_basic_tokens_command:
         class: Apisearch\Server\Console\GenerateBasicTokensCommand
         parent: apisearch_server.command_with_bus_and_god_token
-        public: true
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: apisearch:generate-basic-tokens }
+
+    apisearch_server.print_tokens_command:
+        class: Apisearch\Server\Console\PrintTokensCommand
+        parent: apisearch_server.command_with_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:print-tokens }

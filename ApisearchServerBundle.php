@@ -67,6 +67,7 @@ class ApisearchServerBundle extends BaseBundle
             MonologBundle::class,
             BaseBundle::class,
             RSQueueBundle::class,
+            ApisearchBundle::class,
             new TacticianBundle(),
         ];
     }
