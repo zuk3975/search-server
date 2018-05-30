@@ -38,7 +38,6 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:create-index')
             ->setDescription('Create an index')
             ->addArgument(
                 'app-id',

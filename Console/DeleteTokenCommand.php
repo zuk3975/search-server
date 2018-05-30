@@ -34,7 +34,6 @@ class DeleteTokenCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:delete-token')
             ->setDescription('Delete a token')
             ->addArgument(
                 'uuid',

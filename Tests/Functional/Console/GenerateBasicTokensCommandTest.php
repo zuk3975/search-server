@@ -37,7 +37,7 @@ class GenerateBasicTokensCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
             ]
@@ -46,7 +46,7 @@ class GenerateBasicTokensCommandTest extends CommandTest
         $output = new BufferedOutput();
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:generate-basic-tokens',
+                'command' => 'apisearch-server:generate-basic-tokens',
                 'app-id' => static::$appId,
             ]
         ), $output);

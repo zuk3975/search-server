@@ -17,7 +17,7 @@
  * Errors to Exceptions
  */
 function error_to_exception($code, $message, $file, $line, $context) {
-    throw new Exception($message, $code);
+    throw new \Exception($message, $code);
 }
 set_error_handler( 'error_to_exception' );
 
@@ -34,7 +34,7 @@ $kernel = new \Mmoreram\BaseBundle\Kernel\BaseKernel(
     $oneBundleAppConfig->getConfig(),
     $oneBundleAppConfig->getRoutes(),
     $environment,
-    true,
+    false,
     realpath(__DIR__ . '/../var')
 );
 
@@ -137,9 +137,7 @@ $loop->run();
  */
 function exceptionToSyslog(\Exception $e)
 {
-    openlog("search-server", LOG_PID, LOG_LOCAL0);
-    echo("[{$e->getFile()}] [{$e->getCode()}] ::: [{$e->getMessage()}]");
-    closelog();
+    echo("[{$e->getFile()}] [{$e->getCode()}] ::: [{$e->getMessage()}]") . PHP_EOL;
 }
 
 /**
@@ -152,7 +150,5 @@ function toSyslog(
     string $level,
     string $content
 ) {
-    openlog("search-server", LOG_PID, LOG_LOCAL0);
-    echo($content);
-    closelog();
+    echo($content) . PHP;
 }

@@ -20,10 +20,9 @@ use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 use Apisearch\Server\Domain\Repository\AppRepository\TokenRepository;
 use Apisearch\Server\Domain\Token\TokenLocator;
+use Apisearch\Server\Redis\RedisWrapper;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
-use Redis;
-use RedisCluster;
 
 /**
  * Class TokenRedisRepository.
@@ -40,20 +39,20 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     const REDIS_KEY = 'apisearch_tokens';
 
     /**
-     * @var Redis|RedisCluster
+     * @var RedisWrapper
      *
-     * redis client
+     * Redis wrapper
      */
-    private $redisClient;
+    private $redisWrapper;
 
     /**
      * TokenRedisRepository constructor.
      *
-     * @param Redis|RedisCluster $redisClient
+     * @param RedisWrapper $redisWrapper
      */
-    public function __construct($redisClient)
+    public function __construct(RedisWrapper $redisWrapper)
     {
-        $this->redisClient = $redisClient;
+        $this->redisWrapper = $redisWrapper;
     }
 
     /**
@@ -76,7 +75,8 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     public function addToken(Token $token)
     {
         $this
-            ->redisClient
+            ->redisWrapper
+            ->getClient()
             ->hSet(
                 $this->composeRedisKey($this->getAppId()),
                 $token->getTokenUUID()->composeUUID(),
@@ -92,7 +92,8 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     public function deleteToken(TokenUUID $tokenUUID)
     {
         $this
-            ->redisClient
+            ->redisWrapper
+            ->getClient()
             ->hDel(
                 $this->composeRedisKey($this->getAppId()),
                 $tokenUUID->composeUUID()
@@ -107,7 +108,8 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     public function getTokens(): array
     {
         $tokens = $this
-            ->redisClient
+            ->redisWrapper
+            ->getClient()
             ->hGetAll($this->composeRedisKey($this->getAppId()));
 
         return array_map(function (string $token) {
@@ -128,7 +130,8 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
         string $tokenReference
     ): ? Token {
         $token = $this
-            ->redisClient
+            ->redisWrapper
+            ->getClient()
             ->hGet(
                 $this->composeRedisKey($appId),
                 $tokenReference

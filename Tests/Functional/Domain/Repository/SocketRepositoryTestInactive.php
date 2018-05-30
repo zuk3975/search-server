@@ -21,7 +21,7 @@ use Apisearch\Server\Tests\Functional\SocketFunctionalTest;
 /**
  * Class HttpRepositoryTest.
  */
-class SocketRepositoryTest extends SocketFunctionalTest
+class SocketRepositoryTestInactive extends SocketFunctionalTest
 {
     use AllTests;
 }

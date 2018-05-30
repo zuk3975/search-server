@@ -33,7 +33,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--quiet' => true,
@@ -46,7 +46,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--quiet' => true,
@@ -66,7 +66,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-events' => true,
@@ -80,7 +80,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-events' => true,
@@ -102,7 +102,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-logs' => true,
@@ -116,7 +116,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-logs' => true,
@@ -139,7 +139,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-events' => true,
@@ -154,7 +154,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--with-events' => true,
@@ -176,7 +176,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
         $this->assertNotExistsIndex();
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:create-index',
+                'command' => 'apisearch-server:create-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--synonym' => [
@@ -201,7 +201,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
 
         static::$application->run(new ArrayInput(
             [
-                'command' => 'apisearch:delete-index',
+                'command' => 'apisearch-server:delete-index',
                 'app-id' => self::$appId,
                 'index' => self::$index,
                 '--quiet' => true,

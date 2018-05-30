@@ -37,7 +37,6 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:delete-index')
             ->setDescription('Delete an index')
             ->addArgument(
                 'app-id',

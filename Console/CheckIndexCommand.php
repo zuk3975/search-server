@@ -34,7 +34,6 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:check-index')
             ->setDescription('Checks an index')
             ->addArgument(
                 'app-id',

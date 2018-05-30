@@ -231,7 +231,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             [
                 '@ApisearchServerBundle/Resources/config/routing.yml',
             ],
-            'test', true
+            'prod', false
         );
     }
 

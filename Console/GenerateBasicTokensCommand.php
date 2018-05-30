@@ -37,7 +37,6 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:generate-basic-tokens')
             ->setDescription('Generate a basic tokens ring')
             ->addArgument(
                 'app-id',

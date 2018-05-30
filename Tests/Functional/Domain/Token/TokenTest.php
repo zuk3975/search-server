@@ -69,6 +69,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -93,6 +94,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -132,6 +134,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -174,6 +177,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -194,6 +198,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -214,6 +219,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -236,6 +242,7 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -245,6 +252,8 @@ class TokenTest extends HttpFunctionalTest
      */
     public function testGetTokens()
     {
+        $this->deleteToken(TokenUUID::createById('56789'));
+        $this->deleteToken(TokenUUID::createById('12345'));
         $tokenUUID = TokenUUID::createById('12345');
         $token = new Token(
             $tokenUUID,
@@ -266,5 +275,7 @@ class TokenTest extends HttpFunctionalTest
             self::$anotherAppId
         ));
         $this->assertCount(2, $this->getTokens());
+        $this->deleteToken(TokenUUID::createById('56789'));
+        $this->deleteToken(TokenUUID::createById('12345'));
     }
 }

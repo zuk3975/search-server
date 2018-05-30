@@ -35,7 +35,6 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setName('apisearch:print-tokens')
             ->setDescription('Print all tokens of an app-id')
             ->addArgument(
                 'app-id',

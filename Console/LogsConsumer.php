@@ -64,16 +64,6 @@ class LogsConsumer extends ConsumerCommand
     }
 
     /**
-     * Configures the current command.
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-        $this->setName('apisearch-server:logs-consumer');
-    }
-
-    /**
      * Definition method.
      *
      * All RSQueue commands must implements its own define() method

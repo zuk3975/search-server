@@ -64,16 +64,6 @@ class EventStoreConsumer extends ConsumerCommand
     }
 
     /**
-     * Configures the current command.
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-        $this->setName('apisearch-server:domain-events-consumer');
-    }
-
-    /**
      * Definition method.
      *
      * All RSQueue commands must implements its own define() method
@@ -97,7 +87,6 @@ class EventStoreConsumer extends ConsumerCommand
         OutputInterface $output,
         array $data
     ) {
-        var_dump($data);
         $this
             ->eventStore
             ->setRepositoryReference(
