@@ -16,37 +16,24 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Controller;
 
-use Apisearch\Http\Http;
-use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Query\CheckIndex;
-use Symfony\Component\HttpFoundation\Request;
+use Apisearch\Server\Domain\Query\Ping;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class CheckIndexController.
+ * Class PingController.
  */
-class CheckIndexController extends ControllerWithBus
+class PingController extends ControllerWithBus
 {
     /**
-     * Create an index.
-     *
-     * @param Request $request
+     * Ping.
      *
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(): Response
     {
-        $query = $request->query;
-
         $alive = $this
             ->commandBus
-            ->handle(new CheckIndex(
-                RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
-                ),
-                $query->get(Http::TOKEN_FIELD)
-            ));
+            ->handle(new Ping());
 
         return true === $alive
             ? new Response('', Response::HTTP_OK)

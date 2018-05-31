@@ -34,7 +34,7 @@ class CreateLogsIndexController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function createLogsIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

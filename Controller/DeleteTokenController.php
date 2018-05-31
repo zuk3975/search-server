@@ -35,7 +35,7 @@ class DeleteTokenController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function deleteToken(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
         $requestBody = $request->request;

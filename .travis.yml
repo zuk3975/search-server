@@ -15,14 +15,15 @@ cache:
 install:
   - composer install --no-interaction
   - composer dump-autoload
-  - php bin/console cache:warmup --env=prod
 
 before_script:
   - docker-compose up --build -d
   - chmod +x docker/run-tests
+  - chmod +x docker/print-logs
 
 script:
   - docker exec -i -t $(docker ps -qf "name=apisearch_server") /var/www/apisearch/docker/run-tests
 
 after_script:
+  - docker exec -i -t $(docker ps -qf "name=apisearch_server") /var/www/apisearch/docker/print-logs
   - docker-compose down

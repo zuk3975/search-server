@@ -34,7 +34,7 @@ class CreateEventsIndexController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function createEventsIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

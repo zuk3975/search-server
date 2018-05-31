@@ -35,7 +35,7 @@ class GetTokensController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function getTokens(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cat /var/log/supervisor/search-server-0.log
+cat /var/log/supervisor/search-server-1.log
+cat /var/log/supervisor/search-server-2.log
+cat /var/log/supervisor/search-server-3.log
+cat /var/log/supervisor/search-server-4.log
+cat /var/log/supervisor/supervisord.log
+cat /var/www/apisearch/var/logs/prod.log

@@ -35,7 +35,7 @@ class AddInteractionController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function addInteraction(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

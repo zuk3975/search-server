@@ -34,7 +34,7 @@ class DeleteIndexController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function deleteIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

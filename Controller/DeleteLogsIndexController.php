@@ -34,7 +34,7 @@ class DeleteLogsIndexController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function deleteLogsIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

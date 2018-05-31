@@ -39,7 +39,7 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
      *
      * @throws InvalidFormatException
      */
-    public function updateItems(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $this->configureEventRepository($request);
         $query = $request->query;

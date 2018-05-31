@@ -39,7 +39,7 @@ class EventsController extends ControllerWithBus
      *
      * @throws InvalidTokenException
      */
-    public function query(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

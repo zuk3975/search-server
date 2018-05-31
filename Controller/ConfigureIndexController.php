@@ -36,7 +36,7 @@ class ConfigureIndexController extends ControllerWithBusAndEventRepository
      *
      * @return JsonResponse
      */
-    public function configureIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $this->configureEventRepository($request);
         $query = $request->query;
