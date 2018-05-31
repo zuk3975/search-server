@@ -3,3 +3,4 @@ vendor
 /bin/console
 /web
 app_deploy.yml
+/.env

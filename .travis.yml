@@ -15,6 +15,7 @@ cache:
 install:
   - composer install --no-interaction
   - composer dump-autoload
+  - cp docker/.env_default .env
 
 before_script:
   - docker-compose up --build -d
