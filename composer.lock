@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a66ec4b2c608c14c7021a684291d5fc",
+    "content-hash": "d955d293e8dfc6ec84d2b19ef53c24e7",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
-            "version": "0.1.10",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "b893f2206fa127933bf4c6d850bb455b54bc0ae2"
+                "reference": "650f12d2b25108a49ef76801bcae86588a30377a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/b893f2206fa127933bf4c6d850bb455b54bc0ae2",
-                "reference": "b893f2206fa127933bf4c6d850bb455b54bc0ae2",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/650f12d2b25108a49ef76801bcae86588a30377a",
+                "reference": "650f12d2b25108a49ef76801bcae86588a30377a",
                 "shasum": ""
             },
             "require": {
-                "apisearch-io/php-client": "^0.1.6",
+                "apisearch-io/php-client": "dev-master",
                 "php": ">=7.1",
                 "symfony/console": "^2.8|^3.0|^4.0",
                 "symfony/framework-bundle": "^2.8|^3.0|^4.0",
@@ -56,11 +56,11 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-05-30T16:36:53+00:00"
+            "time": "2018-05-31 18:04:20"
         },
         {
             "name": "apisearch-io/php-client",
-            "version": "0.1.20",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
@@ -106,7 +106,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-05-30T16:33:11+00:00"
+            "time": "2018-05-30 16:33:11"
         },
         {
             "name": "apisearch-io/react-socket-middleware-finite-server",
@@ -6297,6 +6297,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "apisearch-io/apisearch-bundle": 20,
+        "apisearch-io/php-client": 20,
         "graphaware/neo4j-php-client": 15
     },
     "prefer-stable": true,

@@ -51,8 +51,6 @@ class TokenTest extends HttpFunctionalTest
      * Test token without index permissions.
      *
      * @expectedException \Apisearch\Exception\InvalidTokenException
-     *
-     * @group chuli
      */
     public function testTokenWithoutIndexPermissions()
     {
@@ -247,8 +245,6 @@ class TokenTest extends HttpFunctionalTest
 
     /**
      * Test get tokens.
-     *
-     * @group now
      */
     public function testGetTokens()
     {

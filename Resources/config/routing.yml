@@ -128,7 +128,7 @@ search_server_api_check_health:
         _controller: apisearch_server.check_health_controller
 
 search_server_api_ping:
-    path: /ping
-    methods: ["HEAD", "GET"]
+    path: /
+    methods: ["HEAD"]
     defaults:
         _controller: apisearch_server.ping_controller
