@@ -86,14 +86,11 @@ class TokenValidator
         string $path,
         string $verb
     ): Token {
-
         $token = null;
         if ($tokenReference === $this->godToken) {
             $token = $this->createGodToken($appId);
-
         } elseif ($tokenReference === $this->pingToken) {
             $token = $this->createPingToken();
-
         } else {
             $token = $this
                 ->tokenLocator
@@ -163,7 +160,7 @@ class TokenValidator
             [],
             [
                 'head~~/', // Ping
-                'get~~/health' // Check health
+                'get~~/health', // Check health
             ]
         );
     }

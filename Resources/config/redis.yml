@@ -1,6 +1,6 @@
 services:
 
-    apiserach_server.redis_wrapper:
+    apisearch_server.redis_wrapper:
         class: Apisearch\Server\Redis\RedisWrapper
         lazy: true
         arguments:
@@ -9,7 +9,7 @@ services:
     apisearch_server.redis_token_repository:
         class: Apisearch\Server\Redis\Token\TokenRedisRepository
         arguments:
-            - "@apiserach_server.redis_wrapper"
+            - "@apisearch_server.redis_wrapper"
         tags:
             - {name: "apisearch_server.app_repository"}
 

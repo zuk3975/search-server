@@ -24,10 +24,10 @@ use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 class PingTest extends HttpFunctionalTest
 {
     /**
-     * Test ping with different tokens
+     * Test ping with different tokens.
      *
      * @param string $token
-     * @param int $responseCode
+     * @param int    $responseCode
      *
      * @dataProvider dataPing
      *
@@ -36,11 +36,10 @@ class PingTest extends HttpFunctionalTest
     public function testPing(
         string $token,
         int $responseCode
-    )
-    {
+    ) {
         $client = $this->createClient();
         $testRoute = static::get('router')->generate('search_server_api_ping', [
-            'token' => $token
+            'token' => $token,
         ]);
 
         $client->request(
@@ -55,11 +54,11 @@ class PingTest extends HttpFunctionalTest
     }
 
     /**
-     * Data for ping testing
+     * Data for ping testing.
      *
      * @return array
      */
-    public function dataPing() : array
+    public function dataPing(): array
     {
         return [
             [self::$pingToken, 200],

@@ -24,10 +24,10 @@ use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 class HealthTest extends HttpFunctionalTest
 {
     /**
-     * Test check health with different tokens
+     * Test check health with different tokens.
      *
      * @param string $token
-     * @param int $responseCode
+     * @param int    $responseCode
      *
      * @dataProvider dataCheckHealth
      *
@@ -36,11 +36,10 @@ class HealthTest extends HttpFunctionalTest
     public function testCheckHealth(
         string $token,
         int $responseCode
-    )
-    {
+    ) {
         $client = $this->createClient();
         $testRoute = static::get('router')->generate('search_server_api_check_health', [
-            'token' => $token
+            'token' => $token,
         ]);
 
         $client->request(
@@ -48,18 +47,31 @@ class HealthTest extends HttpFunctionalTest
             $testRoute
         );
 
+        $response = $client->getResponse();
         $this->assertEquals(
             $responseCode,
-            $client->getResponse()->getStatusCode()
+            $response->getStatusCode()
         );
+
+        if (200 === $responseCode) {
+            $this->assertEquals(
+                [
+                    'status' => [
+                        'elasticsearch' => 'green',
+                        'redis' => true,
+                    ],
+                ],
+                json_decode($response->getContent(), true)
+            );
+        }
     }
 
     /**
-     * Data for check health testing
+     * Data for check health testing.
      *
      * @return array
      */
-    public function dataCheckHealth() : array
+    public function dataCheckHealth(): array
     {
         return [
             [self::$pingToken, 200],
