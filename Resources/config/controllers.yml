@@ -112,7 +112,7 @@ services:
         arguments:
             - "@tactician.commandbus.query"
 
-    apisearch_server.check_ping_controller:
+    apisearch_server.ping_controller:
         class: Apisearch\Server\Controller\PingController
         arguments:
             - "@tactician.commandbus.query"

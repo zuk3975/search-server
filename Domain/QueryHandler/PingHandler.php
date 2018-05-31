@@ -50,17 +50,6 @@ class PingHandler
      */
     public function handle(Ping $ping): bool
     {
-        return $this->pingElasticsearch();
-    }
-
-    /**
-     * Ping elasticsearch.
-     */
-    private function pingElasticsearch()
-    {
-        return 200 === $this
-            ->client
-            ->request('_cat/master')
-            ->getStatus();
+        return true;
     }
 }

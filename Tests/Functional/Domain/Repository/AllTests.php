@@ -26,7 +26,6 @@ trait AllTests
     use UpdateItemsTest;
     use ScoreStrategyTest;
     use SearchTest;
-    use HealthTest;
     use MachineLearningTest;
     use IndexStatusTest;
     use ErrorRecoveryTest;

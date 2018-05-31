@@ -86,21 +86,24 @@ class TokenValidator
         string $path,
         string $verb
     ): Token {
-        if ($tokenReference === $this->godToken) {
-            return $this->createGodToken($appId);
-        }
 
-        if ($tokenReference === $this->pingToken) {
-            return $this->createPingToken();
+        $token = null;
+        if ($tokenReference === $this->godToken) {
+            $token = $this->createGodToken($appId);
+
+        } elseif ($tokenReference === $this->pingToken) {
+            $token = $this->createPingToken();
+
+        } else {
+            $token = $this
+                ->tokenLocator
+                ->getTokenByReference(
+                    $appId,
+                    $tokenReference
+                );
         }
 
         $endpoint = strtolower($verb.'~~'.trim($path, '/'));
-        $token = $this
-            ->tokenLocator
-            ->getTokenByReference(
-                $appId,
-                $tokenReference
-            );
 
         if (
             (!$token instanceof Token) ||
@@ -155,7 +158,13 @@ class TokenValidator
     {
         return new Token(
             TokenUUID::createById($this->pingToken),
-            ''
+            '',
+            [],
+            [],
+            [
+                'head~~/', // Ping
+                'get~~/health' // Check health
+            ]
         );
     }
 }

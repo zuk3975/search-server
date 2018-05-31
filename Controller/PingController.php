@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller;
 
 use Apisearch\Server\Domain\Query\Ping;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,7 +30,7 @@ class PingController extends ControllerWithBus
      *
      * @return Response
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
         $alive = $this
             ->commandBus
