@@ -17,6 +17,7 @@
  * Errors to Exceptions
  */
 function error_to_exception($code, $message, $file, $line, $context) {
+    var_dump($code, $message, $file, $line);
     throw new \Exception($message, $code);
 }
 set_error_handler( 'error_to_exception',  E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_USER_DEPRECATED);
@@ -102,7 +103,6 @@ $http = new \React\Http\Server(function (\Psr\Http\Message\ServerRequestInterfac
                 throw $e;
             }
 
-            print_r($httpResponse);
             $resolve($httpResponse);
         });
 

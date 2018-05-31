@@ -34,7 +34,7 @@ class DeleteAllInteractionsController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function deleteAllInteractions(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

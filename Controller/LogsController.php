@@ -36,7 +36,7 @@ class LogsController extends ControllerWithBus
      *
      * @return JsonResponse
      */
-    public function query(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
 

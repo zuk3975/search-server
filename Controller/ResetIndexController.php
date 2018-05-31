@@ -34,7 +34,7 @@ class ResetIndexController extends ControllerWithBusAndEventRepository
      *
      * @return JsonResponse
      */
-    public function resetIndex(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $this->configureEventRepository($request);
         $query = $request->query;
