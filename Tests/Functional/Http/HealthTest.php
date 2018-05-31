@@ -30,8 +30,6 @@ class HealthTest extends HttpFunctionalTest
      * @param int    $responseCode
      *
      * @dataProvider dataCheckHealth
-     *
-     * @group ht
      */
     public function testCheckHealth(
         string $token,

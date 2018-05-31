@@ -30,8 +30,6 @@ class PingTest extends HttpFunctionalTest
      * @param int    $responseCode
      *
      * @dataProvider dataPing
-     *
-     * @group ping
      */
     public function testPing(
         string $token,
