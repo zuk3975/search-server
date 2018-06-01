@@ -93,6 +93,8 @@ $http = new \React\Http\Server(function (\Psr\Http\Message\ServerRequestInterfac
                     $symfonyResponse->headers->all(),
                     $symfonyResponse->getContent()
                 );
+                $symfonyRequest = null;
+                $symfonyResponse = null;
 
                 /**
                  * Catching errors and sending to syslog

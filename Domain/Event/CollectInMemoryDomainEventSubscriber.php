@@ -59,4 +59,12 @@ class CollectInMemoryDomainEventSubscriber implements EventSubscriber
     {
         return $this->events;
     }
+
+    /**
+     * Flush events.
+     */
+    public function flushEvents()
+    {
+        $this->events = [];
+    }
 }
