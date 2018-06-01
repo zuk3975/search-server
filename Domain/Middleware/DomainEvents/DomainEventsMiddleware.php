@@ -20,6 +20,7 @@ use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\Event\CollectInMemoryDomainEventSubscriber;
 use Apisearch\Server\Domain\Event\DomainEvent;
 use Apisearch\Server\Domain\Event\EventPublisher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class DomainEventsMiddleware.
@@ -34,6 +35,13 @@ abstract class DomainEventsMiddleware
     private $eventPublisher;
 
     /**
+     * @var EventSubscriberInterface
+     *
+     * Event subscriber
+     */
+    private $eventSubscriber;
+
+    /**
      * DomainEventsMiddleware constructor.
      *
      * @param EventPublisher $eventPublisher
@@ -41,6 +49,10 @@ abstract class DomainEventsMiddleware
     public function __construct(EventPublisher $eventPublisher)
     {
         $this->eventPublisher = $eventPublisher;
+        $this->eventSubscriber = new CollectInMemoryDomainEventSubscriber();
+        $this
+            ->eventPublisher
+            ->subscribe($this->eventSubscriber);
     }
 
     /**
@@ -51,19 +63,24 @@ abstract class DomainEventsMiddleware
      */
     public function execute($command, callable $next)
     {
-        $eventSubscriber = new CollectInMemoryDomainEventSubscriber();
         $this
-            ->eventPublisher
-            ->subscribe($eventSubscriber);
+            ->eventSubscriber
+            ->flushEvents();
 
         $result = $next($command);
 
-        foreach ($eventSubscriber->getEvents() as $event) {
+        foreach ($this
+                     ->eventSubscriber
+                     ->getEvents() as $event) {
             $this->processEvent(
                 $command,
                 $event
             );
         }
+
+        $this
+            ->eventSubscriber
+            ->flushEvents();
 
         return $result;
     }
