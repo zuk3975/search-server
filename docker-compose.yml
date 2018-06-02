@@ -19,9 +19,10 @@ services:
     redis:
         image: redis:4-alpine
         container_name: apisearch_redis
+        command: ["redis-server", "--appendonly", "yes"]
 
     haproxy:
-        build: ${PWD}/docker/haproxy
+        build: ./docker/haproxy
         container_name: apisearch_haproxy
         ports:
             - ${APISEARCH_PORT}:8100
@@ -29,7 +30,7 @@ services:
             - apisearch
 
     apisearch:
-        build: ${PWD}/docker/search-server
+        build: ./docker/search-server
         container_name: apisearch_server
         depends_on:
             - elasticsearch
@@ -41,8 +42,8 @@ services:
             - 8203:8203
             - 8204:8204
         volumes:
-            - ${PWD}:/var/www/apisearch
-            - ${PWD}/var/logs/supervisor:/var/log/supervisor
+            - .:/var/www/apisearch
+            - ./var/logs/supervisor:/var/log/supervisor
         links:
             - redis
 

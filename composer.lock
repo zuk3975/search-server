@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "75c5a4ac15ed243937c89edd1a641290558fc3e5"
+                "reference": "b4898b2c0b5ee4f6bb40aefb1119b9b74e225e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/75c5a4ac15ed243937c89edd1a641290558fc3e5",
-                "reference": "75c5a4ac15ed243937c89edd1a641290558fc3e5",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/b4898b2c0b5ee4f6bb40aefb1119b9b74e225e13",
+                "reference": "b4898b2c0b5ee4f6bb40aefb1119b9b74e225e13",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-02T11:38:50+00:00"
+            "time": "2018-06-02T15:31:23+00:00"
         },
         {
             "name": "apisearch-io/php-client",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "05a7a48be26b5416ebe26af21c2bd63efacd6145"
+                "reference": "285eb065d0ae69ff918f4da40673c29557332508"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/05a7a48be26b5416ebe26af21c2bd63efacd6145",
-                "reference": "05a7a48be26b5416ebe26af21c2bd63efacd6145",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/285eb065d0ae69ff918f4da40673c29557332508",
+                "reference": "285eb065d0ae69ff918f4da40673c29557332508",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-01T18:42:34+00:00"
+            "time": "2018-06-02T15:29:52+00:00"
         },
         {
             "name": "apisearch-io/react-socket-middleware-finite-server",

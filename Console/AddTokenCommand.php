@@ -111,6 +111,7 @@ class AddTokenCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
+        $endpoints = $this->getEndpoints($input, $output);
         $this
             ->commandBus
             ->handle(new AddToken(
@@ -124,7 +125,7 @@ class AddTokenCommand extends CommandWithBusAndGodToken
                     (string) $input->getArgument('app-id'),
                     $input->getOption('index'),
                     $input->getOption('http-referrer'),
-                    $input->getOption('endpoint'),
+                    $endpoints,
                     $input->getOption('plugin'),
                     (int) $input->getOption('seconds-valid'),
                     (int) $input->getOption('max-hits-per-query'),
