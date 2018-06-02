@@ -110,11 +110,13 @@ abstract class CommandWithBusAndGodToken extends ApisearchCommand
                 $input,
                 $output
             );
-            $this->printMessage(
-                $output,
-                $this->getHeader(),
-                $this->getSuccessMessage($input, $result)
-            );
+            if (!empty($this->getSuccessMessage($input, $result))) {
+                $this->printMessage(
+                    $output,
+                    $this->getHeader(),
+                    $this->getSuccessMessage($input, $result)
+                );
+            }
         } catch (Exception $e) {
             $this->printMessageFail(
                 $output,

@@ -118,6 +118,17 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     }
 
     /**
+     * Delete all tokens.
+     */
+    public function deleteTokens()
+    {
+        $this
+            ->redisWrapper
+            ->getClient()
+            ->del($this->composeRedisKey($this->getAppId()));
+    }
+
+    /**
      * Get token by reference.
      *
      * @param string $appId

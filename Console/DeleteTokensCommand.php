@@ -17,17 +17,15 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Query\GetTokens;
-use Apisearch\Token\Token;
-use Symfony\Component\Console\Helper\Table;
+use Apisearch\Server\Domain\Command\DeleteTokens;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class PrintTokensCommand.
+ * Class DeleteTokensCommand.
  */
-class PrintTokensCommand extends CommandWithBusAndGodToken
+class DeleteTokensCommand extends CommandWithBusAndGodToken
 {
     /**
      * Configures the current command.
@@ -35,7 +33,7 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setDescription('Print all tokens of an app-id')
+            ->setDescription('Delete all tokens')
             ->addArgument(
                 'app-id',
                 InputArgument::REQUIRED,
@@ -46,53 +44,32 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
     /**
      * Dispatch domain event.
      *
+     * @return string
+     */
+    protected function getHeader(): string
+    {
+        return 'Delete all tokens';
+    }
+
+    /**
+     * Dispatch domain event.
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return mixed|null
+     * @return mixed
      */
-    protected function dispatchDomainEvent(
-        InputInterface $input,
-        OutputInterface $output
-    ) {
-        $tokens = $this
+    protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
+    {
+        $this
             ->commandBus
-            ->handle(new GetTokens(
+            ->handle(new DeleteTokens(
                 RepositoryReference::create(
                     $input->getArgument('app-id'),
                     '~~~'
                 ),
                 $this->createGodToken($input->getArgument('app-id'))
             ));
-
-        /**
-         * @var Token
-         */
-        $table = new Table($output);
-        $table->setHeaders(['UUID', 'Indices', 'Seconds Valid', 'Max hits per query', 'HTTP Referrers', 'endpoints', 'plugins', 'ttl']);
-        foreach ($tokens as $token) {
-            $table->addRow([
-                $token->getTokenUUID()->composeUUID(),
-                implode(', ', $token->getIndices()),
-                $token->getSecondsValid(),
-                $token->getMaxHitsPerQuery(),
-                implode(', ', $token->getHttpReferrers()),
-                implode(', ', $token->getEndpoints()),
-                implode(', ', $token->getPlugins()),
-                $token->getTtl(),
-            ]);
-        }
-        $table->render();
-    }
-
-    /**
-     * Dispatch domain event.
-     *
-     * @return string
-     */
-    protected function getHeader(): string
-    {
-        return 'Get tokens';
     }
 
     /**
@@ -107,6 +84,9 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return '';
+        return sprintf(
+            'All Tokens deleted properly',
+            $input->getArgument('uuid')
+        );
     }
 }

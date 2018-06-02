@@ -44,4 +44,9 @@ interface TokenRepository
      * @return Token[]
      */
     public function getTokens(): array;
+
+    /**
+     * Delete all tokens.
+     */
+    public function deleteTokens();
 }

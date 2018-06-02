@@ -78,12 +78,12 @@ class EventPersistenceTest extends ServiceFunctionalTest
             '*'
         ));
 
-        $this->assertCount(2, $eventRepository->query(Query::createMatchAll())->getEvents());
+        $this->assertCount(3, $eventRepository->query(Query::createMatchAll())->getEvents());
         $this->deleteToken(TokenUUID::createById('12345'));
         $eventRepository->setRepositoryReference(RepositoryReference::create(
             self::$appId,
             '*'
         ));
-        $this->assertCount(3, $eventRepository->query(Query::createMatchAll())->getEvents());
+        $this->assertCount(4, $eventRepository->query(Query::createMatchAll())->getEvents());
     }
 }

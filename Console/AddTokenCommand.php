@@ -20,6 +20,7 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\AddToken;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,14 +40,15 @@ class AddTokenCommand extends CommandWithBusAndGodToken
             ->setName('apisearch:add-token')
             ->setDescription('Add a token')
             ->addArgument(
-                'uuid',
-                InputArgument::REQUIRED,
-                'UUID'
-            )
-            ->addArgument(
                 'app-id',
                 InputArgument::REQUIRED,
                 'App id'
+            )
+            ->addArgument(
+                'uuid',
+                InputArgument::OPTIONAL,
+                'Token UUID. If none defined, a new one will be generated',
+                Uuid::uuid4()->toString()
             )
             ->addOption(
                 'index',

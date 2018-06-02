@@ -345,12 +345,14 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         static::createEventsIndex(self::$appId);
         static::createEventsIndex(self::$appId, '');
         static::createIndex(self::$appId);
+        static::deleteTokens(self::$appId);
 
         static::createLogsIndex(self::$anotherAppId);
         static::createLogsIndex(self::$anotherAppId, '');
         static::createEventsIndex(self::$anotherAppId);
         static::createEventsIndex(self::$anotherAppId, '');
         static::createIndex(self::$anotherAppId);
+        static::deleteTokens(self::$anotherAppId);
 
         static::indexTestingItems();
     }
@@ -604,6 +606,17 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     abstract public static function getTokens(
         string $appId = null,
         Token $token = null
+    );
+
+    /**
+     * Delete token.
+     *
+     * @param string $appId
+     * @param Token  $token
+     */
+    abstract public static function deleteTokens(
+        string $appId,
+        Token  $token = null
     );
 
     /**

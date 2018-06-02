@@ -37,6 +37,7 @@ use Apisearch\Server\Domain\Command\DeleteIndex;
 use Apisearch\Server\Domain\Command\DeleteItems;
 use Apisearch\Server\Domain\Command\DeleteLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteToken;
+use Apisearch\Server\Domain\Command\DeleteTokens;
 use Apisearch\Server\Domain\Command\IndexItems;
 use Apisearch\Server\Domain\Command\ResetIndex;
 use Apisearch\Server\Domain\Command\UpdateItems;
@@ -383,6 +384,30 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     ) {
         self::getStatic('tactician.commandbus')
             ->handle(new GetTokens(
+                RepositoryReference::create(
+                    $appId ?? self::$appId,
+                    ''
+                ),
+                $token ??
+                    new Token(
+                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
+                        $appId ?? self::$appId
+                    )
+            ));
+    }
+
+    /**
+     * Delete all tokens.
+     *
+     * @param string $appId
+     * @param Token  $token
+     */
+    public static function deleteTokens(
+        string $appId = null,
+        Token $token = null
+    ) {
+        self::getStatic('tactician.commandbus')
+            ->handle(new DeleteTokens(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
                     ''
