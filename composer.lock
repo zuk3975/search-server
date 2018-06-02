@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "ee9c7ee6d127f281f1a76ab70ce012445cbbcc93"
+                "reference": "75c5a4ac15ed243937c89edd1a641290558fc3e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/ee9c7ee6d127f281f1a76ab70ce012445cbbcc93",
-                "reference": "ee9c7ee6d127f281f1a76ab70ce012445cbbcc93",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/75c5a4ac15ed243937c89edd1a641290558fc3e5",
+                "reference": "75c5a4ac15ed243937c89edd1a641290558fc3e5",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-01T16:40:41+00:00"
+            "time": "2018-06-02T11:38:50+00:00"
         },
         {
             "name": "apisearch-io/php-client",
