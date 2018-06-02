@@ -36,14 +36,14 @@ class DeleteTokenCommand extends CommandWithBusAndGodToken
         $this
             ->setDescription('Delete a token')
             ->addArgument(
-                'uuid',
-                InputArgument::REQUIRED,
-                'UUID'
-            )
-            ->addArgument(
                 'app-id',
                 InputArgument::REQUIRED,
                 'App id'
+            )
+            ->addArgument(
+                'uuid',
+                InputArgument::REQUIRED,
+                'UUID'
             );
     }
 
