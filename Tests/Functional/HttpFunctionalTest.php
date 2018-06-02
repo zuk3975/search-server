@@ -258,6 +258,20 @@ abstract class HttpFunctionalTest extends ServiceFunctionalTest
     }
 
     /**
+     * Delete all tokens.
+     *
+     * @param string $appId
+     * @param Token  $token
+     */
+    public static function deleteTokens(
+        string $appId = null,
+        Token $token = null
+    ) {
+        return self::configureAppRepository($appId, $token)
+            ->deleteTokens();
+    }
+
+    /**
      * Create event index using the bus.
      *
      * @param string $appId

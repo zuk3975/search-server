@@ -137,25 +137,29 @@ abstract class CommandTest extends HttpFunctionalTest
 
     /**
      * Assert token is valid.
+     *
+     * @param string|null $token
      */
-    protected function assertTokenExists()
+    protected function assertTokenExists(?string $token = null)
     {
         $this->assertTrue(
             $this->checkIndex(
                 null,
                 null,
-                new Token(TokenUUID::createById($this->token), self::$appId)
+                new Token(TokenUUID::createById($token ?? $this->token), self::$appId)
             )
         );
     }
 
     /**
      * Assert token does not exist.
+     *
+     * @param string|null $token
      */
-    protected function assertTokenNotExists()
+    protected function assertTokenNotExists(?string $token = null)
     {
         try {
-            $this->assertTokenExists();
+            $this->assertTokenExists($token);
             $this->fail('Token should not exist');
         } catch (Exception $e) {
             // OK

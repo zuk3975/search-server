@@ -54,6 +54,11 @@ services:
         arguments:
             - "@tactician.commandbus.command"
 
+    apisearch_server.delete_tokens_controller:
+        class: Apisearch\Server\Controller\DeleteTokensController
+        arguments:
+            - "@tactician.commandbus.command"
+
     apisearch_server.add_interaction_controller:
         class: Apisearch\Server\Controller\AddInteractionController
         arguments:

@@ -58,11 +58,17 @@ services:
         tags:
             -  { name: console.command, command: apisearch-server:delete-token }
 
+    apisearch_server.delete_all_tokens_command:
+        class: Apisearch\Server\Console\DeleteTokensCommand
+        parent: apisearch_server.command_with_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:delete-all-tokens }
+
     apisearch_server.generate_basic_tokens_command:
         class: Apisearch\Server\Console\GenerateBasicTokensCommand
         parent: apisearch_server.command_with_bus_and_god_token
         tags:
-            -  { name: console.command, command: apisearch:generate-basic-tokens }
+            -  { name: console.command, command: apisearch-server:generate-basic-tokens }
 
     apisearch_server.print_tokens_command:
         class: Apisearch\Server\Console\PrintTokensCommand

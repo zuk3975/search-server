@@ -114,6 +114,14 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteToken }
 
+    apisearch_server.comand_handler.delete_tokens:
+        class: Apisearch\Server\Domain\CommandHandler\DeleteTokensHandler
+        arguments:
+            - "@apisearch.app_repository_main"
+            - "@apisearch_server.event_publisher"
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteTokens }
+
     apisearch_server.comand_handler.add_interaction:
         class: Apisearch\Server\Domain\CommandHandler\AddInteractionHandler
         arguments:

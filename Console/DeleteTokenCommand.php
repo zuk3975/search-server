@@ -54,7 +54,7 @@ class DeleteTokenCommand extends CommandWithBusAndGodToken
      */
     protected function getHeader(): string
     {
-        return 'Create token';
+        return 'Delete token';
     }
 
     /**

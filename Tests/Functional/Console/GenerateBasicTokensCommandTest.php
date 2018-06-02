@@ -20,8 +20,6 @@ use Apisearch\Exception\InvalidTokenException;
 use Apisearch\Query\Query;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Class GenerateBasicTokensCommandTest.
@@ -30,36 +28,29 @@ class GenerateBasicTokensCommandTest extends CommandTest
 {
     /**
      * Test token creation.
+     *
+     * @group mmm
      */
     public function testTokenCreation()
     {
-        $this->markTestIncomplete('Output should be solved before mark this test as required');
+        static::runCommand([
+            'command' => 'apisearch-server:create-index',
+            'app-id' => self::$appId,
+            'index' => self::$index,
+        ]);
 
-        static::$application->run(new ArrayInput(
-            [
-                'command' => 'apisearch-server:create-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-            ]
-        ));
+        $output = static::runCommand([
+            'command' => 'apisearch-server:generate-basic-tokens',
+            'app-id' => static::$appId,
+        ]);
 
-        $output = new BufferedOutput();
-        static::$application->run(new ArrayInput(
-            [
-                'command' => 'apisearch-server:generate-basic-tokens',
-                'app-id' => static::$appId,
-            ]
-        ), $output);
-
-        $result = $output->fetch();
-
-        preg_match('~UUID\s*(.*?)\s*generated for admin~', $result, $matches);
+        preg_match('~UUID\s*(.*?)\s*generated for admin~', $output, $matches);
         $uuidAdmin = $matches[1];
-        preg_match('~UUID\s*(.*?)\s*generated for query~', $result, $matches);
+        preg_match('~UUID\s*(.*?)\s*generated for query~', $output, $matches);
         $uuidQuery = $matches[1];
-        preg_match('~UUID\s*(.*?)\s*generated for events~', $result, $matches);
+        preg_match('~UUID\s*(.*?)\s*generated for events~', $output, $matches);
         $uuidEvents = $matches[1];
-        preg_match('~UUID\s*(.*?)\s*generated for interaction~', $result, $matches);
+        preg_match('~UUID\s*(.*?)\s*generated for interaction~', $output, $matches);
         $uuidInteractions = $matches[1];
 
         $adminToken = new Token(TokenUUID::createById($uuidAdmin), self::$appId);

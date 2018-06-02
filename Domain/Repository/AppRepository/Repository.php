@@ -64,4 +64,14 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
             ->getRepository(TokenRepository::class)
             ->getTokens();
     }
+
+    /**
+     * Delete all tokens.
+     */
+    public function deleteTokens()
+    {
+        $this
+            ->getRepository(TokenRepository::class)
+            ->deleteTokens();
+    }
 }

@@ -67,7 +67,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -92,7 +91,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -132,7 +130,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -175,7 +172,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -196,7 +192,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -217,7 +212,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -240,7 +234,6 @@ class TokenTest extends HttpFunctionalTest
             self::$index,
             $token
         );
-        $this->deleteToken(TokenUUID::createById('12345'));
     }
 
     /**
@@ -248,8 +241,6 @@ class TokenTest extends HttpFunctionalTest
      */
     public function testGetTokens()
     {
-        $this->deleteToken(TokenUUID::createById('56789'));
-        $this->deleteToken(TokenUUID::createById('12345'));
         $tokenUUID = TokenUUID::createById('12345');
         $token = new Token(
             $tokenUUID,
@@ -271,7 +262,31 @@ class TokenTest extends HttpFunctionalTest
             self::$anotherAppId
         ));
         $this->assertCount(2, $this->getTokens());
-        $this->deleteToken(TokenUUID::createById('56789'));
-        $this->deleteToken(TokenUUID::createById('12345'));
+    }
+
+    /**
+     * Test delete tokens.
+     */
+    public function testDeleteTokens()
+    {
+        $this->addToken(new Token(
+            TokenUUID::createById('12345'),
+            self::$appId
+        ));
+        $this->addToken(new Token(
+            TokenUUID::createById('67890'),
+            self::$appId
+        ));
+        $this->addToken(new Token(
+            TokenUUID::createById('aaaaa'),
+            self::$appId
+        ));
+        $this->addToken(new Token(
+            TokenUUID::createById('bbbbb'),
+            self::$appId
+        ));
+        $this->assertCount(5, $this->getTokens());
+        $this->deleteTokens();
+        $this->assertCount(0, $this->getTokens());
     }
 }
