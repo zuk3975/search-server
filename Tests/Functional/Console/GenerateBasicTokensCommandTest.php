@@ -28,8 +28,6 @@ class GenerateBasicTokensCommandTest extends CommandTest
 {
     /**
      * Test token creation.
-     *
-     * @group mmm
      */
     public function testTokenCreation()
     {

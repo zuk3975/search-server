@@ -142,7 +142,14 @@ class TokenValidator
     {
         return new Token(
             TokenUUID::createById($this->godToken),
-            $appId
+            $appId,
+            [],
+            [],
+            [],
+            [],
+            Token::INFINITE_DURATION,
+            Token::INFINITE_HITS_PER_QUERY,
+            Token::NO_CACHE
         );
     }
 
@@ -161,7 +168,11 @@ class TokenValidator
             [
                 'head~~/', // Ping
                 'get~~/health', // Check health
-            ]
+            ],
+            [],
+            Token::INFINITE_DURATION,
+            Token::INFINITE_HITS_PER_QUERY,
+            Token::NO_CACHE
         );
     }
 }

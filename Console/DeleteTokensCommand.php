@@ -84,9 +84,6 @@ class DeleteTokensCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return sprintf(
-            'All Tokens deleted properly',
-            $input->getArgument('uuid')
-        );
+        return 'All Tokens deleted properly';
     }
 }
