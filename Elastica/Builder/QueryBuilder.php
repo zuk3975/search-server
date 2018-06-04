@@ -20,6 +20,7 @@ use Apisearch\Geo\CoordinateAndDistance;
 use Apisearch\Geo\LocationRange;
 use Apisearch\Geo\Polygon;
 use Apisearch\Geo\Square;
+use Apisearch\Model\Coordinate;
 use Apisearch\Query\Aggregation as QueryAggregation;
 use Apisearch\Query\Filter;
 use Apisearch\Query\Query;
@@ -66,23 +67,11 @@ class QueryBuilder
         );
 
         $mainQuery->setQuery($boolQuery);
-
-        if (SortBy::SCORE !== $query->getSortBy()) {
-            if (SortBy::RANDOM === $query->getSortBy()) {
-                /**
-                 * Random elements in Elasticsearch need a wrapper in order to
-                 * apply a random score per each result.
-                 */
-                $functionScore = new ElasticaQuery\FunctionScore();
-                $functionScore->addRandomScoreFunction(uniqid());
-                $functionScore->setQuery($boolQuery);
-                $newMainQuery = new ElasticaQuery();
-                $newMainQuery->setQuery($functionScore);
-                $mainQuery = $newMainQuery;
-            } else {
-                $mainQuery->setSort($query->getSortBy());
-            }
-        }
+        $mainQuery = $this->setSortBy(
+            $query,
+            $mainQuery,
+            $boolQuery
+        );
 
         if ($query->areAggregationsEnabled()) {
             $this->addAggregations(
@@ -593,5 +582,97 @@ class QueryBuilder
         }
 
         return $newQuery;
+    }
+
+    /**
+     * Build sort.
+     *
+     * @param Query                   $query
+     * @param ElasticaQuery           $mainQuery
+     * @param ElasticaQuery\BoolQuery $boolQuery
+     *
+     * @return ElasticaQuery
+     */
+    private function setSortBy(
+        Query $query,
+        ElasticaQuery $mainQuery,
+        ElasticaQuery\BoolQuery $boolQuery
+    ): ElasticaQuery {
+        $sortBy = $query->getSortBy();
+        if ($sortBy->hasRandomSort()) {
+            /**
+             * Random elements in Elasticsearch need a wrapper in order to
+             * apply a random score per each result.
+             */
+            $functionScore = new ElasticaQuery\FunctionScore();
+            $functionScore->addRandomScoreFunction(uniqid());
+            $functionScore->setQuery($boolQuery);
+            $newMainQuery = new ElasticaQuery();
+            $newMainQuery->setQuery($functionScore);
+            $mainQuery = $newMainQuery;
+
+            return $mainQuery;
+        }
+
+        $sortByElements = $sortBy->all();
+
+        /*
+         * Because elasticsearch, by default, sorts by score, if score is the
+         * only applied sortBy (or by default, because no sortBy elements were
+         * added) we will skip this step
+         */
+        if (
+            1 === count($sortByElements) &&
+            SortBy::SCORE === $sortByElements[0]
+        ) {
+            return $mainQuery;
+        }
+
+        $sortByElements = array_map(function (array $sortBy) {
+            $type = $sortBy['type'] ?? SortBy::TYPE_FIELD;
+            $mode = $sortBy['mode'] ?? SortBy::MODE_AVG;
+            unset($sortBy['type']);
+            unset($sortBy['mode']);
+
+            if (SortBy::TYPE_NESTED === $type) {
+                $filter = null;
+                if (
+                    isset($sortBy['filter']) &&
+                    ($sortBy['filter'] instanceof Filter)
+                ) {
+                    $filter = $sortBy['filter'];
+                    unset($sortBy['filter']);
+                }
+
+                $key = array_keys($sortBy)[0];
+                $path = explode('.', $key);
+                array_pop($path);
+                $sortBy[$key]['mode'] = $mode;
+                $sortBy[$key]['nested'] = [
+                    'path' => implode('.', $path),
+                ];
+
+                if (!is_null($filter)) {
+                    $sortBy[$key]['nested']['filter'] = $this->createQueryFilterByApplicationType(
+                        $filter,
+                        false,
+                        false
+                    );
+                }
+            }
+
+            if (
+                isset($sortBy['_geo_distance']) &&
+                isset($sortBy['_geo_distance']['coordinate']) &&
+                ($sortBy['_geo_distance']['coordinate'] instanceof Coordinate)
+            ) {
+                $sortBy['_geo_distance']['coordinate'] = $sortBy['_geo_distance']['coordinate']->toArray();
+            }
+
+            return $sortBy;
+        }, $sortByElements);
+        $mainQuery->setSort($sortByElements);
+
+        return $mainQuery;
     }
 }

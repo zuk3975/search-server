@@ -211,6 +211,15 @@ class ItemElasticaWrapper extends ElasticaWrapper
                     ],
                 ],
             ],
+            [
+                'dynamic_arrays_as_nested' => [
+                    'path_match' => 'indexed_metadata.*',
+                    'match_mapping_type' => 'object',
+                    'mapping' => [
+                        'type' => 'nested',
+                    ],
+                ],
+            ],
         ]);
 
         $sourceExcludes = ['exact_matching_metadata'];

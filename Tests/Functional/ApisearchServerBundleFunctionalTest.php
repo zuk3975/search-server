@@ -22,7 +22,6 @@ use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
-use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Result\Result;
 use Apisearch\Server\ApisearchServerBundle;
