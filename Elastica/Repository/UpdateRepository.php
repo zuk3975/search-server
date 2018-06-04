@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Elastica\Repository;
 
 use Apisearch\Model\Changes;
-use Apisearch\Model\Item;
 use Apisearch\Query\Query;
 use Apisearch\Server\Domain\Repository\Repository\UpdateRepository as UpdateRepositoryInterface;
 use Apisearch\Server\Elastica\Builder\QueryBuilder;

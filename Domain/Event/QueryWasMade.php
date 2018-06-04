@@ -18,6 +18,7 @@ namespace Apisearch\Server\Domain\Event;
 
 use Apisearch\Model\User;
 use Apisearch\Query\Filter;
+use Apisearch\Query\SortBy;
 
 /**
  * Class QueryWasMade.
@@ -39,18 +40,11 @@ class QueryWasMade extends DomainEvent
     private $appliedFilters;
 
     /**
-     * @var string
+     * @var SortBy
      *
-     * Sort field
+     * Sort by
      */
-    private $sortField;
-
-    /**
-     * @var string
-     *
-     * Sort direction
-     */
-    private $sortDirection;
+    private $sortBy;
 
     /**
      * @var int
@@ -78,8 +72,7 @@ class QueryWasMade extends DomainEvent
      *
      * @param string    $queryText
      * @param Filter[]  $appliedFilters
-     * @param string    $sortField
-     * @param string    $sortDirection
+     * @param SortBy    $sortBy
      * @param int       $size
      * @param string[]  $resultIds
      * @param User|null $user
@@ -87,16 +80,14 @@ class QueryWasMade extends DomainEvent
     public function __construct(
         string $queryText,
         array $appliedFilters,
-        string $sortField,
-        string $sortDirection,
+        SortBy $sortBy,
         int $size,
         array $resultIds,
         ? User $user
     ) {
         $this->queryText = $queryText;
         $this->appliedFilters = $appliedFilters;
-        $this->sortField = $sortField;
-        $this->sortDirection = $sortDirection;
+        $this->sortBy = $sortBy;
         $this->size = $size;
         $this->resultIds = $resultIds;
         $this->user = $user;
@@ -128,8 +119,7 @@ class QueryWasMade extends DomainEvent
             'q' => $this->queryText,
             'q_empty' => empty($this->queryText),
             'q_length' => strlen($this->queryText),
-            'sort_field' => $this->sortField,
-            'sort_direction' => $this->sortDirection,
+            'sort_by' => $this->sortBy->toArray(),
             'size' => $this->size,
             'result_ids' => $this->resultIds,
             'result_length' => count($this->resultIds),
@@ -157,8 +147,7 @@ class QueryWasMade extends DomainEvent
                     return Filter::createFromArray($filter);
                 }, ($payload['filters'] ?? []))
             ),
-            $payload['sort_field'],
-            $payload['sort_direction'],
+            SortBy::createFromArray($payload['sort_by']),
             $payload['size'],
             $payload['result_ids'] ?? [],
             isset($payload['user'])

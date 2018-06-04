@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional\Domain\Repository;
 
 use Apisearch\Model\Coordinate;
+use Apisearch\Query\Filter;
 use Apisearch\Query\Query;
 use Apisearch\Query\SortBy;
 
@@ -30,7 +31,7 @@ trait SortTest
      */
     public function testSortByIndexableMetadataIntegerAsc()
     {
-        $result = $this->query(Query::createMatchAll()->sortBy(['indexed_metadata.simple_int' => 'asc']));
+        $result = $this->query(Query::createMatchAll()->sortBy(SortBy::byFieldsValues(['simple_int' => 'asc'])));
         $this->assertResults(
             $result,
             ['5', '3', '2', '1', '4']
@@ -42,7 +43,7 @@ trait SortTest
      */
     public function testSortByIndexableMetadataIntegerDesc()
     {
-        $result = $this->query(Query::createMatchAll()->sortBy(['indexed_metadata.simple_int' => 'desc']));
+        $result = $this->query(Query::createMatchAll()->sortBy(SortBy::byFieldsValues(['simple_int' => 'desc'])));
         $this->assertResults(
             $result,
             ['4', '1', '2', '3', '5']
@@ -54,7 +55,7 @@ trait SortTest
      */
     public function testSortByIndexableMetadataStringAsc()
     {
-        $result = $this->query(Query::createMatchAll()->sortBy(['indexed_metadata.simple_string' => 'asc']));
+        $result = $this->query(Query::createMatchAll()->sortBy(SortBy::byFieldsValues(['simple_string' => 'asc'])));
         $this->assertResults(
             $result,
             ['5', '2', '3', '4', '1']
@@ -66,7 +67,7 @@ trait SortTest
      */
     public function testSortByIndexableMetadataStringDesc()
     {
-        $result = $this->query(Query::createMatchAll()->sortBy(['indexed_metadata.simple_string' => 'desc']));
+        $result = $this->query(Query::createMatchAll()->sortBy(SortBy::byFieldsValues(['simple_string' => 'desc'])));
         $this->assertResults(
             $result,
             ['1', '4', '3', '2', '5']
@@ -78,7 +79,7 @@ trait SortTest
      */
     public function testSortByLocationKmAsc()
     {
-        $result = $this->query(Query::createLocated(new Coordinate(45.0, 45.0), '')->sortBy(SortBy::LOCATION_KM_ASC));
+        $result = $this->query(Query::createLocated(new Coordinate(45.0, 45.0), '')->sortBy(SortBy::create()->byValue(SortBy::LOCATION_KM_ASC)));
         $this->assertResults(
             $result,
             ['3', '4', '2', '1', '5']
@@ -94,7 +95,7 @@ trait SortTest
      */
     public function testSortByLocationKmDesc()
     {
-        $result = $this->query(Query::createLocated(new Coordinate(45.0, 45.0), '')->sortBy(SortBy::LOCATION_MI_ASC));
+        $result = $this->query(Query::createLocated(new Coordinate(45.0, 45.0), '')->sortBy(SortBy::create()->byValue(SortBy::LOCATION_MI_ASC)));
         $this->assertResults(
             $result,
             ['3', '4', '2', '1', '5']
@@ -129,6 +130,43 @@ trait SortTest
      */
     private function generateFirstResultRandomSort()
     {
-        return $this->query(Query::createMatchAll()->sortBy(SortBy::RANDOM))->getFirstItem()->getId();
+        return $this->query(Query::createMatchAll()->sortBy(SortBy::create()->byValue(SortBy::RANDOM)))->getFirstItem()->getId();
+    }
+
+    /**
+     * Test by nested field and filter.
+     *
+     * @group mmm
+     */
+    public function testNestedFieldAndFilter()
+    {
+        $result = $this->query(Query::createMatchAll()
+            ->sortBy(SortBy::create()->byNestedField('brand.rank', SortBy::ASC, SortBy::MODE_MIN))
+        );
+        $this->assertResults(
+            $result,
+            ['5', '2', '1', '3', '4']
+        );
+
+        $result = $this->query(Query::createMatchAll()
+            ->sortBy(SortBy::create()
+                ->byNestedFieldAndFilter(
+                    'brand.rank',
+                    SortBy::DESC,
+                    Filter::create(
+                        'brand.category',
+                        [1],
+                        Filter::MUST_ALL,
+                        Filter::TYPE_FIELD
+                    ),
+                    SortBy::MODE_MAX
+                )
+            )
+        );
+
+        $this->assertResults(
+            $result,
+            ['4', '2', '1', '5', '3']
+        );
     }
 }
