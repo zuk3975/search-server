@@ -30,8 +30,7 @@
         "rsqueue/rsqueue-bundle": "^0.1.0",
         "mmoreram/base-bundle": "^1.0.8",
         "mmoreram/symfony-bundle-dependencies": "^2.0.0",
-        "one-bundle-app/one-bundle-app": "^1.0",
-        "apisearch-io/react-socket-middleware-finite-server": "^1.0.0",
+        "one-bundle-app/one-bundle-app": "^1.0.6",
         "apisearch-io/apisearch-bundle": "dev-master@dev",
         "apisearch-io/php-client": "dev-master@dev"
     },
@@ -48,10 +47,12 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "OneBundleApp\\App\\ComposerHook::installEnvironment"
+            "OneBundleApp\\App\\ComposerHook::installConsole",
+            "OneBundleApp\\App\\ComposerHook::installReactServer"
         ],
         "post-update-cmd": [
-            "OneBundleApp\\App\\ComposerHook::installEnvironment"
+            "OneBundleApp\\App\\ComposerHook::installConsole",
+            "OneBundleApp\\App\\ComposerHook::installReactServer"
         ],
         "fix-code": [
             "vendor/bin/php-cs-fixer fix --config=.php_cs",

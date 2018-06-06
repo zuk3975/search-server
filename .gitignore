@@ -1,6 +1,6 @@
 vendor
 /var
 /bin/console
-/web
+/bin/server
 app_deploy.yml
 /.env
