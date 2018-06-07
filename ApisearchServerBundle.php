@@ -19,6 +19,7 @@ namespace Apisearch\Server;
 use Apisearch\ApisearchBundle;
 use Apisearch\Server\DependencyInjection\ApisearchServerExtension;
 use Apisearch\Server\DependencyInjection\CompilerPass\AppRepositoriesCompilerPass;
+use Apisearch\Server\DependencyInjection\CompilerPass\CommandBusCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\DomainEventsMiddlewareCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\ElasticaConfigPathCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\EventRepositoriesCompilerPass;
@@ -88,6 +89,7 @@ class ApisearchServerBundle extends BaseBundle
             new LogsMiddlewareCompilerPass(),
             new AppRepositoriesCompilerPass(),
             new UserRepositoriesCompilerPass(),
+            new CommandBusCompilerPass(),
         ];
     }
 }

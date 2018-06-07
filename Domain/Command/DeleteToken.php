@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Token\Token;
@@ -25,7 +26,7 @@ use Apisearch\Token\TokenUUID;
 /**
  * Class DeleteToken.
  */
-class DeleteToken extends CommandWithRepositoryReferenceAndToken implements LoggableCommand
+class DeleteToken extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand
 {
     /**
      * @var TokenUUID
@@ -63,5 +64,43 @@ class DeleteToken extends CommandWithRepositoryReferenceAndToken implements Logg
     public function getTokenUUID(): TokenUUID
     {
         return $this->tokenUUID;
+    }
+
+    /**
+     * To array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'token_uuid' => $this
+                ->tokenUUID
+                ->toArray(),
+            'repository_reference' => [
+                'app_id' => $this->getRepositoryReference()->getAppId(),
+                'index' => $this->getRepositoryReference()->getIndex(),
+            ],
+            'token' => $this->getToken()->toArray(),
+        ];
+    }
+
+    /**
+     * Create command from array.
+     *
+     * @param array $data
+     *
+     * @return AsynchronousableCommand
+     */
+    public static function fromArray(array $data): AsynchronousableCommand
+    {
+        return new self(
+            RepositoryReference::create(
+                $data['repository_reference']['app_id'],
+                $data['repository_reference']['index']
+            ),
+            Token::createFromArray($data['token']),
+            TokenUUID::createFromArray($data['token_uuid'])
+        );
     }
 }

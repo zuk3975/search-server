@@ -73,7 +73,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Result {
-        return self::getStatic('tactician.commandbus')
+        return self::getStatic('apisearch_server.query_bus')
             ->handle(new Query(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -102,7 +102,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        return self::getStatic('tactician.commandbus')
+        return self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteItems(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -131,7 +131,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         ?string $index = null,
         ?Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new IndexItems(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -162,7 +162,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new UpdateItems(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -190,7 +190,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new ResetIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -218,7 +218,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         Token $token = null,
         ImmutableConfig $config = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new CreateIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -247,7 +247,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new ConfigureIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -276,7 +276,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): bool {
-        return self::getStatic('tactician.commandbus')
+        return self::getStatic('apisearch_server.query_bus')
             ->handle(new CheckIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -302,7 +302,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -328,7 +328,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new AddToken(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -355,7 +355,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteToken(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -382,7 +382,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.query_bus')
             ->handle(new GetTokens(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -406,7 +406,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteTokens(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -432,7 +432,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new CreateEventsIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -458,7 +458,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteEventsIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -490,7 +490,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        return self::getStatic('tactician.commandbus')
+        return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryEvents(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -519,7 +519,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new CreateLogsIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -545,7 +545,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteLogsIndex(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -577,7 +577,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        return self::getStatic('tactician.commandbus')
+        return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryLogs(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -610,7 +610,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new AddInteraction(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -635,7 +635,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token = null
     ) {
-        self::getStatic('tactician.commandbus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteAllInteractions(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
@@ -658,7 +658,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      */
     public function ping(Token $token = null): bool
     {
-        return self::getStatic('tactician.commandbus')->handle(new Ping());
+        return self::getStatic('apisearch_server.query_bus')->handle(new Ping());
     }
 
     /**
@@ -670,6 +670,6 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      */
     public function checkHealth(Token $token = null): array
     {
-        return self::getStatic('tactician.commandbus')->handle(new CheckHealth());
+        return self::getStatic('apisearch_server.query_bus')->handle(new CheckHealth());
     }
 }

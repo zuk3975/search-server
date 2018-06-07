@@ -14,57 +14,16 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\Domain\Command;
+namespace Apisearch\Server\Domain;
 
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\AsynchronousableCommand;
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
-use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Token\Token;
 
 /**
- * Class AddToken.
+ * Class AsynchronousRepositoryReferenceAndToken.
  */
-class AddToken extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand
+trait AsynchronousRepositoryReferenceAndToken
 {
-    /**
-     * @var Token
-     *
-     * Token
-     */
-    private $newToken;
-
-    /**
-     * AddToken constructor.
-     *
-     *
-     * @param RepositoryReference $repositoryReference
-     * @param Token               $token
-     * @param Token               $newToken
-     */
-    public function __construct(
-        RepositoryReference $repositoryReference,
-        Token $token,
-        Token $newToken
-    ) {
-        parent::__construct(
-            $repositoryReference,
-            $token
-        );
-
-        $this->newToken = $newToken;
-    }
-
-    /**
-     * Get new Token.
-     *
-     * @return Token
-     */
-    public function getNewToken(): Token
-    {
-        return $this->newToken;
-    }
-
     /**
      * To array.
      *
@@ -73,9 +32,6 @@ class AddToken extends CommandWithRepositoryReferenceAndToken implements Loggabl
     public function toArray(): array
     {
         return [
-            'new_token' => $this
-                ->newToken
-                ->toArray(),
             'repository_reference' => [
                 'app_id' => $this->getRepositoryReference()->getAppId(),
                 'index' => $this->getRepositoryReference()->getIndex(),
@@ -98,8 +54,7 @@ class AddToken extends CommandWithRepositoryReferenceAndToken implements Loggabl
                 $data['repository_reference']['app_id'],
                 $data['repository_reference']['index']
             ),
-            Token::createFromArray($data['token']),
-            Token::createFromArray($data['new_token'])
+            Token::createFromArray($data['token'])
         );
     }
 }

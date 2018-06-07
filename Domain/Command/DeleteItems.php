@@ -21,6 +21,7 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 use Apisearch\Repository\WithTokenTrait;
+use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -28,7 +29,7 @@ use Apisearch\Token\Token;
 /**
  * Class DeleteItems.
  */
-class DeleteItems implements WithRepositoryReference, WriteCommand, LoggableCommand
+class DeleteItems implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
     use WithRepositoryReferenceTrait;
     use WithTokenTrait;
@@ -65,5 +66,45 @@ class DeleteItems implements WithRepositoryReference, WriteCommand, LoggableComm
     public function getItemsUUID(): array
     {
         return $this->itemsUUID;
+    }
+
+    /**
+     * To array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'items_uuid' => array_map(function (ItemUUID $itemUUID) {
+                return $itemUUID->toArray();
+            }, $this->itemsUUID),
+            'repository_reference' => [
+                'app_id' => $this->getRepositoryReference()->getAppId(),
+                'index' => $this->getRepositoryReference()->getIndex(),
+            ],
+            'token' => $this->getToken()->toArray(),
+        ];
+    }
+
+    /**
+     * Create command from array.
+     *
+     * @param array $data
+     *
+     * @return AsynchronousableCommand
+     */
+    public static function fromArray(array $data): AsynchronousableCommand
+    {
+        return new self(
+            RepositoryReference::create(
+                $data['repository_reference']['app_id'],
+                $data['repository_reference']['index']
+            ),
+            Token::createFromArray($data['token']),
+            array_map(function (array $itemUUID) {
+                return ItemUUID::createFromArray($itemUUID);
+            }, $data['items_uuid'])
+        );
     }
 }
