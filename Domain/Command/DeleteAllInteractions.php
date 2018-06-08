@@ -16,11 +16,14 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\AsynchronousRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 
 /**
  * Class DeleteAllInteractions.
  */
-class DeleteAllInteractions extends CommandWithRepositoryReferenceAndToken
+class DeleteAllInteractions extends CommandWithRepositoryReferenceAndToken implements AsynchronousableCommand
 {
+    use AsynchronousRepositoryReferenceAndToken;
 }

@@ -194,6 +194,23 @@ services:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\Ping }
 
     #
+    # Command bus
+    #
+    apisearch_server.query_bus:
+        alias: "tactician.commandbus.query"
+
+    apisearch_server.command_bus.inline:
+        class: Apisearch\Server\Domain\CommandBus\InlineCommandBus
+        arguments:
+            - "@tactician.commandbus.command"
+
+    apisearch_server.command_bus.asynchronous:
+        class: Apisearch\Server\Domain\CommandBus\AsynchronousCommandBus
+        arguments:
+            - "@rs_queue.producer"
+            - "@tactician.commandbus.command"
+
+    #
     # Middlewares Domain Events
     #
     apisearch_server.middleware.ignore_events:

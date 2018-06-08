@@ -21,6 +21,7 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 use Apisearch\Repository\WithTokenTrait;
+use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -28,7 +29,7 @@ use Apisearch\Token\Token;
 /**
  * Class IndexItems.
  */
-class IndexItems implements WithRepositoryReference, WriteCommand, LoggableCommand
+class IndexItems implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
     use WithRepositoryReferenceTrait;
     use WithTokenTrait;
@@ -65,5 +66,45 @@ class IndexItems implements WithRepositoryReference, WriteCommand, LoggableComma
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    /**
+     * To array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'items' => array_map(function (Item $item) {
+                return $item->toArray();
+            }, $this->items),
+            'repository_reference' => [
+                'app_id' => $this->getRepositoryReference()->getAppId(),
+                'index' => $this->getRepositoryReference()->getIndex(),
+            ],
+            'token' => $this->getToken()->toArray(),
+        ];
+    }
+
+    /**
+     * Create command from array.
+     *
+     * @param array $data
+     *
+     * @return AsynchronousableCommand
+     */
+    public static function fromArray(array $data): AsynchronousableCommand
+    {
+        return new self(
+            RepositoryReference::create(
+                $data['repository_reference']['app_id'],
+                $data['repository_reference']['index']
+            ),
+            Token::createFromArray($data['token']),
+            array_map(function (array $item) {
+                return Item::createFromArray($item);
+            }, $data['items'])
+        );
     }
 }

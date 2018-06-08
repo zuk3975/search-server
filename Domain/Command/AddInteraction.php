@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Token\Token;
@@ -25,7 +26,7 @@ use Apisearch\User\Interaction;
 /**
  * Class AddInteraction.
  */
-class AddInteraction extends CommandWithRepositoryReferenceAndToken implements LoggableCommand
+class AddInteraction extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand
 {
     /**
      * @var Interaction
@@ -63,5 +64,43 @@ class AddInteraction extends CommandWithRepositoryReferenceAndToken implements L
     public function getInteraction(): Interaction
     {
         return $this->interaction;
+    }
+
+    /**
+     * To array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'interaction' => $this
+                ->interaction
+                ->toArray(),
+            'repository_reference' => [
+                'app_id' => $this->getRepositoryReference()->getAppId(),
+                'index' => $this->getRepositoryReference()->getIndex(),
+            ],
+            'token' => $this->getToken()->toArray(),
+        ];
+    }
+
+    /**
+     * Create command from array.
+     *
+     * @param array $data
+     *
+     * @return AsynchronousableCommand
+     */
+    public static function fromArray(array $data): AsynchronousableCommand
+    {
+        return new self(
+            RepositoryReference::create(
+                $data['repository_reference']['app_id'],
+                $data['repository_reference']['index']
+            ),
+            Token::createFromArray($data['token']),
+            Interaction::createFromArray($data['interaction'])
+        );
     }
 }

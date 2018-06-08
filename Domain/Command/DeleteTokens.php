@@ -16,12 +16,15 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\AsynchronousRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 
 /**
  * Class DeleteTokens.
  */
-class DeleteTokens extends CommandWithRepositoryReferenceAndToken implements LoggableCommand
+class DeleteTokens extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand
 {
+    use AsynchronousRepositoryReferenceAndToken;
 }

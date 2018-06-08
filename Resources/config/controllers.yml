@@ -11,80 +11,80 @@ services:
     apisearch_server.create_index_controller:
         class: Apisearch\Server\Controller\CreateIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_index_controller:
         class: Apisearch\Server\Controller\DeleteIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.reset_index_controller:
         class: Apisearch\Server\Controller\ResetIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
             - "@apisearch_server.events_repository"
 
     apisearch_server.create_events_index_controller:
         class: Apisearch\Server\Controller\CreateEventsIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_events_index_controller:
         class: Apisearch\Server\Controller\DeleteEventsIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.create_logs_index_controller:
         class: Apisearch\Server\Controller\CreateLogsIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_logs_index_controller:
         class: Apisearch\Server\Controller\DeleteLogsIndexController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.add_token_controller:
         class: Apisearch\Server\Controller\AddTokenController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_token_controller:
         class: Apisearch\Server\Controller\DeleteTokenController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_tokens_controller:
         class: Apisearch\Server\Controller\DeleteTokensController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.add_interaction_controller:
         class: Apisearch\Server\Controller\AddInteractionController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.delete_all_interactions_controller:
         class: Apisearch\Server\Controller\DeleteAllInteractionsController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
 
     apisearch_server.index_items_controller:
         class: Apisearch\Server\Controller\IndexItemsController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
             - "@apisearch_server.events_repository"
 
     apisearch_server.update_items_controller:
         class: Apisearch\Server\Controller\UpdateItemsController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
             - "@apisearch_server.events_repository"
 
     apisearch_server.delete_items_controller:
         class: Apisearch\Server\Controller\DeleteItemsController
         arguments:
-            - "@tactician.commandbus.command"
+            - "@apisearch_server.command_bus"
             - "@apisearch_server.events_repository"
 
     #
@@ -93,44 +93,44 @@ services:
     apisearch_server.query_controller:
         class: Apisearch\Server\Controller\QueryController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
             - "@apisearch_server.events_repository"
 
     apisearch_server.events_controller:
         class: Apisearch\Server\Controller\EventsController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
     apisearch_server.logs_controller:
         class: Apisearch\Server\Controller\LogsController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
     apisearch_server.configure_index_controller:
         class: Apisearch\Server\Controller\ConfigureIndexController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
             - "@apisearch_server.events_repository"
 
     apisearch_server.check_health_controller:
         class: Apisearch\Server\Controller\CheckHealthController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
     apisearch_server.ping_controller:
         class: Apisearch\Server\Controller\PingController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
     apisearch_server.check_index_controller:
         class: Apisearch\Server\Controller\CheckIndexController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
     apisearch_server.get_tokens_controller:
         class: Apisearch\Server\Controller\GetTokensController
         arguments:
-            - "@tactician.commandbus.query"
+            - "@apisearch_server.query_bus"
 
 
     #

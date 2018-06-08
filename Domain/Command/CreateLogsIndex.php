@@ -16,12 +16,15 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\AsynchronousRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\WriteCommand;
 
 /**
  * Class CreateLogsIndex.
  */
-class CreateLogsIndex extends CommandWithRepositoryReferenceAndToken implements WriteCommand
+class CreateLogsIndex extends CommandWithRepositoryReferenceAndToken implements WriteCommand, AsynchronousableCommand
 {
+    use AsynchronousRepositoryReferenceAndToken;
 }

@@ -150,6 +150,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                     'middleware_logs_service' => static::saveEvents()
                         ? 'apisearch_server.middleware.inline_logs'
                         : 'apisearch_server.middleware.ignore_logs',
+                    'command_bus_service' => static::asynchronousCommands()
+                        ? 'apisearch_server.command_bus.asynchronous'
+                        : 'apisearch_server.command_bus.inline',
                     'god_token' => self::$godToken,
                     'ping_token' => self::$pingToken,
                     'cluster' => [
@@ -242,6 +245,16 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     protected static function logDomainEvents(): bool
     {
         return true;
+    }
+
+    /**
+     * Use asynchronous commands.
+     *
+     * @return bool
+     */
+    protected static function asynchronousCommands(): bool
+    {
+        return false;
     }
 
     /**
