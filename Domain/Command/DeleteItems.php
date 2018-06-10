@@ -19,9 +19,8 @@ namespace Apisearch\Server\Domain\Command;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Repository\WithRepositoryReferenceTrait;
-use Apisearch\Repository\WithTokenTrait;
 use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -29,11 +28,8 @@ use Apisearch\Token\Token;
 /**
  * Class DeleteItems.
  */
-class DeleteItems implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
+class DeleteItems extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
-    use WithRepositoryReferenceTrait;
-    use WithTokenTrait;
-
     /**
      * @var ItemUUID[]
      *
@@ -53,8 +49,11 @@ class DeleteItems implements WithRepositoryReference, WriteCommand, LoggableComm
         Token              $token,
         array $itemsUUID
     ) {
-        $this->repositoryReference = $repositoryReference;
-        $this->token = $token;
+        parent::__construct(
+            $repositoryReference,
+            $token
+        );
+
         $this->itemsUUID = $itemsUUID;
     }
 

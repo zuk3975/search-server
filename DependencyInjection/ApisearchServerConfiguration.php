@@ -99,6 +99,9 @@ class ApisearchServerConfiguration extends BaseConfiguration
                             ->end()
                             ->integerNode('port')
                                 ->defaultNull()
-                            ->end();
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
 }

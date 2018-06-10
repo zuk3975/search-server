@@ -14,14 +14,17 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\Domain\Query;
-
-use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
+namespace Apisearch\Server\Domain\Plugin;
 
 /**
- * Class GetTokens.
+ * Interface Plugin.
  */
-class GetTokens extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
+interface Plugin
 {
+    /**
+     * Get plugin name.
+     *
+     * @return string
+     */
+    public function getPluginName(): string;
 }

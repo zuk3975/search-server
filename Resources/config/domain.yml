@@ -265,6 +265,11 @@ services:
         class: Apisearch\Server\Domain\Middleware\TokenMiddleware
         public: false
 
+    apisearch_server.middleware.plugins:
+        class: Apisearch\Server\Domain\Plugin\PluginMiddlewareCollector
+        arguments:
+            - "%apisearch_server.enabled_plugins%"
+
     #
     # Repositories
     #

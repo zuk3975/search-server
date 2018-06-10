@@ -19,18 +19,14 @@ namespace Apisearch\Server\Domain\Query;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Repository\WithRepositoryReferenceTrait;
-use Apisearch\Repository\WithTokenTrait;
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Token\Token;
 
 /**
  * Class QueryEvents.
  */
-class QueryEvents implements WithRepositoryReference
+class QueryEvents extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
 {
-    use WithRepositoryReferenceTrait;
-    use WithTokenTrait;
-
     /**
      * @var Query
      *
@@ -68,8 +64,11 @@ class QueryEvents implements WithRepositoryReference
         ?int $from,
         ?int $to
     ) {
-        $this->repositoryReference = $repositoryReference;
-        $this->token = $token;
+        parent::__construct(
+            $repositoryReference,
+            $token
+        );
+
         $this->query = $query;
         $this->from = $from;
         $this->to = $to;

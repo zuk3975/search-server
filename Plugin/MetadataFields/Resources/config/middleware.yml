@@ -1,0 +1,25 @@
+services:
+
+    #
+    # Middlewares
+    #
+    apisearch_plugin.metadata_fields.index_items:
+        class: Apisearch\Plugin\MetadataFields\Domain\Middleware\IndexItemsMiddleware
+        arguments:
+            - "@apisearch_plugin.metadata_fields.repository"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.metadata_fields.delete_items:
+        class: Apisearch\Plugin\MetadataFields\Domain\Middleware\DeleteItemsMiddleware
+        arguments:
+            - "@apisearch_plugin.metadata_fields.repository"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.metadata_fields.query:
+        class: Apisearch\Plugin\MetadataFields\Domain\Middleware\QueryMiddleware
+        arguments:
+            - "@apisearch_plugin.metadata_fields.repository"
+        tags:
+            - { name: apisearch_plugin.middleware }

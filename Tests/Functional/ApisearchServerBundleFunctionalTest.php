@@ -124,112 +124,117 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             $imports[] = ['resource' => '@ApisearchServerBundle/Resources/test/middlewares.yml'];
         }
 
-        return new BaseKernel(
-            [
-                BaseBundle::class,
-                ApisearchServerBundle::class,
-            ], [
-                'imports' => $imports,
-                'parameters' => [
-                    'kernel.secret' => 'sdhjshjkds',
+        $bundles = [
+            BaseBundle::class,
+            ApisearchServerBundle::class,
+        ];
+
+        $configuration = [
+            'imports' => $imports,
+            'parameters' => [
+                'kernel.secret' => 'sdhjshjkds',
+            ],
+            'framework' => [
+                'test' => true,
+            ],
+            'services' => [
+                '_defaults' => [
+                    'autowire' => false,
+                    'autoconfigure' => false,
+                    'public' => true,
                 ],
-                'framework' => [
-                    'test' => true,
-                ],
-                'services' => [
-                    '_defaults' => [
-                        'autowire' => false,
-                        'autoconfigure' => false,
-                        'public' => true,
+            ],
+            'apisearch_server' => [
+                'middleware_domain_events_service' => static::saveEvents()
+                    ? 'apisearch_server.middleware.inline_events'
+                    : 'apisearch_server.middleware.ignore_events',
+                'middleware_logs_service' => static::saveEvents()
+                    ? 'apisearch_server.middleware.inline_logs'
+                    : 'apisearch_server.middleware.ignore_logs',
+                'command_bus_service' => static::asynchronousCommands()
+                    ? 'apisearch_server.command_bus.asynchronous'
+                    : 'apisearch_server.command_bus.inline',
+                'god_token' => self::$godToken,
+                'ping_token' => self::$pingToken,
+                'cluster' => [
+                    'localhost' => [
+                        'host' => 'localhost',
+                        'port' => 9200,
                     ],
                 ],
-                'apisearch_server' => [
-                    'middleware_domain_events_service' => static::saveEvents()
-                        ? 'apisearch_server.middleware.inline_events'
-                        : 'apisearch_server.middleware.ignore_events',
-                    'middleware_logs_service' => static::saveEvents()
-                        ? 'apisearch_server.middleware.inline_logs'
-                        : 'apisearch_server.middleware.ignore_logs',
-                    'command_bus_service' => static::asynchronousCommands()
-                        ? 'apisearch_server.command_bus.asynchronous'
-                        : 'apisearch_server.command_bus.inline',
-                    'god_token' => self::$godToken,
-                    'ping_token' => self::$pingToken,
-                    'cluster' => [
-                        'localhost' => [
-                            'host' => 'localhost',
-                            'port' => 9200,
-                        ],
+                'config' => [
+                    'repository' => [
+                        'config_path' => '/tmp/config_{app_id}_{index_id}',
+                        'shards' => 1,
+                        'replicas' => 0,
                     ],
-                    'config' => [
-                        'repository' => [
-                            'config_path' => '/tmp/config_{app_id}_{index_id}',
-                            'shards' => 1,
-                            'replicas' => 0,
-                        ],
-                        'event_repository' => [
-                            'shards' => 1,
-                            'replicas' => 0,
-                        ],
-                        'log_repository' => [
-                            'shards' => 1,
-                            'replicas' => 0,
-                        ],
+                    'event_repository' => [
+                        'shards' => 1,
+                        'replicas' => 0,
+                    ],
+                    'log_repository' => [
+                        'shards' => 1,
+                        'replicas' => 0,
                     ],
                 ],
-                'apisearch' => [
-                    'repositories' => [
-                        'main' => [
-                            'adapter' => 'service',
-                            'endpoint' => '~',
-                            'app_id' => self::$appId,
-                            'token' => '~',
-                            'test' => true,
-                            'search' => [
-                                'repository_service' => 'apisearch_server.items_repository',
-                            ],
-                            'app' => [
-                                'repository_service' => 'apisearch_server.app_repository',
-                            ],
-                            'user' => [
-                                'repository_service' => 'apisearch_server.user_repository',
-                            ],
-                            'event' => [
-                                'repository_service' => 'apisearch_server.events_repository',
-                            ],
-                            'log' => [
-                                'repository_service' => 'apisearch_server.logs_repository',
-                            ],
-                            'indexes' => [
-                                self::$index => self::$index,
-                                self::$anotherIndex => self::$anotherIndex,
-                            ],
+            ],
+            'apisearch' => [
+                'repositories' => [
+                    'main' => [
+                        'adapter' => 'service',
+                        'endpoint' => '~',
+                        'app_id' => self::$appId,
+                        'token' => '~',
+                        'test' => true,
+                        'search' => [
+                            'repository_service' => 'apisearch_server.items_repository',
                         ],
-                        'search_http' => [
-                            'adapter' => 'http_test',
-                            'endpoint' => '~',
-                            'app_id' => self::$appId,
-                            'token' => '~',
-                            'test' => true,
-                            'indexes' => [
-                                self::$index => self::$index,
-                                self::$anotherIndex => self::$anotherIndex,
-                            ],
+                        'app' => [
+                            'repository_service' => 'apisearch_server.app_repository',
                         ],
-                        'search_socket' => [
-                            'adapter' => 'http',
-                            'endpoint' => 'http://127.0.0.1:8200',
-                            'app_id' => self::$appId,
-                            'token' => self::$godToken,
-                            'test' => true,
-                            'indexes' => [
-                                self::$index => self::$index,
-                                self::$anotherIndex => self::$anotherIndex,
-                            ],
+                        'user' => [
+                            'repository_service' => 'apisearch_server.user_repository',
+                        ],
+                        'event' => [
+                            'repository_service' => 'apisearch_server.events_repository',
+                        ],
+                        'log' => [
+                            'repository_service' => 'apisearch_server.logs_repository',
+                        ],
+                        'indexes' => [
+                            self::$index => self::$index,
+                            self::$anotherIndex => self::$anotherIndex,
+                        ],
+                    ],
+                    'search_http' => [
+                        'adapter' => 'http_test',
+                        'endpoint' => '~',
+                        'app_id' => self::$appId,
+                        'token' => '~',
+                        'test' => true,
+                        'indexes' => [
+                            self::$index => self::$index,
+                            self::$anotherIndex => self::$anotherIndex,
+                        ],
+                    ],
+                    'search_socket' => [
+                        'adapter' => 'http',
+                        'endpoint' => 'http://127.0.0.1:8200',
+                        'app_id' => self::$appId,
+                        'token' => self::$godToken,
+                        'test' => true,
+                        'indexes' => [
+                            self::$index => self::$index,
+                            self::$anotherIndex => self::$anotherIndex,
                         ],
                     ],
                 ],
             ],
+        ];
+
+        return new BaseKernel(
+            static::decorateBundles($bundles),
+            static::decorateConfiguration($configuration),
             [
                 '@ApisearchServerBundle/Resources/config/routing.yml',
             ],
@@ -275,6 +280,30 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     protected static function saveLogs(): bool
     {
         return true;
+    }
+
+    /**
+     * Decorate bundles.
+     *
+     * @param array $bundles
+     *
+     * @return array
+     */
+    protected static function decorateBundles(array $bundles): array
+    {
+        return $bundles;
+    }
+
+    /**
+     * Decorate configuration.
+     *
+     * @param array $configuration
+     *
+     * @return array
+     */
+    protected static function decorateConfiguration(array $configuration): array
+    {
+        return $configuration;
     }
 
     /**

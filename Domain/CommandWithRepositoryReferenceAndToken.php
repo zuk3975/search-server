@@ -25,7 +25,7 @@ use Apisearch\Token\Token;
 /**
  * Class CommandWithRepositoryReferenceAndToken.
  */
-class CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
+abstract class CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
 {
     use WithRepositoryReferenceTrait;
     use WithTokenTrait;
