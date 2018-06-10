@@ -19,9 +19,8 @@ namespace Apisearch\Server\Domain\Command;
 use Apisearch\Config\Config;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Repository\WithRepositoryReferenceTrait;
-use Apisearch\Repository\WithTokenTrait;
 use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -29,11 +28,8 @@ use Apisearch\Token\Token;
 /**
  * Class ConfigureIndex.
  */
-class ConfigureIndex implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
+class ConfigureIndex extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
-    use WithRepositoryReferenceTrait;
-    use WithTokenTrait;
-
     /**
      * @var Config
      *
@@ -53,8 +49,11 @@ class ConfigureIndex implements WithRepositoryReference, WriteCommand, LoggableC
         Token              $token,
         Config $config
     ) {
-        $this->repositoryReference = $repositoryReference;
-        $this->token = $token;
+        parent::__construct(
+            $repositoryReference,
+            $token
+        );
+
         $this->config = $config;
     }
 

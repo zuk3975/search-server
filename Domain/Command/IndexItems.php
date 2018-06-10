@@ -19,9 +19,8 @@ namespace Apisearch\Server\Domain\Command;
 use Apisearch\Model\Item;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Repository\WithRepositoryReferenceTrait;
-use Apisearch\Repository\WithTokenTrait;
 use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -29,11 +28,8 @@ use Apisearch\Token\Token;
 /**
  * Class IndexItems.
  */
-class IndexItems implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
+class IndexItems extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
-    use WithRepositoryReferenceTrait;
-    use WithTokenTrait;
-
     /**
      * @var Item[]
      *
@@ -53,8 +49,11 @@ class IndexItems implements WithRepositoryReference, WriteCommand, LoggableComma
         Token              $token,
         array $items
     ) {
-        $this->repositoryReference = $repositoryReference;
-        $this->token = $token;
+        parent::__construct(
+            $repositoryReference,
+            $token
+        );
+
         $this->items = $items;
     }
 

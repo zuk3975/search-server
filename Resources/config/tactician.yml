@@ -5,6 +5,7 @@ tactician:
             middleware:
                 - tactician.middleware.locking
                 - apisearch_server.middleware.token
+                - apisearch_server.middleware.plugins
                 - apisearch_server.middleware.logs
                 - apisearch_server.middleware.transaction
                 # - apisearch_server.middleware.interactions
@@ -14,6 +15,7 @@ tactician:
         query:
             middleware:
                 - apisearch_server.middleware.token
+                - apisearch_server.middleware.plugins
                 - apisearch_server.middleware.logs
                 # - apisearch_server.middleware.interactions
                 - apisearch_server.middleware.domain_events

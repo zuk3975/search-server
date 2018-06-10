@@ -20,9 +20,8 @@ use Apisearch\Model\Changes;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Repository\WithRepositoryReferenceTrait;
-use Apisearch\Repository\WithTokenTrait;
 use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -30,11 +29,8 @@ use Apisearch\Token\Token;
 /**
  * Class UpdateItems.
  */
-class UpdateItems implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
+class UpdateItems extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
 {
-    use WithRepositoryReferenceTrait;
-    use WithTokenTrait;
-
     /**
      * @var Query
      *
@@ -63,8 +59,11 @@ class UpdateItems implements WithRepositoryReference, WriteCommand, LoggableComm
         Query $query,
         Changes $changes
     ) {
-        $this->repositoryReference = $repositoryReference;
-        $this->token = $token;
+        parent::__construct(
+            $repositoryReference,
+            $token
+        );
+
         $this->query = $query;
         $this->changes = $changes;
     }

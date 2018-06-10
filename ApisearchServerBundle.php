@@ -22,10 +22,12 @@ use Apisearch\Server\DependencyInjection\CompilerPass\AppRepositoriesCompilerPas
 use Apisearch\Server\DependencyInjection\CompilerPass\CommandBusCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\DomainEventsMiddlewareCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\ElasticaConfigPathCompilerPass;
+use Apisearch\Server\DependencyInjection\CompilerPass\EnabledPluginsMiddlewareCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\EventRepositoriesCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\ItemRepositoriesCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\LogRepositoriesCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\LogsMiddlewareCompilerPass;
+use Apisearch\Server\DependencyInjection\CompilerPass\PluginsMiddlewareCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\UserRepositoriesCompilerPass;
 use League\Tactician\Bundle\TacticianBundle;
 use Mmoreram\BaseBundle\BaseBundle;
@@ -41,6 +43,23 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class ApisearchServerBundle extends BaseBundle
 {
+    /**
+     * @var KernelInterface
+     *
+     * Kernel
+     */
+    protected $kernel;
+
+    /**
+     * ApisearchServerBundle constructor.
+     *
+     * @param KernelInterface $kernel
+     */
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
     /**
      * Returns the bundle's container extension.
      *
@@ -90,6 +109,8 @@ class ApisearchServerBundle extends BaseBundle
             new AppRepositoriesCompilerPass(),
             new UserRepositoriesCompilerPass(),
             new CommandBusCompilerPass(),
+            new PluginsMiddlewareCompilerPass(),
+            new EnabledPluginsMiddlewareCompilerPass($this->kernel),
         ];
     }
 }

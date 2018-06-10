@@ -42,7 +42,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Apisearch\\Server\\": ""
+            "Apisearch\\Server\\": "",
+            "Apisearch\\Plugin\\": "Plugin/"
         }
     },
     "scripts": {
