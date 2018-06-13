@@ -43,25 +43,27 @@ class QueryController extends ControllerWithBusAndEventRepository
         $this->configureEventRepository($request);
         $query = $request->query;
 
-        $plainQuery = $query->get(Http::QUERY_FIELD, null);
-        if (!is_string($plainQuery)) {
-            throw InvalidFormatException::queryFormatNotValid(json_encode($plainQuery));
-        }
+        $queryAsArray = $this->getRequestContentObject(
+            $request,
+            Http::QUERY_FIELD,
+            InvalidFormatException::queryFormatNotValid($request->getContent()),
+            []
+        );
 
         $responseAsArray = $this
             ->commandBus
             ->handle(new Query(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '*')
                 ),
-                $query->get('token'),
-                QueryModel::createFromArray(json_decode($plainQuery, true))
+                $query->get(Http::TOKEN_FIELD, ''),
+                QueryModel::createFromArray($queryAsArray)
             ))
             ->toArray();
 
         if ($query->has(Http::PURGE_QUERY_FROM_RESPONSE_FIELD)) {
-            unset($responseAsArray['query']);
+            unset($responseAsArray[Http::QUERY_FIELD]);
         }
 
         return new JsonResponse(

@@ -42,23 +42,27 @@ class IndexItemsController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = $request->request;
-        $items = $requestBody->get(Http::ITEMS_FIELD, null);
-        if (!is_string($items)) {
-            throw InvalidFormatException::itemsRepresentationNotValid(json_encode($items));
+        $requestBody = json_decode($request->getContent(), true);
+
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody)
+        ) {
+            throw InvalidFormatException::itemsRepresentationNotValid($request->getContent());
         }
 
+        $itemsAsArray = $requestBody[Http::ITEMS_FIELD] ?? [];
         $this
             ->commandBus
             ->handle(new IndexItems(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get('token'),
+                $query->get(Http::TOKEN_FIELD, ''),
                 array_map(function (array $object) {
                     return Item::createFromArray($object);
-                }, json_decode($items, true))
+                }, $itemsAsArray)
             ));
 
         return new JsonResponse('Items indexed', 200);

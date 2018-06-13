@@ -24,16 +24,6 @@ use Apisearch\Log\Log;
 interface IndexRepository
 {
     /**
-     * Create the index.
-     */
-    public function createIndex();
-
-    /**
-     * Delete the index.
-     */
-    public function deleteIndex();
-
-    /**
      * Generate log document.
      *
      * @param Log $log

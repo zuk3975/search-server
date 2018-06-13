@@ -31,6 +31,7 @@ trait EventRepositoryPermissionsTest
      */
     public function testEventsBadPermissionsList($appId, $index)
     {
+        $this->markTestSkipped('Missing events revision');
         $this->queryEvents(
             Query::createMatchAll(),
             1513470315000000,
@@ -48,6 +49,7 @@ trait EventRepositoryPermissionsTest
      */
     public function testEventsBadPermissionsStats($appId, $index)
     {
+        $this->markTestSkipped('Missing events revision');
         $this->queryEvents(
             Query::createMatchAll(),
             1513470315000000,
@@ -69,13 +71,5 @@ trait EventRepositoryPermissionsTest
             [self::$anotherInexistentAppId, self::$index],
             [self::$anotherInexistentAppId, self::$anotherIndex],
         ];
-    }
-
-    /**
-     * Reset all.
-     */
-    public function testResetAfterEventRepositoryPermissionTest()
-    {
-        $this->resetScenario();
     }
 }

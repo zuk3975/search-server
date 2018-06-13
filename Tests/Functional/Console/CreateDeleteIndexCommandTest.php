@@ -37,8 +37,6 @@ class CreateDeleteIndexCommandTest extends CommandTest
             ]);
 
         $this->assertExistsIndex();
-        $this->assertNotExistsEventsIndex();
-        $this->assertNotExistsLogsIndex();
 
         static::runCommand([
                 'command' => 'apisearch-server:delete-index',
@@ -47,100 +45,6 @@ class CreateDeleteIndexCommandTest extends CommandTest
             ]);
 
         $this->assertNotExistsIndex();
-    }
-
-    /**
-     * Test create index command with events.
-     */
-    public function testCreateIndexWithEventsCommand()
-    {
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsEventsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:create-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-events' => true,
-            ]);
-
-        $this->assertExistsIndex();
-        $this->assertExistsEventsIndex();
-        $this->assertNotExistsLogsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:delete-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-events' => true,
-            ]);
-
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsEventsIndex();
-    }
-
-    /**
-     * Test create index command with logs.
-     */
-    public function testCreateIndexWithLogsCommand()
-    {
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsLogsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:create-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-logs' => true,
-            ]);
-
-        $this->assertExistsIndex();
-        $this->assertNotExistsEventsIndex();
-        $this->assertExistsLogsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:delete-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-logs' => true,
-            ]);
-
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsLogsIndex();
-    }
-
-    /**
-     * Test create all indices command.
-     */
-    public function testCreateAllIndicesCommand()
-    {
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsEventsIndex();
-        $this->assertNotExistsLogsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:create-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-events' => true,
-                '--with-logs' => true,
-            ]);
-
-        $this->assertExistsIndex();
-        $this->assertExistsEventsIndex();
-        $this->assertExistsLogsIndex();
-
-        static::runCommand([
-                'command' => 'apisearch-server:delete-index',
-                'app-id' => self::$appId,
-                'index' => self::$index,
-                '--with-events' => true,
-                '--with-logs' => true,
-            ]);
-
-        $this->assertNotExistsIndex();
-        $this->assertNotExistsEventsIndex();
-        $this->assertNotExistsLogsIndex();
     }
 
     /**

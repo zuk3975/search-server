@@ -42,10 +42,10 @@ class DeleteIndexController extends ControllerWithBus
             ->commandBus
             ->handle(new DeleteIndex(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get('token')
+                $query->get(Http::TOKEN_FIELD, '')
             ));
 
         return new JsonResponse('Index deleted', 200);

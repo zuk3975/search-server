@@ -17,11 +17,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Query;
 
 use Apisearch\Repository\WithRepositoryReference;
+use Apisearch\Server\Domain\AppRequiredCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 
 /**
  * Class GetTokens.
  */
-class GetTokens extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
+class GetTokens extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, AppRequiredCommand
 {
 }

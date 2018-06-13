@@ -148,7 +148,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                 'middleware_domain_events_service' => static::saveEvents()
                     ? 'apisearch_server.middleware.inline_events'
                     : 'apisearch_server.middleware.ignore_events',
-                'middleware_logs_service' => static::saveEvents()
+                'middleware_logs_service' => static::saveLogs()
                     ? 'apisearch_server.middleware.inline_logs'
                     : 'apisearch_server.middleware.ignore_logs',
                 'command_bus_service' => static::asynchronousCommands()
@@ -381,17 +381,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     {
         static::deleteEverything();
 
-        static::createLogsIndex(self::$appId);
-        static::createLogsIndex(self::$appId, '');
-        static::createEventsIndex(self::$appId);
-        static::createEventsIndex(self::$appId, '');
         static::createIndex(self::$appId);
         static::deleteTokens(self::$appId);
 
-        static::createLogsIndex(self::$anotherAppId);
-        static::createLogsIndex(self::$anotherAppId, '');
-        static::createEventsIndex(self::$anotherAppId);
-        static::createEventsIndex(self::$anotherAppId, '');
         static::createIndex(self::$anotherAppId);
         static::deleteTokens(self::$anotherAppId);
 
@@ -438,22 +430,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     {
         try {
             static::deleteIndex($appId);
-        } catch (ResourceNotAvailableException $e) {
-        }
-        try {
-            static::deleteEventsIndex($appId, '');
-        } catch (ResourceNotAvailableException $e) {
-        }
-        try {
-            static::deleteEventsIndex($appId);
-        } catch (ResourceNotAvailableException $e) {
-        }
-        try {
-            static::deleteLogsIndex($appId, '');
-        } catch (ResourceNotAvailableException $e) {
-        }
-        try {
-            static::deleteLogsIndex($appId);
         } catch (ResourceNotAvailableException $e) {
         }
     }
@@ -661,32 +637,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     );
 
     /**
-     * Create event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    abstract public static function createEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    );
-
-    /**
-     * Delete event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    abstract public static function deleteEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    );
-
-    /**
      * Query events.
      *
      * @param QueryModel $query
@@ -700,32 +650,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         QueryModel $query,
         ?int $from = null,
         ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    );
-
-    /**
-     * Create log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    abstract public static function createLogsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    );
-
-    /**
-     * Delete log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    abstract public static function deleteLogsIndex(
         string $appId = null,
         string $index = null,
         Token $token = null

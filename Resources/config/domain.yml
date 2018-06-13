@@ -261,6 +261,10 @@ services:
             - "@apisearch.user_repository_main"
         public: false
 
+    apisearch_server.middleware.repository_reference:
+        class: Apisearch\Server\Domain\Middleware\TokenMiddleware
+        public: false
+
     apisearch_server.middleware.token:
         class: Apisearch\Server\Domain\Middleware\TokenMiddleware
         public: false

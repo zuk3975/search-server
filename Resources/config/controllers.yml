@@ -24,26 +24,6 @@ services:
             - "@apisearch_server.command_bus"
             - "@apisearch_server.events_repository"
 
-    apisearch_server.create_events_index_controller:
-        class: Apisearch\Server\Controller\CreateEventsIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
-
-    apisearch_server.delete_events_index_controller:
-        class: Apisearch\Server\Controller\DeleteEventsIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
-
-    apisearch_server.create_logs_index_controller:
-        class: Apisearch\Server\Controller\CreateLogsIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
-
-    apisearch_server.delete_logs_index_controller:
-        class: Apisearch\Server\Controller\DeleteLogsIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
-
     apisearch_server.add_token_controller:
         class: Apisearch\Server\Controller\AddTokenController
         arguments:
@@ -140,6 +120,11 @@ services:
         class: Apisearch\Server\Controller\Listener\PHPExceptionToJsonResponse
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
+
+    apisearch_server.content_type_validation_over_http:
+        class: Apisearch\Server\Controller\Listener\ContentTypeValidationOverHTTP
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: validateContentTypeOnKernelRequest }
 
     apisearch_server.token_validation_over_http:
         class: Apisearch\Server\Controller\Listener\TokenValidationOverHTTP

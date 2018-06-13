@@ -43,28 +43,32 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = $request->request;
+        $requestBody = json_decode($request->getContent(), true);
 
-        $plainQuery = $requestBody->get(Http::QUERY_FIELD, null);
-        if (!is_string($plainQuery)) {
-            throw InvalidFormatException::queryFormatNotValid(json_encode($plainQuery));
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody) ||
+            !isset($requestBody[Http::QUERY_FIELD])
+        ) {
+            throw InvalidFormatException::queryFormatNotValid($request->getContent());
         }
 
-        $changes = $requestBody->get(Http::CHANGES_FIELD, null);
-        if (!is_string($changes)) {
-            throw InvalidFormatException::changesFormatNotValid(json_encode($changes));
+        if (!isset($requestBody[Http::CHANGES_FIELD])) {
+            throw InvalidFormatException::changesFormatNotValid($request->getContent());
         }
 
+        $queryAsArray = $requestBody[Http::QUERY_FIELD];
+        $changesAsArray = $requestBody[Http::CHANGES_FIELD];
         $this
             ->commandBus
             ->handle(new UpdateItems(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get(Http::TOKEN_FIELD),
-                QueryModel::createFromArray(json_decode($plainQuery, true)),
-                Changes::createFromArray(json_decode($changes, true))
+                $query->get(Http::TOKEN_FIELD, ''),
+                QueryModel::createFromArray($queryAsArray),
+                Changes::createFromArray($changesAsArray)
             ));
 
         return new JsonResponse('Items updated', 200);

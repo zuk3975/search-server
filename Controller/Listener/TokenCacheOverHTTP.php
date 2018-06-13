@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Controller\Listener;
 
+use Apisearch\Http\Http;
 use Apisearch\Token\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -35,7 +36,7 @@ class TokenCacheOverHTTP
         $request = $event->getRequest();
         $response = $event->getResponse();
         $query = $request->query;
-        $token = $query->get('token');
+        $token = $query->get(Http::TOKEN_FIELD, '');
 
         if (
             $request->isMethod(Request::METHOD_GET) &&

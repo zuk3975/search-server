@@ -18,7 +18,6 @@ namespace Apisearch\Server\Domain\Repository\EventRepository;
 
 use Apisearch\Event\Event;
 use Apisearch\Event\EventRepository as BaseEventRepository;
-use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryWithCredentials;
@@ -31,30 +30,6 @@ use Apisearch\Server\Domain\Repository\WithRepositories;
 class Repository extends RepositoryWithCredentials implements BaseEventRepository
 {
     use WithRepositories;
-
-    /**
-     * Create an index.
-     *
-     * @throws ResourceExistsException
-     */
-    public function createIndex()
-    {
-        $this
-            ->getRepository(IndexRepository::class)
-            ->createIndex();
-    }
-
-    /**
-     * Delete an index.
-     *
-     * @throws ResourceNotAvailableException
-     */
-    public function deleteIndex()
-    {
-        $this
-            ->getRepository(IndexRepository::class)
-            ->deleteIndex();
-    }
 
     /**
      * Save event.

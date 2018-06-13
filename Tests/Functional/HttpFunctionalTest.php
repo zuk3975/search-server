@@ -272,38 +272,6 @@ abstract class HttpFunctionalTest extends ServiceFunctionalTest
     }
 
     /**
-     * Create event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function createEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::configureEventsRepository($appId, $index, $token)
-            ->createIndex(3, 2);
-    }
-
-    /**
-     * Delete event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function deleteEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::configureEventsRepository($appId, $index, $token)
-            ->deleteIndex();
-    }
-
-    /**
      * Query events.
      *
      * @param QueryModel $query
@@ -323,38 +291,6 @@ abstract class HttpFunctionalTest extends ServiceFunctionalTest
     ) {
         self::configureEventsRepository($appId, $index, $token)
             ->query($query, $from, $to);
-    }
-
-    /**
-     * Create log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function createLogsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::configureLogsRepository($appId, $index, $token)
-            ->createIndex();
-    }
-
-    /**
-     * Delete log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function deleteLogsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::configureLogsRepository($appId, $index, $token)
-            ->deleteIndex();
     }
 
     /**

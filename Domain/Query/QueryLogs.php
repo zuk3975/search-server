@@ -20,12 +20,13 @@ use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
+use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Token\Token;
 
 /**
  * Class QueryLogs.
  */
-class QueryLogs extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference
+class QueryLogs extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, IndexRequiredCommand
 {
     /**
      * @var Query

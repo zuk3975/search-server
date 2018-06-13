@@ -21,6 +21,7 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
+use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
 use Apisearch\Token\Token;
@@ -28,7 +29,9 @@ use Apisearch\Token\Token;
 /**
  * Class IndexItems.
  */
-class IndexItems extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand
+class IndexItems
+    extends CommandWithRepositoryReferenceAndToken
+    implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
 {
     /**
      * @var Item[]

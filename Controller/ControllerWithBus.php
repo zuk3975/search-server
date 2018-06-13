@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Controller;
 
+use Apisearch\Exception\TransportableException;
 use League\Tactician\CommandBus;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ControllerWithBus.
@@ -38,5 +40,45 @@ abstract class ControllerWithBus extends BaseController
     public function __construct(CommandBus $commandBus)
     {
         $this->commandBus = $commandBus;
+    }
+
+    /**
+     * Get body element
+     *
+     * @param Request $request
+     * @param string $field
+     * @param TransportableException $exception
+     * @param array $default
+     *
+     * @return array
+     */
+    protected function getRequestContentObject(
+        Request $request,
+        string $field,
+        TransportableException $exception,
+        array $default = null
+    ) : array {
+        $requestContent = $request->getContent();
+        $requestBody = json_decode($requestContent, true);
+
+        if (
+            !empty($requestContent) &&
+            is_null($requestBody)
+        ) {
+            throw $exception;
+        }
+
+        if (
+            !is_array($requestBody) ||
+            !isset($requestBody[$field])
+        ) {
+            if (is_null($default)) {
+                throw $exception;
+            }
+
+            return $default;
+        }
+
+        return $requestBody[$field];
     }
 }

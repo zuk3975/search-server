@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Server\Domain\AppRequiredCommand;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
@@ -25,7 +26,9 @@ use Apisearch\Token\Token;
 /**
  * Class AddToken.
  */
-class AddToken extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand
+class AddToken
+    extends CommandWithRepositoryReferenceAndToken
+    implements LoggableCommand, AsynchronousableCommand, AppRequiredCommand
 {
     /**
      * @var Token

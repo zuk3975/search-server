@@ -39,21 +39,25 @@ class LogsController extends ControllerWithBus
     public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
+        $requestBody = json_decode($request->getContent(), true);
 
-        $plainQuery = $query->get(Http::QUERY_FIELD, null);
-        if (!is_string($plainQuery)) {
-            throw InvalidFormatException::queryFormatNotValid(json_encode($plainQuery));
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody)
+        ) {
+            throw InvalidFormatException::queryFormatNotValid($request->getContent());
         }
 
+        $queryAsArray = $requestBody[Http::QUERY_FIELD] ?? [];
         $eventsAsArray = $this
             ->commandBus
             ->handle(new QueryLogs(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get('token'),
-                Query::createFromArray(json_decode($plainQuery, true)),
+                $query->get(Http::TOKEN_FIELD, ''),
+                Query::createFromArray($queryAsArray),
                 $this->castToIntIfNotNull($query, Http::FROM_FIELD),
                 $this->castToIntIfNotNull($query, Http::TO_FIELD)
             ))

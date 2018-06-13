@@ -44,11 +44,11 @@ class AddInteractionController extends ControllerWithBus
             ->commandBus
             ->handle(new AddInteraction(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
+                    $query->get(Http::APP_ID_FIELD, ''),
                     ''
                 ),
-                $query->get('token'),
-                Interaction::createFromArray(json_decode($query->get('interaction'), true))
+                $query->get(Http::TOKEN_FIELD, ''),
+                Interaction::createFromArray(json_decode($query->get(Http::INTERACTION_FIELD), true))
             ));
 
         return new JsonResponse('', 200);

@@ -19,13 +19,14 @@ namespace Apisearch\Server\Domain\Query;
 use Apisearch\Query\Query as SearchQuery;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
+use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Token\Token;
 
 /**
  * Class Query.
  */
-class Query extends CommandWithRepositoryReferenceAndToken implements LoggableCommand
+class Query extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, IndexRequiredCommand
 {
     /**
      * @var SearchQuery

@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Server\Domain\AppRequiredCommand;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\AsynchronousRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
@@ -23,7 +24,9 @@ use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 /**
  * Class DeleteAllInteractions.
  */
-class DeleteAllInteractions extends CommandWithRepositoryReferenceAndToken implements AsynchronousableCommand
+class DeleteAllInteractions
+    extends CommandWithRepositoryReferenceAndToken
+    implements AsynchronousableCommand, AppRequiredCommand
 {
     use AsynchronousRepositoryReferenceAndToken;
 }
