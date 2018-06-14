@@ -52,14 +52,13 @@ class HealthTest extends HttpFunctionalTest
         );
 
         if (200 === $responseCode) {
-            $this->assertEquals(
-                [
-                    'status' => [
-                        'elasticsearch' => 'green',
-                        'redis' => true,
-                    ],
-                ],
-                json_decode($response->getContent(), true)
+            $content = json_decode($response->getContent(), true);
+            $this->assertTrue($content['status']['redis']);
+            $this->assertTrue(
+                in_array(
+                    $content['status']['elasticsearch'],
+                    ['green', 'yellow']
+                )
             );
         }
     }

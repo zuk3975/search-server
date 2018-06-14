@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Elastica;
 
+use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 
@@ -77,4 +78,34 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
             $this->repositoryConfig['config_path']
         ), '/');
     }
+
+    /**
+     * Normalize Repository Reference for cross index
+     *
+     * @param RepositoryReference $repositoryReference
+     *
+     * @return RepositoryReference
+     */
+    protected function normalizeRepositoryReferenceCrossIndices(RepositoryReference $repositoryReference)
+    {
+        $indices = $repositoryReference->getIndex();
+        if ($indices === '*') {
+            return RepositoryReference::create(
+                $repositoryReference->getAppId(),
+                'all'
+            );
+        }
+
+        $splittedIndices = explode(',', $indices);
+        if (count($splittedIndices) > 1) {
+            sort($splittedIndices);
+            return RepositoryReference::create(
+                $repositoryReference->getAppId(),
+                implode('_', $splittedIndices)
+            );
+        }
+
+        return $repositoryReference;
+    }
+
 }

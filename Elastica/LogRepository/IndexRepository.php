@@ -58,50 +58,19 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
     }
 
     /**
-     * Create the index.
-     */
-    public function createIndex()
-    {
-        $this
-            ->elasticaWrapper
-            ->createIndex(
-                $this->getRepositoryReference(),
-                ImmutableConfig::createEmpty(),
-                $this->repositoryConfig['shards'],
-                $this->repositoryConfig['replicas']
-            );
-
-        $this
-            ->elasticaWrapper
-            ->createIndexMapping(
-                $this->getRepositoryReference(),
-                ImmutableConfig::createEmpty()
-            );
-
-        $this->refresh();
-    }
-
-    /**
-     * Delete the index.
-     */
-    public function deleteIndex()
-    {
-        $this
-            ->elasticaWrapper
-            ->deleteIndex($this->getRepositoryReference());
-    }
-
-    /**
      * Generate log document.
      *
      * @param Log $log
      */
     public function addLog(Log $log)
     {
+
         $this
             ->elasticaWrapper
             ->addDocuments(
-                $this->getRepositoryReference(),
+                $this->normalizeRepositoryReferenceCrossIndices(
+                    $this->getRepositoryReference()
+                ),
                 [$this->createLogDocument($log)]
             );
 

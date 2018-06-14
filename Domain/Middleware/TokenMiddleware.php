@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Middleware;
 
+use Apisearch\Exception\ForbiddenException;
 use Apisearch\Exception\InvalidTokenException;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\Query\Query;
@@ -35,13 +36,16 @@ class TokenMiddleware implements Middleware
     public function execute($command, callable $next)
     {
         $hasToken = ($command instanceof CommandWithRepositoryReferenceAndToken);
+
         if ($hasToken) {
+            if (empty($command->getToken())) {
+                throw ForbiddenException::createTokenIsRequiredException();
+            }
+
             $this->applyMiddlewarePre($command);
         }
 
-        $result = $next($command);
-
-        return $result;
+        return $next($command);
     }
 
     /**

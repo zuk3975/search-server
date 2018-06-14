@@ -33,30 +33,6 @@ class Repository extends RepositoryWithCredentials implements BaseLogRepository
     use WithRepositories;
 
     /**
-     * Create an index.
-     *
-     * @throws ResourceExistsException
-     */
-    public function createIndex()
-    {
-        $this
-            ->getRepository(IndexRepository::class)
-            ->createIndex();
-    }
-
-    /**
-     * Delete an index.
-     *
-     * @throws ResourceNotAvailableException
-     */
-    public function deleteIndex()
-    {
-        $this
-            ->getRepository(IndexRepository::class)
-            ->deleteIndex();
-    }
-
-    /**
      * Save log.
      *
      * @param Log $log

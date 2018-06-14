@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller;
 
 use Apisearch\Config\ImmutableConfig;
+use Apisearch\Exception\InvalidFormatException;
 use Apisearch\Http\Http;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\CreateIndex;
@@ -38,18 +39,25 @@ class CreateIndexController extends ControllerWithBus
     public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
-        $requestBody = $request->request;
-        $plainConfig = $requestBody->get(Http::CONFIG_FIELD, '{}');
+        $requestBody = json_decode($request->getContent(), true);
 
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody)
+        ) {
+            throw InvalidFormatException::configFormatNotValid($request->getContent());
+        }
+
+        $configAsArray = $requestBody[Http::CONFIG_FIELD] ?? [];
         $this
             ->commandBus
             ->handle(new CreateIndex(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get(Http::TOKEN_FIELD),
-                ImmutableConfig::createFromArray(json_decode($plainConfig, true))
+                $query->get(Http::TOKEN_FIELD, ''),
+                ImmutableConfig::createFromArray($configAsArray)
             ));
 
         return new JsonResponse('Index created', 200);

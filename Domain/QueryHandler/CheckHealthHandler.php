@@ -67,6 +67,9 @@ class CheckHealthHandler
                 'elasticsearch' => $this->getElasticsearchClusterStatus(),
                 'redis' => $this->getRedisStatus(),
             ],
+            'process' => [
+                'memory_used' => memory_get_usage(true),
+            ]
         ];
     }
 

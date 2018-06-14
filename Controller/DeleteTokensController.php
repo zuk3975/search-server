@@ -42,10 +42,10 @@ class DeleteTokensController extends ControllerWithBus
             ->commandBus
             ->handle(new DeleteTokens(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
+                    $query->get(Http::APP_ID_FIELD, ''),
                     ''
                 ),
-                $query->get(Http::TOKEN_FIELD)
+                $query->get(Http::TOKEN_FIELD, '')
             ));
 
         return new JsonResponse('Tokens deleted', 200);

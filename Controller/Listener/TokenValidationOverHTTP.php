@@ -53,7 +53,7 @@ class TokenValidationOverHTTP
     {
         $request = $event->getRequest();
         $query = $request->query;
-        $token = $query->get(Http::TOKEN_FIELD);
+        $token = $query->get(Http::TOKEN_FIELD, '');
         if (is_null($token)) {
             throw InvalidTokenException::createInvalidTokenPermissions('');
         }

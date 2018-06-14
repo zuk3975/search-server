@@ -64,8 +64,8 @@ abstract class ControllerWithBusAndEventRepository extends ControllerWithBus
             ->eventRepository
             ->setRepositoryReference(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 )
             );
     }

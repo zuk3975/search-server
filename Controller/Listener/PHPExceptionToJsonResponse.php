@@ -33,10 +33,9 @@ class PHPExceptionToJsonResponse
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
-
         if ($exception instanceof TransportableException) {
             $event->setResponse(new JsonResponse([
-                'message' => $exception->getMessage(),
+                'message' => $exception->getMessage()
             ], $exception::getTransportableHTTPError()));
 
             return;

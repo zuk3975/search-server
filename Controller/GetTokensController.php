@@ -40,14 +40,14 @@ class GetTokensController extends ControllerWithBus
         $query = $request->query;
 
         $tokens = $this
-        ->commandBus
-        ->handle(new GetTokens(
-            RepositoryReference::create(
-                $query->get(Http::APP_ID_FIELD),
-                ''
-            ),
-            $query->get(Http::TOKEN_FIELD)
-        ));
+            ->commandBus
+            ->handle(new GetTokens(
+                RepositoryReference::create(
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    ''
+                ),
+                $query->get(Http::TOKEN_FIELD, '')
+            ));
 
         return new JsonResponse(
             array_map(function (Token $token) {

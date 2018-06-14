@@ -421,58 +421,6 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     }
 
     /**
-     * Create event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function createEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::getStatic('apisearch_server.command_bus')
-            ->handle(new CreateEventsIndex(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
-            ));
-    }
-
-    /**
-     * Delete event index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function deleteEventsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::getStatic('apisearch_server.command_bus')
-            ->handle(new DeleteEventsIndex(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
-            ));
-    }
-
-    /**
      * Query events.
      *
      * @param QueryModel $query
@@ -504,58 +452,6 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                 $query,
                 $from,
                 $to
-            ));
-    }
-
-    /**
-     * Create log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function createLogsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::getStatic('apisearch_server.command_bus')
-            ->handle(new CreateLogsIndex(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
-            ));
-    }
-
-    /**
-     * Delete log index using the bus.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     */
-    public static function deleteLogsIndex(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        self::getStatic('apisearch_server.command_bus')
-            ->handle(new DeleteLogsIndex(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
             ));
     }
 

@@ -42,24 +42,27 @@ class DeleteItemsController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = $request->request;
+        $requestBody = json_decode($request->getContent(), true);
 
-        $itemsUUID = $requestBody->get(Http::ITEMS_FIELD, null);
-        if (!is_string($itemsUUID)) {
-            throw InvalidFormatException::itemsUUIDRepresentationNotValid(json_encode($itemsUUID));
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody)
+        ) {
+            throw InvalidFormatException::itemsUUIDRepresentationNotValid($request->getContent());
         }
 
+        $itemsUUIDAsArray = $requestBody[Http::ITEMS_FIELD] ?? [];
         $this
             ->commandBus
             ->handle(new DeleteItems(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get('token'),
+                $query->get(Http::TOKEN_FIELD, ''),
                 array_map(function (array $object) {
                     return ItemUUID::createFromArray($object);
-                }, json_decode($itemsUUID, true))
+                }, $itemsUUIDAsArray)
             ));
 
         return new JsonResponse('Items deleted', 200);

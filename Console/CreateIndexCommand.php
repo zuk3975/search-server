@@ -19,9 +19,7 @@ namespace Apisearch\Server\Console;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Command\CreateEventsIndex;
 use Apisearch\Server\Domain\Command\CreateIndex;
-use Apisearch\Server\Domain\Command\CreateLogsIndex;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,18 +59,6 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                 null,
                 InputOption::VALUE_NONE,
                 'Store searchable metadata'
-            )
-            ->addOption(
-                'with-events',
-                null,
-                InputOption::VALUE_NONE,
-                'Create events as well'
-            )
-            ->addOption(
-                'with-logs',
-                null,
-                InputOption::VALUE_NONE,
-                'Create logs as well'
             )
             ->addOption(
                 'synonym',
@@ -126,22 +112,6 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                 'Index is already created. Skipping.'
             );
         }
-
-        if ($input->getOption('with-events')) {
-            $this->createEvents(
-                $input->getArgument('app-id'),
-                $input->getArgument('index'),
-                $output
-            );
-        }
-
-        if ($input->getOption('with-logs')) {
-            $this->createLogs(
-                $input->getArgument('app-id'),
-                $input->getArgument('index'),
-                $output
-            );
-        }
     }
 
     /**
@@ -157,67 +127,5 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
         $result
     ): string {
         return 'Indices created properly';
-    }
-
-    /**
-     * Create events index.
-     *
-     * @param string          $appId
-     * @param string          $index
-     * @param OutputInterface $output
-     */
-    protected function createEvents(
-        string $appId,
-        string $index,
-        OutputInterface $output
-    ) {
-        try {
-            $this
-                ->commandBus
-                ->handle(new CreateEventsIndex(
-                    RepositoryReference::create(
-                        $appId,
-                        $index
-                    ),
-                    $this->createGodToken($appId)
-                ));
-        } catch (ResourceNotAvailableException $exception) {
-            $this->printInfoMessage(
-                $output,
-                $this->getHeader(),
-                'Events index is already created. Skipping.'
-            );
-        }
-    }
-
-    /**
-     * Create logs index.
-     *
-     * @param string          $appId
-     * @param string          $index
-     * @param OutputInterface $output
-     */
-    protected function createLogs(
-        string $appId,
-        string $index,
-        OutputInterface $output
-    ) {
-        try {
-            $this
-                ->commandBus
-                ->handle(new CreateLogsIndex(
-                    RepositoryReference::create(
-                        $appId,
-                        $index
-                    ),
-                    $this->createGodToken($appId)
-                ));
-        } catch (ResourceNotAvailableException $exception) {
-            $this->printInfoMessage(
-                $output,
-                $this->getHeader(),
-                'Logs index is already created. Skipping.'
-            );
-        }
     }
 }

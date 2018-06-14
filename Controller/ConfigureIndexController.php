@@ -40,22 +40,26 @@ class ConfigureIndexController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = $request->request;
+        $requestBody = json_decode($request->getContent(), true);
 
-        $plainConfig = $requestBody->get(Http::CONFIG_FIELD, null);
-        if (!is_string($plainConfig)) {
-            throw InvalidFormatException::configFormatNotValid(json_encode($plainConfig));
+        if (
+            is_null($requestBody) ||
+            !is_array($requestBody) ||
+            !isset($requestBody[Http::CONFIG_FIELD])
+        ) {
+            throw InvalidFormatException::configFormatNotValid($request->getContent());
         }
 
+        $configAsArray = $requestBody[Http::CONFIG_FIELD];
         $this
             ->commandBus
             ->handle(new ConfigureIndex(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD),
-                    $query->get(Http::INDEX_FIELD)
+                    $query->get(Http::APP_ID_FIELD, ''),
+                    $query->get(Http::INDEX_FIELD, '')
                 ),
-                $query->get('token'),
-                Config::createFromArray(json_decode($plainConfig, true))
+                $query->get(Http::TOKEN_FIELD, ''),
+                Config::createFromArray($configAsArray)
             ));
 
         return new JsonResponse('Config applied', 200);

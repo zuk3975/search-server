@@ -24,16 +24,6 @@ use Apisearch\Event\Event;
 interface IndexRepository
 {
     /**
-     * Create the index.
-     */
-    public function createIndex();
-
-    /**
-     * Delete the index.
-     */
-    public function deleteIndex();
-
-    /**
      * Generate event document.
      *
      * @param Event $event

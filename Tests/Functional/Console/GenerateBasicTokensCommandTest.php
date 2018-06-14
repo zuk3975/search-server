@@ -58,9 +58,10 @@ class GenerateBasicTokensCommandTest extends CommandTest
 
         $this->query(Query::createMatchAll(), null, null, $adminToken);
         $this->query(Query::createMatchAll(), null, null, $queryToken);
-        $this->queryEvents(Query::createMatchAll(), null, null, null, null, $adminToken);
-        $this->queryEvents(Query::createMatchAll(), null, null, null, null, $eventsToken);
-        $this->queryLogs(Query::createMatchAll(), null, null, null, null, $adminToken);
+
+        // $this->queryEvents(Query::createMatchAll(), null, null, null, null, $adminToken);
+        // $this->queryEvents(Query::createMatchAll(), null, null, null, null, $eventsToken);
+        // $this->queryLogs(Query::createMatchAll(), null, null, null, null, $adminToken);
         // $this->addInteraction('1234', '1~product', 10, self::$appId, $adminToken);
         // $this->addInteraction('1234', '1~product', 10, self::$appId, $interactionsToken);
 
@@ -72,8 +73,8 @@ class GenerateBasicTokensCommandTest extends CommandTest
         }
 
         try {
-            $this->queryEvents(Query::createMatchAll(), null, null, null, null, $queryToken);
-            $this->fail('Events endpoint should not be accessible with an query token');
+            // $this->queryEvents(Query::createMatchAll(), null, null, null, null, $queryToken);
+            // $this->fail('Events endpoint should not be accessible with an query token');
         } catch (InvalidTokenException $e) {
             // Silent pass
         }

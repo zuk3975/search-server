@@ -194,7 +194,7 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
             $indexedMetadata['occurred_on']
         );
         unset($indexedMetadata['occurred_on']);
-
+var_dump($occurredOn->format('Uu'));
         return Log::createFromArray([
             'id ' => (string) $result['uuid']['id'],
             'type' => (string) $result['uuid']['type'],

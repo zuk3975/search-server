@@ -18,12 +18,9 @@ namespace Apisearch\Server\Console;
 
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Command\DeleteEventsIndex;
 use Apisearch\Server\Domain\Command\DeleteIndex;
-use Apisearch\Server\Domain\Command\DeleteLogsIndex;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -47,18 +44,6 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
                 'index',
                 InputArgument::REQUIRED,
                 'Index'
-            )
-            ->addOption(
-                'with-events',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Create events as well'
-            )
-            ->addOption(
-                'with-logs',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Create logs as well'
             );
     }
 
@@ -95,22 +80,6 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
         } catch (ResourceNotAvailableException $exception) {
             $output->writeln('Index not found. Skipping.');
         }
-
-        if ($input->hasOption('with-events')) {
-            $this->deleteEvents(
-                $input->getArgument('app-id'),
-                $input->getArgument('index'),
-                $output
-            );
-        }
-
-        if ($input->hasOption('with-logs')) {
-            $this->deleteLogs(
-                $input->getArgument('app-id'),
-                $input->getArgument('index'),
-                $output
-            );
-        }
     }
 
     /**
@@ -126,59 +95,5 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
         $result
     ): string {
         return 'Indices deleted properly';
-    }
-
-    /**
-     * Delete events index.
-     *
-     * @param string          $appId
-     * @param string          $index
-     * @param OutputInterface $output
-     */
-    protected function deleteEvents(
-        string $appId,
-        string $index,
-        OutputInterface $output
-    ) {
-        try {
-            $this
-                ->commandBus
-                ->handle(new DeleteEventsIndex(
-                    RepositoryReference::create(
-                        $appId,
-                        $index
-                    ),
-                    $this->createGodToken($appId)
-                ));
-        } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Events index not found. Skipping.');
-        }
-    }
-
-    /**
-     * Delete logs index.
-     *
-     * @param string          $appId
-     * @param string          $index
-     * @param OutputInterface $output
-     */
-    protected function deleteLogs(
-        string $appId,
-        string $index,
-        OutputInterface $output
-    ) {
-        try {
-            $this
-                ->commandBus
-                ->handle(new DeleteLogsIndex(
-                    RepositoryReference::create(
-                        $appId,
-                        $index
-                    ),
-                    $this->createGodToken($appId)
-                ));
-        } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Logs index not found. Skipping.');
-        }
     }
 }
