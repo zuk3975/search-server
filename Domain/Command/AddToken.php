@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -26,9 +25,7 @@ use Apisearch\Token\Token;
 /**
  * Class AddToken.
  */
-class AddToken
-    extends CommandWithRepositoryReferenceAndToken
-    implements LoggableCommand, AsynchronousableCommand, AppRequiredCommand
+class AddToken extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand, AppRequiredCommand
 {
     /**
      * @var Token

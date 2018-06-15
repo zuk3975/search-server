@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -43,22 +42,18 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = json_decode($request->getContent(), true);
+        $queryAsArray = $this->getRequestContentObject(
+            $request,
+            Http::QUERY_FIELD,
+            InvalidFormatException::queryFormatNotValid($request->getContent())
+        );
 
-        if (
-            is_null($requestBody) ||
-            !is_array($requestBody) ||
-            !isset($requestBody[Http::QUERY_FIELD])
-        ) {
-            throw InvalidFormatException::queryFormatNotValid($request->getContent());
-        }
+        $changesAsArray = $this->getRequestContentObject(
+            $request,
+            Http::CHANGES_FIELD,
+            InvalidFormatException::queryFormatNotValid($request->getContent())
+        );
 
-        if (!isset($requestBody[Http::CHANGES_FIELD])) {
-            throw InvalidFormatException::changesFormatNotValid($request->getContent());
-        }
-
-        $queryAsArray = $requestBody[Http::QUERY_FIELD];
-        $changesAsArray = $requestBody[Http::CHANGES_FIELD];
         $this
             ->commandBus
             ->handle(new UpdateItems(

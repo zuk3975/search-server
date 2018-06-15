@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -25,7 +24,10 @@ use Apisearch\Server\Tests\Functional\AsynchronousFunctionalTest;
 class AsynchronousCommandsTest extends AsynchronousFunctionalTest
 {
     /**
-     * @group nobita
+     * Test simple query.
+     *
+     * We start sleeping 2 seconds to make sure that the commands are properly
+     * ingested and processed by the command consumer
      */
     public function testSimpleQuery()
     {

@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -58,9 +57,11 @@ class PingTest extends HttpFunctionalTest
      */
     public function dataPing(): array
     {
+        self::loadEnv();
+
         return [
-            [self::$pingToken, 200],
-            [self::$godToken, 200],
+            [$_ENV['APISEARCH_GOD_TOKEN'], 200],
+            [$_ENV['APISEARCH_PING_TOKEN'], 200],
             ['1234', 401],
         ];
     }

@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -25,9 +24,7 @@ use Apisearch\Server\Domain\LoggableCommand;
 /**
  * Class DeleteTokens.
  */
-class DeleteTokens
-    extends CommandWithRepositoryReferenceAndToken
-    implements LoggableCommand, AsynchronousableCommand, AppRequiredCommand
+class DeleteTokens extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand, AppRequiredCommand
 {
     use AsynchronousRepositoryReferenceAndToken;
 }

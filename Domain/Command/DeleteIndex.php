@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -26,9 +25,7 @@ use Apisearch\Server\Domain\WriteCommand;
 /**
  * Class DeleteIndex.
  */
-class DeleteIndex
-    extends CommandWithRepositoryReferenceAndToken
-    implements WriteCommand, LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
+class DeleteIndex extends CommandWithRepositoryReferenceAndToken implements WriteCommand, LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
 {
     use AsynchronousRepositoryReferenceAndToken;
 }

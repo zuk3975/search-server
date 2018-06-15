@@ -9,14 +9,12 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
 
 namespace Apisearch\Server\Elastica\LogRepository;
 
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Log\Log;
 use Apisearch\Server\Domain\Repository\LogRepository\IndexRepository as IndexRepositoryInterface;
 use Apisearch\Server\Elastica\Builder\TimeFormatBuilder;
@@ -64,7 +62,6 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
      */
     public function addLog(Log $log)
     {
-
         $this
             ->elasticaWrapper
             ->addDocuments(

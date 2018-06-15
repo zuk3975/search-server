@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -42,16 +41,13 @@ class DeleteItemsController extends ControllerWithBusAndEventRepository
     {
         $this->configureEventRepository($request);
         $query = $request->query;
-        $requestBody = json_decode($request->getContent(), true);
+        $itemsUUIDAsArray = $this->getRequestContentObject(
+            $request,
+            Http::ITEMS_FIELD,
+            InvalidFormatException::itemsUUIDRepresentationNotValid($request->getContent()),
+            []
+        );
 
-        if (
-            is_null($requestBody) ||
-            !is_array($requestBody)
-        ) {
-            throw InvalidFormatException::itemsUUIDRepresentationNotValid($request->getContent());
-        }
-
-        $itemsUUIDAsArray = $requestBody[Http::ITEMS_FIELD] ?? [];
         $this
             ->commandBus
             ->handle(new DeleteItems(

@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of the {Package name}.
+ * This file is part of the Apisearch Server
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,20 +11,19 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Apisearch\Server\Tests\Functional\Http;
+declare(strict_types=1);
 
+namespace Apisearch\Server\Tests\Functional\Http;
 
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 
 /**
- * Class HttpParametersTest
+ * Class HttpParametersTest.
  */
 class HttpParametersTest extends HttpFunctionalTest
 {
     /**
-     * Test mandatory app_id parameter
-     *
-     * @group test
+     * Test mandatory app_id parameter.
      */
     public function testMandatoryAppId()
     {

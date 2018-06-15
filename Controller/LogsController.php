@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -39,16 +38,13 @@ class LogsController extends ControllerWithBus
     public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
-        $requestBody = json_decode($request->getContent(), true);
+        $queryAsArray = $this->getRequestContentObject(
+            $request,
+            Http::QUERY_FIELD,
+            InvalidFormatException::queryFormatNotValid($request->getContent()),
+            []
+        );
 
-        if (
-            is_null($requestBody) ||
-            !is_array($requestBody)
-        ) {
-            throw InvalidFormatException::queryFormatNotValid($request->getContent());
-        }
-
-        $queryAsArray = $requestBody[Http::QUERY_FIELD] ?? [];
         $eventsAsArray = $this
             ->commandBus
             ->handle(new QueryLogs(

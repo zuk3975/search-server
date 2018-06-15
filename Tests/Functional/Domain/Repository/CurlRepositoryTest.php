@@ -13,11 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\Domain\Query;
+namespace Apisearch\Server\Tests\Functional\Domain\Repository;
+
+use Apisearch\Server\Tests\Functional\CurlFunctionalTest;
 
 /**
- * Class Ping.
+ * Class CurlRepositoryTest.
  */
-class Ping
+class CurlRepositoryTest extends CurlFunctionalTest
 {
+    use AllTests;
 }
