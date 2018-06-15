@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -194,7 +193,7 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
             $indexedMetadata['occurred_on']
         );
         unset($indexedMetadata['occurred_on']);
-var_dump($occurredOn->format('Uu'));
+
         return Log::createFromArray([
             'id ' => (string) $result['uuid']['id'],
             'type' => (string) $result['uuid']['type'],

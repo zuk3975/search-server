@@ -1,6 +1,7 @@
 <?php
+
 /*
- * This file is part of the {Package name}.
+ * This file is part of the Apisearch Server
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,8 +11,9 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Apisearch\Server\Domain\Middleware;
+declare(strict_types=1);
 
+namespace Apisearch\Server\Domain\Middleware;
 
 use Apisearch\Exception\ForbiddenException;
 use Apisearch\Server\Domain\AppRequiredCommand;
@@ -20,7 +22,7 @@ use Apisearch\Server\Domain\IndexRequiredCommand;
 use League\Tactician\Middleware;
 
 /**
- * Class RepositoryReferenceMiddleware
+ * Class RepositoryReferenceMiddleware.
  */
 class RepositoryReferenceMiddleware implements Middleware
 {

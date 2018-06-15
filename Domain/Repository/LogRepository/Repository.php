@@ -9,14 +9,12 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Repository\LogRepository;
 
-use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Log\Log;
 use Apisearch\Log\LogRepository as BaseLogRepository;

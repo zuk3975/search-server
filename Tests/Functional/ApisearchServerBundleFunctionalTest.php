@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -23,19 +22,17 @@ use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Query\Query as QueryModel;
+use Apisearch\Result\Events;
+use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Command\AddInteraction;
 use Apisearch\Server\Domain\Command\AddToken;
 use Apisearch\Server\Domain\Command\ConfigureIndex;
-use Apisearch\Server\Domain\Command\CreateEventsIndex;
 use Apisearch\Server\Domain\Command\CreateIndex;
-use Apisearch\Server\Domain\Command\CreateLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteAllInteractions;
-use Apisearch\Server\Domain\Command\DeleteEventsIndex;
 use Apisearch\Server\Domain\Command\DeleteIndex;
 use Apisearch\Server\Domain\Command\DeleteItems;
-use Apisearch\Server\Domain\Command\DeleteLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteToken;
 use Apisearch\Server\Domain\Command\IndexItems;
 use Apisearch\Server\Domain\Command\ResetIndex;
@@ -50,6 +47,7 @@ use Apisearch\Server\Exception\ErrorException;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
 use Apisearch\User\Interaction;
+use Dotenv\Dotenv;
 use Mmoreram\BaseBundle\BaseBundle;
 use Mmoreram\BaseBundle\Kernel\BaseKernel;
 use Mmoreram\BaseBundle\Tests\BaseFunctionalTest;
@@ -112,6 +110,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      */
     protected static function getKernel(): KernelInterface
     {
+        self::loadEnv();
+        self::$godToken = $_ENV['APISEARCH_GOD_TOKEN'];
+        self::$pingToken = $_ENV['APISEARCH_PING_TOKEN'];
         $imports = [
             ['resource' => '@ApisearchServerBundle/Resources/config/tactician.yml'],
             [
@@ -243,6 +244,15 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     }
 
     /**
+     * Load env vars.
+     */
+    protected static function loadEnv()
+    {
+        $dotenv = new Dotenv(__DIR__.'/../..');
+        $dotenv->load();
+    }
+
+    /**
      * Log domain events.
      *
      * @return bool
@@ -311,14 +321,14 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      *
      * God token
      */
-    public static $godToken = '0e4d75ba-c640-44c1-a745-06ee51db4e93';
+    public static $godToken;
 
     /**
      * @var string
      *
      * Ping token
      */
-    public static $pingToken = '6326d504-0a5f-f1ae-7344-8e70b75fcde9';
+    public static $pingToken;
 
     /**
      * @var string
@@ -645,6 +655,8 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @param string     $appId
      * @param string     $index
      * @param Token      $token
+     *
+     * @return Events
      */
     abstract public function queryEvents(
         QueryModel $query,
@@ -653,7 +665,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         string $appId = null,
         string $index = null,
         Token $token = null
-    );
+    ): Events;
 
     /**
      * Query logs.
@@ -664,6 +676,8 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @param string     $appId
      * @param string     $index
      * @param Token      $token
+     *
+     * @return Logs
      */
     abstract public function queryLogs(
         QueryModel $query,
@@ -672,7 +686,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         string $appId = null,
         string $index = null,
         Token $token = null
-    );
+    ): Logs;
 
     /**
      * Add interaction.
@@ -719,4 +733,18 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @return array
      */
     abstract public function checkHealth(Token $token = null): array;
+
+    /**
+     * Get token id.
+     *
+     * @param Token $token
+     *
+     * @return string
+     */
+    protected static function getTokenId(Token $token = null): string
+    {
+        return ($token instanceof Token)
+                ? $token->getTokenUUID()->composeUUID()
+                : self::getParameterStatic('apisearch_server.god_token');
+    }
 }

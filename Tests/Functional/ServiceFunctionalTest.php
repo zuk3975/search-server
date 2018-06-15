@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -24,18 +23,16 @@ use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Result\Events;
+use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Command\AddInteraction;
 use Apisearch\Server\Domain\Command\AddToken;
 use Apisearch\Server\Domain\Command\ConfigureIndex;
-use Apisearch\Server\Domain\Command\CreateEventsIndex;
 use Apisearch\Server\Domain\Command\CreateIndex;
-use Apisearch\Server\Domain\Command\CreateLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteAllInteractions;
-use Apisearch\Server\Domain\Command\DeleteEventsIndex;
 use Apisearch\Server\Domain\Command\DeleteIndex;
 use Apisearch\Server\Domain\Command\DeleteItems;
-use Apisearch\Server\Domain\Command\DeleteLogsIndex;
 use Apisearch\Server\Domain\Command\DeleteToken;
 use Apisearch\Server\Domain\Command\DeleteTokens;
 use Apisearch\Server\Domain\Command\IndexItems;
@@ -429,6 +426,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string     $appId
      * @param string     $index
      * @param Token      $token
+     *
+     * @return Events
      */
     public function queryEvents(
         QueryModel $query,
@@ -437,7 +436,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         string $index = null,
         Token $token = null
-    ) {
+    ): Events {
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryEvents(
                 RepositoryReference::create(
@@ -464,6 +463,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string     $appId
      * @param string     $index
      * @param Token      $token
+     *
+     * @return Logs
      */
     public function queryLogs(
         QueryModel $query,
@@ -472,7 +473,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         string $index = null,
         Token $token = null
-    ) {
+    ): Logs {
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryLogs(
                 RepositoryReference::create(

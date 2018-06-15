@@ -70,34 +70,6 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\UpdateItems }
 
-    apisearch_server.comand_handler.create_events_index:
-        class: Apisearch\Server\Domain\CommandHandler\CreateEventsIndexHandler
-        arguments:
-            - "@apisearch_server.events_repository"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\CreateEventsIndex }
-
-    apisearch_server.comand_handler.delete_events_index:
-        class: Apisearch\Server\Domain\CommandHandler\DeleteEventsIndexHandler
-        arguments:
-            - "@apisearch_server.events_repository"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteEventsIndex }
-
-    apisearch_server.comand_handler.create_logs_index:
-        class: Apisearch\Server\Domain\CommandHandler\CreateLogsIndexHandler
-        arguments:
-            - "@apisearch_server.logs_repository"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\CreateLogsIndex }
-
-    apisearch_server.comand_handler.delete_logs_index:
-        class: Apisearch\Server\Domain\CommandHandler\DeleteLogsIndexHandler
-        arguments:
-            - "@apisearch_server.logs_repository"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteLogsIndex }
-
     apisearch_server.comand_handler.add_token:
         class: Apisearch\Server\Domain\CommandHandler\AddTokenHandler
         arguments:

@@ -22,30 +22,6 @@ search_server_api_configure_index:
     defaults:
         _controller: apisearch_server.configure_index_controller
 
-search_server_api_create_events_index:
-    path: /v1/events
-    methods: ["POST"]
-    defaults:
-        _controller: apisearch_server.create_events_index_controller
-
-search_server_api_delete_events_index:
-    path: /v1/events
-    methods: ["DELETE"]
-    defaults:
-        _controller: apisearch_server.delete_events_index_controller
-
-search_server_api_create_logs_index:
-    path: /v1/logs
-    methods: ["POST"]
-    defaults:
-        _controller: apisearch_server.create_logs_index_controller
-
-search_server_api_delete_logs_index:
-    path: /v1/logs
-    methods: ["DELETE"]
-    defaults:
-        _controller: apisearch_server.delete_logs_index_controller
-
 search_server_api_add_token:
     path: /v1/token
     methods: ["POST"]

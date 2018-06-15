@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -80,7 +79,7 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
     }
 
     /**
-     * Normalize Repository Reference for cross index
+     * Normalize Repository Reference for cross index.
      *
      * @param RepositoryReference $repositoryReference
      *
@@ -89,7 +88,7 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
     protected function normalizeRepositoryReferenceCrossIndices(RepositoryReference $repositoryReference)
     {
         $indices = $repositoryReference->getIndex();
-        if ($indices === '*') {
+        if ('*' === $indices) {
             return RepositoryReference::create(
                 $repositoryReference->getAppId(),
                 'all'
@@ -99,6 +98,7 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
         $splittedIndices = explode(',', $indices);
         if (count($splittedIndices) > 1) {
             sort($splittedIndices);
+
             return RepositoryReference::create(
                 $repositoryReference->getAppId(),
                 implode('_', $splittedIndices)
@@ -107,5 +107,4 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
 
         return $repositoryReference;
     }
-
 }

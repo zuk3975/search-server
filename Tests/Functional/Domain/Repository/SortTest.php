@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -135,8 +134,6 @@ trait SortTest
 
     /**
      * Test by nested field and filter.
-     *
-     * @group mmm
      */
     public function testNestedFieldAndFilter()
     {

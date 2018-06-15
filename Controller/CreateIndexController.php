@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -39,16 +38,14 @@ class CreateIndexController extends ControllerWithBus
     public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
-        $requestBody = json_decode($request->getContent(), true);
 
-        if (
-            is_null($requestBody) ||
-            !is_array($requestBody)
-        ) {
-            throw InvalidFormatException::configFormatNotValid($request->getContent());
-        }
+        $configAsArray = $this->getRequestContentObject(
+            $request,
+            Http::CONFIG_FIELD,
+            InvalidFormatException::configFormatNotValid($request->getContent()),
+            []
+        );
 
-        $configAsArray = $requestBody[Http::CONFIG_FIELD] ?? [];
         $this
             ->commandBus
             ->handle(new CreateIndex(

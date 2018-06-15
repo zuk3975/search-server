@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -261,6 +260,7 @@ abstract class ElasticaWrapper
              * The index resource cannot be deleted.
              * This means that the resource is not available
              */
+
             throw $this->getIndexNotAvailableException($exception->getMessage());
         }
 

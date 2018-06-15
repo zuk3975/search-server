@@ -15,32 +15,29 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Functional;
 
-use Apisearch\App\AppRepository;
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
-use Apisearch\Event\EventRepository;
-use Apisearch\Log\LogRepository;
+use Apisearch\Exception\ConnectionException;
+use Apisearch\Http\Endpoints;
+use Apisearch\Http\HttpResponsesToException;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
-use Apisearch\Repository\Repository;
-use Apisearch\Repository\RepositoryReference;
 use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
-use Apisearch\User\Interaction;
-use Apisearch\User\UserRepository;
-use Exception;
 
 /**
- * Class HttpFunctionalTest.
+ * Class CurlFunctionalTest.
  */
-abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
+abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
 {
+    use HttpResponsesToException;
+
     /**
      * Query using the bus.
      *
@@ -57,8 +54,15 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Result {
-        return self::configureRepository($appId, $index, $token)
-            ->query($query);
+        $result = self::makeCurl(
+            'v1-query',
+            $appId,
+            $index,
+            $token,
+            ['query' => $query->toArray()]
+        );
+
+        return Result::createFromArray($result['body']);
     }
 
     /**
@@ -75,11 +79,15 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        $repository = self::configureRepository($appId, $index, $token);
-        foreach ($itemsUUID as $itemUUID) {
-            $repository->deleteItem($itemUUID);
-        }
-        $repository->flush();
+        self::makeCurl(
+            'v1-items-delete',
+            $appId,
+            $index,
+            $token,
+            ['items' => array_map(function (ItemUUID $itemUUID) {
+                return $itemUUID->toArray();
+            }, $itemsUUID)]
+        );
     }
 
     /**
@@ -92,15 +100,19 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
      */
     public static function indexItems(
         array $items,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
+        ?string $appId = null,
+        ?string $index = null,
+        ?Token $token = null
     ) {
-        $repository = self::configureRepository($appId, $index, $token);
-        foreach ($items as $item) {
-            $repository->addItem($item);
-        }
-        $repository->flush();
+        self::makeCurl(
+            'v1-items-index',
+            $appId,
+            $index,
+            $token,
+            ['items' => array_map(function (Item $item) {
+                return $item->toArray();
+            }, $items)]
+        );
     }
 
     /**
@@ -119,8 +131,16 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->updateItems($query, $changes);
+        self::makeCurl(
+            'v1-items-update',
+            $appId,
+            $index,
+            $token,
+            [
+                'query' => $query->toArray(),
+                'changes' => $changes->toArray(),
+            ]
+        );
     }
 
     /**
@@ -135,8 +155,12 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->resetIndex();
+        self::makeCurl(
+            'v1-index-reset',
+            $appId,
+            $index,
+            $token
+        );
     }
 
     /**
@@ -153,10 +177,15 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         Token $token = null,
         ImmutableConfig $config = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->createIndex(
-                $config ?? ImmutableConfig::createFromArray([])
-            );
+        self::makeCurl(
+            'v1-index-create',
+            $appId,
+            $index,
+            $token,
+            is_null($config)
+                ? []
+                : ['config' => $config->toArray()]
+        );
     }
 
     /**
@@ -173,8 +202,7 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->configureIndex($config);
+        // TODO: Implement configureIndex() method.
     }
 
     /**
@@ -191,8 +219,19 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): bool {
-        return self::configureRepository($appId, $index, $token)
-            ->checkIndex();
+        try {
+            $result = self::makeCurl(
+                'v1-index-check',
+                $appId,
+                $index,
+                $token,
+                []
+            );
+        } catch (ConnectionException $exception) {
+            return false;
+        }
+
+        return '200' === $result['code'];
     }
 
     /**
@@ -207,8 +246,12 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->deleteIndex();
+        self::makeCurl(
+            'v1-index-delete',
+            $appId,
+            $index,
+            $token
+        );
     }
 
     /**
@@ -223,8 +266,13 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::configureAppRepository($appId, $token)
-            ->addToken($newToken);
+        self::makeCurl(
+            'v1-token-add',
+            $appId,
+            null,
+            $token,
+            ['token' => $newToken->toArray()]
+        );
     }
 
     /**
@@ -239,8 +287,13 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::configureAppRepository($appId, $token)
-            ->deleteToken($tokenUUID);
+        self::makeCurl(
+            'v1-token-delete',
+            $appId,
+            null,
+            $token,
+            ['token' => $tokenUUID->toArray()]
+        );
     }
 
     /**
@@ -255,22 +308,34 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        return self::configureAppRepository($appId, $token)
-            ->getTokens();
+        $result = self::makeCurl(
+            'v1-tokens-get',
+            $appId,
+            null,
+            $token
+        );
+
+        return array_map(function (array $tokenAsArray) {
+            return Token::createFromArray($tokenAsArray);
+        }, $result['body']);
     }
 
     /**
-     * Delete all tokens.
+     * Delete token.
      *
      * @param string $appId
      * @param Token  $token
      */
     public static function deleteTokens(
-        string $appId = null,
+        string $appId,
         Token $token = null
     ) {
-        return self::configureAppRepository($appId, $token)
-            ->deleteTokens();
+        self::makeCurl(
+            'v1-tokens-delete',
+            $appId,
+            null,
+            $token
+        );
     }
 
     /**
@@ -293,8 +358,19 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Events {
-        return self::configureEventsRepository($appId, $index, $token)
-            ->query($query, $from, $to);
+        $result = self::makeCurl(
+            'v1-events',
+            $appId,
+            $index,
+            $token,
+            [
+                'query' => $query->toArray(),
+                'from' => $from,
+                'to' => $to,
+            ]
+        );
+
+        return Events::createFromArray($result['body']);
     }
 
     /**
@@ -317,8 +393,19 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Logs {
-        return self::configureLogsRepository($appId, $index, $token)
-            ->query($query, $from, $to);
+        $result = self::makeCurl(
+            'v1-logs',
+            $appId,
+            $index,
+            $token,
+            [
+                'query' => $query->toArray(),
+                'from' => $from,
+                'to' => $to,
+            ]
+        );
+
+        return Logs::createFromArray($result['body']);
     }
 
     /**
@@ -337,12 +424,17 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token
     ) {
-        self::configureUserRepository($appId, $token)
-            ->addInteraction(new Interaction(
-                new User($userId),
-                ItemUUID::createByComposedUUID($itemUUIDComposed),
-                $weight
-            ));
+        self::makeCurl(
+            'v1-interactions',
+            $appId,
+            null,
+            $token,
+            [
+                'user' => User::createFromArray(['id' => $userId]),
+                'item_uuid' => ItemUUID::createByComposedUUID($itemUUIDComposed),
+                'weight' => $weight,
+            ]
+        );
     }
 
     /**
@@ -355,8 +447,12 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token = null
     ) {
-        self::configureUserRepository($appId, $token)
-            ->deleteAllInteractions();
+        self::makeCurl(
+            'v1-interactions-delete',
+            $appId,
+            null,
+            $token
+        );
     }
 
     /**
@@ -365,12 +461,15 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param Token $token
      *
      * @return bool
-     *
-     * @throws Exception
      */
     public function ping(Token $token = null): bool
     {
-        throw new Exception('Cannot test ping with this endpoint');
+        $result = self::makeCurl(
+            'v1-ping',
+            null,
+            null,
+            $token
+        );
     }
 
     /**
@@ -379,164 +478,69 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param Token $token
      *
      * @return array
-     *
-     * @throws Exception
      */
     public function checkHealth(Token $token = null): array
     {
-        throw new Exception('Cannot test ping with this endpoint');
-    }
-
-    /**
-     * Configure repository.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     *
-     * @return Repository
-     */
-    private static function configureRepository(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Repository {
-        $index = $index ?? self::$index;
-        $realIndex = empty($index) ? self::$index : $index;
-
-        return self::configureAbstractRepository(
-            rtrim('apisearch.repository_'.static::getRepositoryName().'.'.$realIndex, '.'),
-            $appId,
-            $index,
+        $result = self::makeCurl(
+            'v1-check-health',
+            null,
+            null,
             $token
         );
     }
 
     /**
-     * Configure app repository.
+     * Make a curl execution.
      *
-     * @param string $appId
-     * @param Token  $token
-     *
-     * @return AppRepository
-     */
-    private static function configureAppRepository(
-        string $appId = null,
-        Token $token = null
-    ): AppRepository {
-        return self::configureAbstractRepository(
-            'apisearch.app_repository_'.static::getRepositoryName(),
-            $appId,
-            '*',
-            $token
-        );
-    }
-
-    /**
-     * Configure events repository.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     *
-     * @return EventRepository
-     */
-    private static function configureEventsRepository(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): EventRepository {
-        $index = $index ?? self::$index;
-        $realIndex = empty($index) ? self::$index : $index;
-
-        return self::configureAbstractRepository(
-            rtrim('apisearch.event_repository_'.static::getRepositoryName().'.'.$realIndex, '.'),
-            $appId,
-            $index,
-            $token
-        );
-    }
-
-    /**
-     * Configure logs repository.
-     *
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     *
-     * @return LogRepository
-     */
-    private static function configureLogsRepository(
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): LogRepository {
-        $index = $index ?? self::$index;
-        $realIndex = empty($index) ? self::$index : $index;
-
-        return self::configureAbstractRepository(
-            rtrim('apisearch.log_repository_'.static::getRepositoryName().'.'.$realIndex, '.'),
-            $appId,
-            $index,
-            $token
-        );
-    }
-
-    /**
-     * Configure user repository.
-     *
-     * @param string $appId
-     * @param Token  $token
-     *
-     * @return UserRepository
-     */
-    private static function configureUserRepository(
-        string $appId = null,
-        Token $token = null
-    ): UserRepository {
-        return self::configureAbstractRepository(
-            'apisearch.user_repository_'.static::getRepositoryName(),
-            $appId,
-            '*',
-            $token
-        );
-    }
-
-    /**
-     * Configure abstract repository.
-     *
-     * @param string $repositoryName
-     * @param string $appId
-     * @param string $index
-     * @param Token  $token
-     *
-     * @return mixed
-     */
-    private static function configureAbstractRepository(
-        string $repositoryName,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ) {
-        $repository = self::getStatic($repositoryName);
-        $repository->setCredentials(
-            RepositoryReference::create(
-                $appId ?? self::$appId,
-                $index ?? self::$index
-            ),
-            self::getTokenId($token)
-        );
-
-        return $repository;
-    }
-
-    /**
-     * Get repository name.
+     * @param string      $routeName
+     * @param null|string $appId
+     * @param null|string $index
+     * @param null|Token  $token
+     * @param array       $body
      *
      * @return string
      */
-    protected static function getRepositoryName(): string
-    {
-        return 'search_http';
+    private static function makeCurl(
+        string $routeName,
+        ?string $appId,
+        ?string $index,
+        ?Token $token,
+        array $body = []
+    ) {
+        $endpoint = Endpoints::all()[$routeName];
+        $tmpFile = tempnam('/tmp', 'curl_tmp');
+        $command = sprintf('curl -s -o %s -w "%%{http_code}" %s %s "http://localhost:8200%s?app_id=%s&index=%s&token=%s" -d\'%s\'',
+            $tmpFile,
+            (
+                'head' === $endpoint['verb']
+                    ? '--head'
+                    : '-X'.$endpoint['verb']
+            ),
+            (
+                empty($body)
+                    ? ''
+                    : '-H "Content-Type: application/json"'
+            ),
+            $endpoint['path'],
+            $appId ?? self::$appId,
+            $index ?? self::$index,
+            $token
+                ? $token->getTokenUUID()->composeUUID()
+                : self::getParameterStatic('apisearch_server.god_token'),
+            json_encode($body)
+        );
+
+        $command = str_replace("-d'[]'", '', $command);
+
+        $responseCode = exec($command);
+        $result = [
+            'code' => $responseCode,
+            'body' => json_decode(file_get_contents($tmpFile), true),
+        ];
+        unlink($tmpFile);
+
+        self::throwTransportableExceptionIfNeeded($result);
+
+        return $result;
     }
 }

@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -17,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\AppRequiredCommand;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
@@ -28,9 +26,7 @@ use Apisearch\User\Interaction;
 /**
  * Class AddInteraction.
  */
-class AddInteraction
-    extends CommandWithRepositoryReferenceAndToken
-    implements LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
+class AddInteraction extends CommandWithRepositoryReferenceAndToken implements LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
 {
     /**
      * @var Interaction

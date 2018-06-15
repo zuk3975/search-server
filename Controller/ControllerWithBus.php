@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -43,12 +42,12 @@ abstract class ControllerWithBus extends BaseController
     }
 
     /**
-     * Get body element
+     * Get body element.
      *
-     * @param Request $request
-     * @param string $field
+     * @param Request                $request
+     * @param string                 $field
      * @param TransportableException $exception
-     * @param array $default
+     * @param array                  $default
      *
      * @return array
      */
@@ -57,7 +56,7 @@ abstract class ControllerWithBus extends BaseController
         string $field,
         TransportableException $exception,
         array $default = null
-    ) : array {
+    ): array {
         $requestContent = $request->getContent();
         $requestBody = json_decode($requestContent, true);
 

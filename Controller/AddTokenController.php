@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -39,16 +38,12 @@ class AddTokenController extends ControllerWithBus
     public function __invoke(Request $request): JsonResponse
     {
         $query = $request->query;
-        $requestBody = json_decode($request->getContent(), true);
+        $newTokenAsArray = $this->getRequestContentObject(
+            $request,
+            Http::TOKEN_FIELD,
+            InvalidFormatException::tokenFormatNotValid($request->getContent())
+        );
 
-        if (
-            null === $requestBody ||
-            !isset($requestBody[Http::TOKEN_FIELD])
-        ) {
-            throw InvalidFormatException::tokenFormatNotValid($request->getContent());
-        }
-
-        $newTokenAsArray = $requestBody[Http::TOKEN_FIELD];
         $this
             ->commandBus
             ->handle(new AddToken(

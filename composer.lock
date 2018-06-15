@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "134f4f30e68f6e99ea56379b1e141d7e",
+    "content-hash": "9449230712514e5e20ba262981117dd4",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "3bf80238fbbe4e591011e3de6b4ab590287e0960"
+                "reference": "f5dcba3a72f0e23a1ac26751f214a8e13eabd726"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/3bf80238fbbe4e591011e3de6b4ab590287e0960",
-                "reference": "3bf80238fbbe4e591011e3de6b4ab590287e0960",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/f5dcba3a72f0e23a1ac26751f214a8e13eabd726",
+                "reference": "f5dcba3a72f0e23a1ac26751f214a8e13eabd726",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-13 15:50:58"
+            "time": "2018-06-13 16:11:25"
         },
         {
             "name": "apisearch-io/php-client",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "93fad8f375cf820804b36f54e897cf10330ca96b"
+                "reference": "9061157e31d82383df77071c94ad875ece3b6adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/93fad8f375cf820804b36f54e897cf10330ca96b",
-                "reference": "93fad8f375cf820804b36f54e897cf10330ca96b",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/9061157e31d82383df77071c94ad875ece3b6adf",
+                "reference": "9061157e31d82383df77071c94ad875ece3b6adf",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-13 15:50:39"
+            "time": "2018-06-14 16:51:59"
         },
         {
             "name": "apisearch-io/react-socket-middleware-finite-server",
@@ -1406,16 +1406,16 @@
         },
         {
             "name": "one-bundle-app/one-bundle-app",
-            "version": "1.0.6",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/one-bundle-app/one-bundle-app.git",
-                "reference": "44ee32fc58a9aec3401be02d5a3b6f9d19facd16"
+                "reference": "7a509215e1f0808793ce77d09a4bdff94ffffa7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/44ee32fc58a9aec3401be02d5a3b6f9d19facd16",
-                "reference": "44ee32fc58a9aec3401be02d5a3b6f9d19facd16",
+                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/7a509215e1f0808793ce77d09a4bdff94ffffa7d",
+                "reference": "7a509215e1f0808793ce77d09a4bdff94ffffa7d",
                 "shasum": ""
             },
             "require": {
@@ -1430,7 +1430,8 @@
                 "symfony/debug": "^3.0|^4.0",
                 "symfony/framework-bundle": "^3.0|^4.0",
                 "symfony/http-kernel": "^3.0|^4.0",
-                "symfony/yaml": "^3.0|^4.0"
+                "symfony/yaml": "^3.0|^4.0",
+                "vlucas/phpdotenv": "^2.4"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^1.12.4",
@@ -1463,7 +1464,7 @@
                 "bundle",
                 "symfony"
             ],
-            "time": "2018-06-06T11:33:47+00:00"
+            "time": "2018-06-15T07:28:36+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2472,16 +2473,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "5e60e5596a5422287f9d2205f405bef2ae0cef4b"
+                "reference": "f4edc2581617431aea50430749db55cc3fc031b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/5e60e5596a5422287f9d2205f405bef2ae0cef4b",
-                "reference": "5e60e5596a5422287f9d2205f405bef2ae0cef4b",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/f4edc2581617431aea50430749db55cc3fc031b3",
+                "reference": "f4edc2581617431aea50430749db55cc3fc031b3",
                 "shasum": ""
             },
             "require": {
@@ -2514,26 +2515,26 @@
                 "promise",
                 "promises"
             ],
-            "time": "2018-06-11T11:05:43+00:00"
+            "time": "2018-06-13T15:59:06+00:00"
         },
         {
             "name": "react/promise-timer",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise-timer.git",
-                "reference": "c21781145955892900efba366ec236eb66e3ee35"
+                "reference": "a11206938ca2394dc7bb368f5da25cd4533fa603"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise-timer/zipball/c21781145955892900efba366ec236eb66e3ee35",
-                "reference": "c21781145955892900efba366ec236eb66e3ee35",
+                "url": "https://api.github.com/repos/reactphp/promise-timer/zipball/a11206938ca2394dc7bb368f5da25cd4533fa603",
+                "reference": "a11206938ca2394dc7bb368f5da25cd4533fa603",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3",
                 "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3.5",
-                "react/promise": "^2.6.0 || ^1.2.1"
+                "react/promise": "^2.7.0 || ^1.2.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
@@ -2558,7 +2559,7 @@
                 }
             ],
             "description": "A trivial implementation of timeouts for Promises, built on top of ReactPHP.",
-            "homepage": "https://github.com/react/promise-timer",
+            "homepage": "https://github.com/reactphp/promise-timer",
             "keywords": [
                 "async",
                 "event-loop",
@@ -2567,7 +2568,7 @@
                 "timeout",
                 "timer"
             ],
-            "time": "2018-06-11T14:11:05+00:00"
+            "time": "2018-06-13T16:45:37+00:00"
         },
         {
             "name": "react/socket",
@@ -4182,6 +4183,56 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2018-05-03T23:18:14+00:00"
+        },
+        {
+            "name": "vlucas/phpdotenv",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c",
+                "reference": "3cc116adbe4b11be5ec557bf1d24dc5e3a21d18c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dotenv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause-Attribution"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2016-09-01T10:05:43+00:00"
         }
     ],
     "packages-dev": [

@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author PuntMig Technologies
  */
 
 declare(strict_types=1);
@@ -24,9 +23,7 @@ use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 /**
  * Class DeleteAllInteractions.
  */
-class DeleteAllInteractions
-    extends CommandWithRepositoryReferenceAndToken
-    implements AsynchronousableCommand, AppRequiredCommand
+class DeleteAllInteractions extends CommandWithRepositoryReferenceAndToken implements AsynchronousableCommand, AppRequiredCommand
 {
     use AsynchronousRepositoryReferenceAndToken;
 }
