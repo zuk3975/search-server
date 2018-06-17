@@ -67,7 +67,7 @@ class CheckHealthHandler
                 'redis' => $this->getRedisStatus(),
             ],
             'process' => [
-                'memory_used' => memory_get_usage(true),
+                'memory_used' => memory_get_usage(false),
             ],
         ];
     }

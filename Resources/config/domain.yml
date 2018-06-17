@@ -234,7 +234,7 @@ services:
         public: false
 
     apisearch_server.middleware.repository_reference:
-        class: Apisearch\Server\Domain\Middleware\TokenMiddleware
+        class: Apisearch\Server\Domain\Middleware\RepositoryReferenceMiddleware
         public: false
 
     apisearch_server.middleware.token:
