@@ -27,6 +27,7 @@ use Apisearch\Server\DependencyInjection\CompilerPass\ItemRepositoriesCompilerPa
 use Apisearch\Server\DependencyInjection\CompilerPass\LogRepositoriesCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\LogsMiddlewareCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\PluginsMiddlewareCompilerPass;
+use Apisearch\Server\DependencyInjection\CompilerPass\TokenRepositoryCompilerPass;
 use Apisearch\Server\DependencyInjection\CompilerPass\UserRepositoriesCompilerPass;
 use League\Tactician\Bundle\TacticianBundle;
 use Mmoreram\BaseBundle\BaseBundle;
@@ -110,6 +111,7 @@ class ApisearchServerBundle extends BaseBundle
             new CommandBusCompilerPass(),
             new PluginsMiddlewareCompilerPass(),
             new EnabledPluginsMiddlewareCompilerPass($this->kernel),
+            new TokenRepositoryCompilerPass(),
         ];
     }
 }

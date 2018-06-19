@@ -1,0 +1,9 @@
+services:
+
+    #
+    # Callbacks
+    #
+    apisearch_plugin.callbacks.callbacks:
+        class: Apisearch\Plugin\Callbacks\Domain\Callbacks
+        arguments:
+            - "%apisearch_plugin_callbacks.callbacks%"

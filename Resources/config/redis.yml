@@ -12,6 +12,3 @@ services:
             - "@apisearch_server.redis_wrapper"
         tags:
             - {name: "apisearch_server.app_repository"}
-
-    apisearch_server.token_locator:
-        alias: apisearch_server.redis_token_repository

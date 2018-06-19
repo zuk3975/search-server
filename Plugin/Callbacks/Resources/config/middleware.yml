@@ -1,0 +1,13 @@
+services:
+
+    #
+    # Middlewares
+    #
+    apisearch_plugin.callbacks.callbacks_middleware:
+        class: Apisearch\Plugin\Callbacks\Domain\Middleware\CallbacksMiddleware
+        arguments:
+            - "@apisearch_plugin.callbacks.callbacks"
+            - "@apisearch_plugin.callbacks.http_client_adapter"
+            - "@apisearch_plugin.callbacks.http_command_adapters"
+        tags:
+            - { name: apisearch_plugin.middleware }

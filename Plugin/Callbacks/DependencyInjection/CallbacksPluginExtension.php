@@ -13,15 +13,15 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\DependencyInjection;
+namespace Apisearch\Plugin\Callbacks\DependencyInjection;
 
 use Mmoreram\BaseBundle\DependencyInjection\BaseExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Class ApisearchServerExtension.
+ * Class CallbacksPluginExtension.
  */
-class ApisearchServerExtension extends BaseExtension
+class CallbacksPluginExtension extends BaseExtension
 {
     /**
      * Returns the recommended alias to use in XML.
@@ -32,7 +32,7 @@ class ApisearchServerExtension extends BaseExtension
      */
     public function getAlias()
     {
-        return 'apisearch_server';
+        return 'apisearch_plugin_callbacks';
     }
 
     /**
@@ -69,12 +69,9 @@ class ApisearchServerExtension extends BaseExtension
     protected function getConfigFiles(array $config): array
     {
         return [
-            'domain',
-            'controllers',
-            'console',
-            'elastica',
-            'neo4j',
-            'redis',
+            'middleware',
+            'adapters',
+            'callbacks',
         ];
     }
 
@@ -94,16 +91,8 @@ class ApisearchServerExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         return [
-            'apisearch_server.middleware_domain_events_service' => $config['middleware_domain_events_service'],
-            'apisearch_server.middleware_logs_service' => $config['middleware_logs_service'],
-            'apisearch_server.command_bus_service' => $config['command_bus_service'],
-            'apisearch_server.token_repository_service' => $config['token_repository_service'],
-            'apisearch_server.config.repository' => $config['config']['repository'],
-            'apisearch_server.config.event_repository' => $config['config']['event_repository'],
-            'apisearch_server.config.log_repository' => $config['config']['log_repository'],
-            'apisearch_server.cluster' => ['servers' => $config['cluster']],
-            'apisearch_server.god_token' => $config['god_token'],
-            'apisearch_server.ping_token' => $config['ping_token'],
+            'apisearch_plugin_callbacks.http_client_adapter' => $config['http_client_adapter'],
+            'apisearch_plugin_callbacks.callbacks' => $config['callbacks'],
         ];
     }
 
@@ -121,6 +110,6 @@ class ApisearchServerExtension extends BaseExtension
      */
     protected function getConfigurationInstance(): ? ConfigurationInterface
     {
-        return new ApisearchServerConfiguration($this->getAlias());
+        return new CallbacksPluginConfiguration($this->getAlias());
     }
 }

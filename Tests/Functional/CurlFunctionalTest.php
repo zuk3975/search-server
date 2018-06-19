@@ -509,7 +509,7 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
     ) {
         $endpoint = Endpoints::all()[$routeName];
         $tmpFile = tempnam('/tmp', 'curl_tmp');
-        $command = sprintf('curl -s -o %s -w "%%{http_code}" %s %s "http://localhost:8200%s?app_id=%s&index=%s&token=%s" -d\'%s\'',
+        $command = sprintf('curl -s -o %s -w "%%{http_code}" %s %s "http://localhost:'.static::HTTP_TEST_SERVICE_PORT.'%s?app_id=%s&index=%s&token=%s" -d\'%s\'',
             $tmpFile,
             (
                 'head' === $endpoint['verb']

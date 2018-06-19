@@ -54,7 +54,7 @@ class PluginMiddlewareCollector implements Middleware
      */
     public function addPluginMiddleware(PluginMiddleware $pluginMiddleware)
     {
-        $commandNamespace = $pluginMiddleware->getSubscribedEvent();
+        $commanddNamespaces = $pluginMiddleware->getSubscribedEvents();
 
         if (!array_reduce($this->enabledPlugins, function (bool $found, array $plugin) use ($pluginMiddleware) {
             return $found || (0 === strpos(get_class($pluginMiddleware), $plugin['path']));
@@ -62,11 +62,13 @@ class PluginMiddlewareCollector implements Middleware
             return;
         }
 
-        if (!isset($this->pluginMiddlewares[$commandNamespace])) {
-            $this->pluginMiddlewares[$commandNamespace] = [];
-        }
+        foreach ($commanddNamespaces as $commandNamespace) {
+            if (!isset($this->pluginMiddlewares[$commandNamespace])) {
+                $this->pluginMiddlewares[$commandNamespace] = [];
+            }
 
-        $this->pluginMiddlewares[$commandNamespace][] = $pluginMiddleware;
+            $this->pluginMiddlewares[$commandNamespace][] = $pluginMiddleware;
+        }
     }
 
     /**

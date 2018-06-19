@@ -1,0 +1,44 @@
+services:
+
+    #
+    # HTTP Adapters
+    #
+    apisearch_plugin.callbacks.retry_map:
+        class: Apisearch\Http\RetryMap
+
+    apisearch_plugin.callbacks.guzzle_http_adapter:
+        class: Apisearch\Http\GuzzleClient
+        arguments:
+            - "@apisearch.guzzle_client_adapter"
+            - ""
+            - ""
+            - "@apisearch_plugin.callbacks.retry_map"
+
+    apisearch_plugin.callbacks.test_http_adapter:
+        class: Apisearch\Http\TestClient
+        arguments:
+            - "@test.client"
+            - ""
+            - "@apisearch_plugin.callbacks.retry_map"
+
+    #
+    # Adapters
+    #
+    apisearch_plugin.callbacks.http_command_adapters:
+        class: Apisearch\Plugin\Callbacks\Domain\Adapter\HttpCommandAdapters
+
+    apisearch_plugin.callbacks.query_http_command_adapters:
+        class: Apisearch\Plugin\Callbacks\Domain\Adapter\QueryHttpCommandAdapter
+        tags:
+            - {name: apisearch_plugin_endpoints_http_command_adapter}
+
+    apisearch_plugin.callbacks.add_token_http_command_adapters:
+        class: Apisearch\Plugin\Callbacks\Domain\Adapter\AddTokenHttpCommandAdapter
+        tags:
+            - {name: apisearch_plugin_endpoints_http_command_adapter}
+
+    apisearch_plugin.callbacks.index_items_http_command_adapters:
+        class: Apisearch\Plugin\Callbacks\Domain\Adapter\IndexItemsHttpCommandAdapter
+        tags:
+            - {name: apisearch_plugin_endpoints_http_command_adapter}
+

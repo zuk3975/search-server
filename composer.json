@@ -62,6 +62,8 @@
             "vendor/bin/php-formatter f:u:s . --exclude=vendor --exclude=web --exclude=bin --exclude=var"
         ],
         "clean-for-test": [
+            "rm -Rf /tmp/base-kernel*",
+            "rm -Rf var/cache/*",
             "curl -XDELETE http://apisearch_elasticsearch:9200/apisearch_*_test_*"
         ],
         "clean-and-test": [

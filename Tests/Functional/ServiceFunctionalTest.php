@@ -55,6 +55,16 @@ use Apisearch\User\Interaction;
 abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
 {
     /**
+     * Save events.
+     *
+     * @return bool
+     */
+    protected static function tokensInRedis(): bool
+    {
+        return false;
+    }
+
+    /**
      * Query using the bus.
      *
      * @param QueryModel $query
@@ -379,7 +389,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
-        self::getStatic('apisearch_server.query_bus')
+        return self::getStatic('apisearch_server.query_bus')
             ->handle(new GetTokens(
                 RepositoryReference::create(
                     $appId ?? self::$appId,
