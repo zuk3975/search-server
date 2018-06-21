@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\AddToken;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\TokenWasAdded;
 use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
@@ -44,6 +45,9 @@ class AddTokenHandler extends WithAppRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new TokenWasAdded($token));
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new TokenWasAdded($token)
+            ));
     }
 }

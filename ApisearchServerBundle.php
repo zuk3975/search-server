@@ -17,18 +17,7 @@ namespace Apisearch\Server;
 
 use Apisearch\ApisearchBundle;
 use Apisearch\Server\DependencyInjection\ApisearchServerExtension;
-use Apisearch\Server\DependencyInjection\CompilerPass\AppRepositoriesCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\CommandBusCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\DomainEventsMiddlewareCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\ElasticaConfigPathCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\EnabledPluginsMiddlewareCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\EventRepositoriesCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\ItemRepositoriesCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\LogRepositoriesCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\LogsMiddlewareCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\PluginsMiddlewareCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\TokenRepositoryCompilerPass;
-use Apisearch\Server\DependencyInjection\CompilerPass\UserRepositoriesCompilerPass;
+use Apisearch\Server\DependencyInjection\CompilerPass;
 use League\Tactician\Bundle\TacticianBundle;
 use Mmoreram\BaseBundle\BaseBundle;
 use RSQueueBundle\RSQueueBundle;
@@ -100,18 +89,19 @@ class ApisearchServerBundle extends BaseBundle
     public function getCompilerPasses(): array
     {
         return [
-            new ItemRepositoriesCompilerPass(),
-            new EventRepositoriesCompilerPass(),
-            new LogRepositoriesCompilerPass(),
-            new ElasticaConfigPathCompilerPass(),
-            new DomainEventsMiddlewareCompilerPass(),
-            new LogsMiddlewareCompilerPass(),
-            new AppRepositoriesCompilerPass(),
-            new UserRepositoriesCompilerPass(),
-            new CommandBusCompilerPass(),
-            new PluginsMiddlewareCompilerPass(),
-            new EnabledPluginsMiddlewareCompilerPass($this->kernel),
-            new TokenRepositoryCompilerPass(),
+            new CompilerPass\ItemRepositoriesCompilerPass(),
+            new CompilerPass\EventRepositoriesCompilerPass(),
+            new CompilerPass\LogRepositoriesCompilerPass(),
+            new CompilerPass\ElasticaConfigPathCompilerPass(),
+            new CompilerPass\DomainEventsMiddlewareCompilerPass(),
+            new CompilerPass\LogsMiddlewareCompilerPass(),
+            new CompilerPass\AppRepositoriesCompilerPass(),
+            new CompilerPass\UserRepositoriesCompilerPass(),
+            new CompilerPass\CommandBusCompilerPass(),
+            new CompilerPass\PluginsMiddlewareCompilerPass(),
+            new CompilerPass\EnabledPluginsMiddlewareCompilerPass($this->kernel),
+            new CompilerPass\TokenRepositoryCompilerPass(),
+            new CompilerPass\DomainEventsSubscribersCompilerPass(),
         ];
     }
 }

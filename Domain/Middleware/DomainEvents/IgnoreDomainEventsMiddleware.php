@@ -15,8 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Middleware\DomainEvents;
 
-use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Server\Domain\Event\DomainEvent;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use League\Tactician\Middleware;
 
 /**
@@ -27,13 +26,10 @@ class IgnoreDomainEventsMiddleware extends DomainEventsMiddleware implements Mid
     /**
      * Process events.
      *
-     * @param WithRepositoryReference $command
-     * @param DomainEvent             $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function processEvent(
-        WithRepositoryReference $command,
-        DomainEvent $event
-    ) {
+    public function processEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
+    {
         // Silent pass
     }
 }

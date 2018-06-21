@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\DeleteItems;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\ItemsWereDeleted;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 
@@ -31,11 +32,12 @@ class DeleteItemsHandler extends WithRepositoryAndEventPublisher
      */
     public function handle(DeleteItems $deleteItems)
     {
+        $repositoryReference = $deleteItems->getRepositoryReference();
         $itemsUUID = $deleteItems->getItemsUUID();
 
         $this
             ->repository
-            ->setRepositoryReference($deleteItems->getRepositoryReference());
+            ->setRepositoryReference($repositoryReference);
 
         $this
             ->repository
@@ -43,6 +45,9 @@ class DeleteItemsHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new ItemsWereDeleted($itemsUUID));
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new ItemsWereDeleted($itemsUUID)
+            ));
     }
 }

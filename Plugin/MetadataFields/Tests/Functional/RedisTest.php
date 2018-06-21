@@ -26,9 +26,6 @@ class RedisTest extends MetadataFieldsFunctionalTest
 {
     /**
      * Basic usage.
-     *
-     * @group metadatafields
-     * @group plugin
      */
     public function testBasicUsage()
     {

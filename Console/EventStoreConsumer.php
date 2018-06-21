@@ -18,7 +18,8 @@ namespace Apisearch\Server\Console;
 use Apisearch\Exception\TransportableException;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Event\DomainEvent;
-use Apisearch\Server\Domain\Event\EventStore;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
+use Apisearch\Server\Domain\Event\EventPublisher;
 use RSQueue\Command\ConsumerCommand;
 use RSQueue\Services\Consumer;
 use RSQueue\Services\Publisher;
@@ -31,11 +32,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class EventStoreConsumer extends ConsumerCommand
 {
     /**
-     * @var EventStore
+     * @var EventPublisher
      *
-     * Event store
+     * Event publisher
      */
-    private $eventStore;
+    private $eventPublisher;
 
     /**
      * @var Publisher
@@ -47,18 +48,18 @@ class EventStoreConsumer extends ConsumerCommand
     /**
      * ConsumerCommand constructor.
      *
-     * @param Consumer   $consumer
-     * @param EventStore $eventStore
-     * @param Publisher  $publisher
+     * @param Consumer       $consumer
+     * @param EventPublisher $eventPublisher
+     * @param Publisher      $publisher
      */
     public function __construct(
         Consumer $consumer,
-        EventStore $eventStore,
+        EventPublisher $eventPublisher,
         Publisher $publisher
     ) {
         parent::__construct($consumer);
 
-        $this->eventStore = $eventStore;
+        $this->eventPublisher = $eventPublisher;
         $this->publisher = $publisher;
     }
 
@@ -86,21 +87,19 @@ class EventStoreConsumer extends ConsumerCommand
         OutputInterface $output,
         array $data
     ) {
-        $this
-            ->eventStore
-            ->setRepositoryReference(
-                RepositoryReference::create(
-                    $data['app_id'],
-                    $data['index_id']
-                )
-            );
-
         $domainEvent = DomainEvent::fromArray($data['event']);
+        $domainEventWithRepositoryReference = new DomainEventWithRepositoryReference(
+            RepositoryReference::create(
+                $data['app_id'],
+                $data['index_id']
+            ),
+            $domainEvent
+        );
 
         try {
             $this
-                ->eventStore
-                ->append($domainEvent);
+                ->eventPublisher
+                ->publish($domainEventWithRepositoryReference);
         } catch (TransportableException $exception) {
             // Silent pass
         }

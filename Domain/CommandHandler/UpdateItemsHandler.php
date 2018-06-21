@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\UpdateItems;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\ItemsWereUpdated;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 
@@ -31,6 +32,7 @@ class UpdateItemsHandler extends WithRepositoryAndEventPublisher
      */
     public function handle(UpdateItems $updateItems)
     {
+        $repositoryReference = $updateItems->getRepositoryReference();
         $query = $updateItems->getQuery();
         $changes = $updateItems->getChanges();
 
@@ -47,9 +49,12 @@ class UpdateItemsHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new ItemsWereUpdated(
-                $query->getFilters(),
-                $changes
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new ItemsWereUpdated(
+                    $query->getFilters(),
+                    $changes
+                )
             ));
     }
 }

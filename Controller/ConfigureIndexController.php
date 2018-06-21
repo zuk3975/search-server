@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class ConfigureIndexController.
  */
-class ConfigureIndexController extends ControllerWithBusAndEventRepository
+class ConfigureIndexController extends ControllerWithBus
 {
     /**
      * Config the index.
@@ -37,7 +37,6 @@ class ConfigureIndexController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
         $configAsArray = $this->getRequestContentObject(
             $request,

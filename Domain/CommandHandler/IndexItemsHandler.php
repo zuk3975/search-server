@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\IndexItems;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\ItemsWereIndexed;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 
@@ -31,11 +32,12 @@ class IndexItemsHandler extends WithRepositoryAndEventPublisher
      */
     public function handle(IndexItems $indexItems)
     {
+        $repositoryReference = $indexItems->getRepositoryReference();
         $items = $indexItems->getItems();
 
         $this
             ->repository
-            ->setRepositoryReference($indexItems->getRepositoryReference());
+            ->setRepositoryReference($repositoryReference);
 
         $this
             ->repository
@@ -43,6 +45,9 @@ class IndexItemsHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new ItemsWereIndexed($items));
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new ItemsWereIndexed($items)
+            ));
     }
 }

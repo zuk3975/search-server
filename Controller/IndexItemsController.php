@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class IndexItemsController.
  */
-class IndexItemsController extends ControllerWithBusAndEventRepository
+class IndexItemsController extends ControllerWithBus
 {
     /**
      * Index items.
@@ -39,7 +39,6 @@ class IndexItemsController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
         $itemsAsArray = $this->getRequestContentObject(
             $request,

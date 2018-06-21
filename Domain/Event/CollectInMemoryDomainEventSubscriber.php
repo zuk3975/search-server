@@ -25,16 +25,16 @@ class CollectInMemoryDomainEventSubscriber implements EventSubscriber
      *
      * Events
      */
-    private $events = [];
+    private $domainEventWithRepositoryReference = [];
 
     /**
      * Subscriber should handle event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      *
      * @return bool
      */
-    public function shouldHandleEvent(DomainEvent $event): bool
+    public function shouldHandleEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference): bool
     {
         return true;
     }
@@ -42,21 +42,21 @@ class CollectInMemoryDomainEventSubscriber implements EventSubscriber
     /**
      * Handle event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function handle(DomainEvent $event)
+    public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
     {
-        $this->events[] = $event;
+        $this->domainEventWithRepositoryReference[] = $domainEventWithRepositoryReference;
     }
 
     /**
      * Get Events.
      *
-     * @return DomainEvent[]
+     * @return DomainEventWithRepositoryReference[]
      */
     public function getEvents(): array
     {
-        return $this->events;
+        return $this->domainEventWithRepositoryReference;
     }
 
     /**
@@ -64,6 +64,6 @@ class CollectInMemoryDomainEventSubscriber implements EventSubscriber
      */
     public function flushEvents()
     {
-        $this->events = [];
+        $this->domainEventWithRepositoryReference = [];
     }
 }

@@ -23,16 +23,16 @@ interface EventSubscriber
     /**
      * Subscriber should handle event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      *
      * @return bool
      */
-    public function shouldHandleEvent(DomainEvent $event): bool;
+    public function shouldHandleEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference): bool;
 
     /**
      * Handle event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function handle(DomainEvent $event);
+    public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference);
 }

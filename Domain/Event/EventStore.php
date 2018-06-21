@@ -17,13 +17,12 @@ namespace Apisearch\Server\Domain\Event;
 
 use Apisearch\Event\Event;
 use Apisearch\Event\EventRepository;
-use Apisearch\Repository\RepositoryReference;
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class EventStore.
  */
-class EventStore
+class EventStore implements EventSubscriber
 {
     /**
      * @var EventRepository
@@ -43,24 +42,29 @@ class EventStore
     }
 
     /**
-     * Set repository reference.
+     * Subscriber should handle event.
      *
-     * @param RepositoryReference $repositoryReference
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
+     *
+     * @return bool
      */
-    public function setRepositoryReference(RepositoryReference $repositoryReference)
+    public function shouldHandleEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference): bool
     {
-        $this
-            ->eventRepository
-            ->setRepositoryReference($repositoryReference);
+        return true;
     }
 
     /**
-     * Append event.
+     * Handle event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function append(DomainEvent $event)
+    public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
     {
+        $this
+            ->eventRepository
+            ->setRepositoryReference($domainEventWithRepositoryReference->getRepositoryReference());
+
+        $domainEvent = $domainEventWithRepositoryReference->getDomainEvent();
         $this
             ->eventRepository
             ->save(
@@ -69,14 +73,14 @@ class EventStore
                     str_replace(
                         'Apisearch\Server\Domain\Event\\',
                         '',
-                        get_class($event)
+                        get_class($domainEvent)
                     ),
-                    json_encode($event->readableOnlyToArray()),
+                    json_encode($domainEvent->readableOnlyToArray()),
                     array_merge(
-                        $event->indexableToArray(),
-                        $event->occurredOnRanges()
+                        $domainEvent->indexableToArray(),
+                        $domainEvent->occurredOnRanges()
                     ),
-                    $event->occurredOn()
+                    $domainEvent->occurredOn()
                 )
             );
     }

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class ResetIndexController.
  */
-class ResetIndexController extends ControllerWithBusAndEventRepository
+class ResetIndexController extends ControllerWithBus
 {
     /**
      * Reset the index.
@@ -35,7 +35,6 @@ class ResetIndexController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
 
         $this

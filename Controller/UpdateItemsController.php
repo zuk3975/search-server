@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class UpdateItemsController.
  */
-class UpdateItemsController extends ControllerWithBusAndEventRepository
+class UpdateItemsController extends ControllerWithBus
 {
     /**
      * Update items.
@@ -40,7 +40,6 @@ class UpdateItemsController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
         $queryAsArray = $this->getRequestContentObject(
             $request,

@@ -18,6 +18,7 @@ namespace Apisearch\Server\Domain\QueryHandler;
 use Apisearch\Model\Item;
 use Apisearch\Query\Filter;
 use Apisearch\Result\Result;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\QueryWasMade;
 use Apisearch\Server\Domain\Query\Query;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
@@ -36,6 +37,7 @@ class QueryHandler extends WithRepositoryAndEventPublisher
      */
     public function handle(Query $query)
     {
+        $repositoryReference = $query->getRepositoryReference();
         $searchQuery = $query->getQuery();
 
         $this
@@ -48,15 +50,18 @@ class QueryHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new QueryWasMade(
-                $searchQuery->getQueryText(),
-                $this->filterFiltersByType($searchQuery->getFilters(), Filter::TYPE_FIELD),
-                $searchQuery->getSortBy(),
-                $searchQuery->getSize(),
-                array_map(function (Item $item) {
-                    return $item->composeUUID();
-                }, $result->getItems()),
-                $searchQuery->getUser()
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new QueryWasMade(
+                    $searchQuery->getQueryText(),
+                    $this->filterFiltersByType($searchQuery->getFilters(), Filter::TYPE_FIELD),
+                    $searchQuery->getSortBy(),
+                    $searchQuery->getSize(),
+                    array_map(function (Item $item) {
+                        return $item->composeUUID();
+                    }, $result->getItems()),
+                    $searchQuery->getUser()
+                )
             ));
 
         return $result;
