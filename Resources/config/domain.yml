@@ -267,6 +267,9 @@ services:
     #
     # Token
     #
+    apisearch_server.in_memory_token_locator:
+        class: Apisearch\Server\Domain\Repository\AppRepository\InMemoryTokenRepository
+
     apisearch_server.token_validator:
         class: Apisearch\Server\Domain\Token\TokenValidator
         arguments:

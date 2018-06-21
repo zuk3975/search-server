@@ -68,12 +68,12 @@ class IndexItemsMiddleware implements PluginMiddleware
     }
 
     /**
-     * Event subscribed namespace.
+     * Events subscribed namespace.
      *
-     * @return string
+     * @return string[]
      */
-    public function getSubscribedEvent(): string
+    public function getSubscribedEvents(): array
     {
-        return IndexItems::class;
+        return [IndexItems::class];
     }
 }

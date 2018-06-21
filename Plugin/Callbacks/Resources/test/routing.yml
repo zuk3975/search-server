@@ -1,0 +1,29 @@
+apisearch_plugin_callbacks_test_controller_empty_endpoint:
+    path: /plugin/endpoints/empty_endpoint
+    methods: []
+    defaults:
+        _controller: apisearch_plugin.callbacks_test_controller:emptyEndpoint
+
+apisearch_plugin_callbacks_test_controller_change_query_size:
+    path: /plugin/endpoints/change_query_size
+    methods: []
+    defaults:
+        _controller: apisearch_plugin.callbacks_test_controller:changeQuerySize
+
+apisearch_plugin_callbacks_test_controller_change_query_result:
+    path: /plugin/endpoints/change_query_result
+    methods: []
+    defaults:
+        _controller: apisearch_plugin.callbacks_test_controller:changeQueryResult
+
+apisearch_plugin_callbacks_test_controller_change_token:
+    path: /plugin/endpoints/change_token
+    methods: []
+    defaults:
+        _controller: apisearch_plugin.callbacks_test_controller:changeToken
+
+apisearch_plugin_callbacks_test_controller_change_items:
+    path: /plugin/endpoints/change_items
+    methods: []
+    defaults:
+        _controller: apisearch_plugin.callbacks_test_controller:changeItems

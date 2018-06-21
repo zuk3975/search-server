@@ -57,6 +57,7 @@ class QueryMiddleware implements PluginMiddleware
     ) {
         /**
          * @var Result
+         * @var Query  $command
          */
         $result = $next($command);
 
@@ -71,12 +72,12 @@ class QueryMiddleware implements PluginMiddleware
     }
 
     /**
-     * Event subscribed namespace.
+     * Events subscribed namespace.
      *
-     * @return string
+     * @return string[]
      */
-    public function getSubscribedEvent(): string
+    public function getSubscribedEvents(): array
     {
-        return Query::class;
+        return [Query::class];
     }
 }

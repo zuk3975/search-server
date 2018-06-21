@@ -68,6 +68,13 @@ set_error_handler(function ($code, $message, $file, $line, $context) {
 abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
 {
     /**
+     * @var string
+     *
+     * External server port
+     */
+    const HTTP_TEST_SERVICE_PORT = '8200';
+
+    /**
      * Get container service.
      *
      * @param string $serviceName
@@ -155,6 +162,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                 'command_bus_service' => static::asynchronousCommands()
                     ? 'apisearch_server.command_bus.asynchronous'
                     : 'apisearch_server.command_bus.inline',
+                'token_repository_service' => static::tokensInRedis()
+                    ? 'apisearch_server.redis_token_repository'
+                    : 'apisearch_server.in_memory_token_locator',
                 'god_token' => self::$godToken,
                 'ping_token' => self::$pingToken,
                 'cluster' => [
@@ -220,7 +230,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                     ],
                     'search_socket' => [
                         'adapter' => 'http',
-                        'endpoint' => 'http://127.0.0.1:8200',
+                        'endpoint' => 'http://127.0.0.1:'.self::HTTP_TEST_SERVICE_PORT,
                         'app_id' => self::$appId,
                         'token' => self::$godToken,
                         'test' => true,
@@ -236,9 +246,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         return new BaseKernel(
             static::decorateBundles($bundles),
             static::decorateConfiguration($configuration),
-            [
+            static::decorateRoutes([
                 '@ApisearchServerBundle/Resources/config/routing.yml',
-            ],
+            ]),
             'prod', false
         );
     }
@@ -293,6 +303,16 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     }
 
     /**
+     * Save events.
+     *
+     * @return bool
+     */
+    protected static function tokensInRedis(): bool
+    {
+        return true;
+    }
+
+    /**
      * Decorate bundles.
      *
      * @param array $bundles
@@ -314,6 +334,18 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     protected static function decorateConfiguration(array $configuration): array
     {
         return $configuration;
+    }
+
+    /**
+     * Decorate routes.
+     *
+     * @param array $routes
+     *
+     * @return array
+     */
+    protected static function decorateRoutes(array $routes): array
+    {
+        return $routes;
     }
 
     /**
