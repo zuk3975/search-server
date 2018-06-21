@@ -17,7 +17,7 @@ namespace Apisearch\Server\Domain\Middleware\DomainEvents;
 
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\Event\CollectInMemoryDomainEventSubscriber;
-use Apisearch\Server\Domain\Event\DomainEvent;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\EventPublisher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -31,7 +31,7 @@ abstract class DomainEventsMiddleware
      *
      * Event publisher
      */
-    private $eventPublisher;
+    private $inlineEventPublisher;
 
     /**
      * @var EventSubscriberInterface
@@ -43,14 +43,14 @@ abstract class DomainEventsMiddleware
     /**
      * DomainEventsMiddleware constructor.
      *
-     * @param EventPublisher $eventPublisher
+     * @param EventPublisher $inlineEventPublisher
      */
-    public function __construct(EventPublisher $eventPublisher)
+    public function __construct(EventPublisher $inlineEventPublisher)
     {
-        $this->eventPublisher = $eventPublisher;
+        $this->inlineEventPublisher = $inlineEventPublisher;
         $this->eventSubscriber = new CollectInMemoryDomainEventSubscriber();
         $this
-            ->eventPublisher
+            ->inlineEventPublisher
             ->subscribe($this->eventSubscriber);
     }
 
@@ -70,11 +70,8 @@ abstract class DomainEventsMiddleware
 
         foreach ($this
                      ->eventSubscriber
-                     ->getEvents() as $event) {
-            $this->processEvent(
-                $command,
-                $event
-            );
+                     ->getEvents() as $domainEventWithRepositoryReference) {
+            $this->processEvent($domainEventWithRepositoryReference);
         }
 
         $this
@@ -87,11 +84,7 @@ abstract class DomainEventsMiddleware
     /**
      * Process events.
      *
-     * @param WithRepositoryReference $command
-     * @param DomainEvent             $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    abstract public function processEvent(
-        WithRepositoryReference $command,
-        DomainEvent $event
-    );
+    abstract public function processEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference);
 }

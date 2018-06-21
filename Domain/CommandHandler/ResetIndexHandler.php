@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\ResetIndex;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\IndexWasReset;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 
@@ -43,6 +44,9 @@ class ResetIndexHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new IndexWasReset());
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new IndexWasReset()
+            ));
     }
 }

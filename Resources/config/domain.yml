@@ -7,8 +7,13 @@ services:
         class: Apisearch\Server\Domain\Event\EventStore
         arguments:
             - "@apisearch_server.events_repository"
+        tags:
+            - { name: apisearch_server.domain_event_subscriber }
 
     apisearch_server.event_publisher:
+        class: Apisearch\Server\Domain\Event\EventPublisher
+
+    apisearch_server.inline_event_publisher:
         class: Apisearch\Server\Domain\Event\EventPublisher
 
     #
@@ -18,7 +23,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\CreateIndexHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\CreateIndex }
 
@@ -26,7 +31,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\DeleteIndexHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteIndex }
 
@@ -34,7 +39,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\ResetIndexHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\ResetIndex }
 
@@ -42,7 +47,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\ConfigureIndexHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\ConfigureIndex }
 
@@ -50,7 +55,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\DeleteItemsHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteItems }
 
@@ -58,7 +63,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\IndexItemsHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\IndexItems }
 
@@ -66,7 +71,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\UpdateItemsHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\UpdateItems }
 
@@ -74,7 +79,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\AddTokenHandler
         arguments:
             - "@apisearch.app_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\AddToken }
 
@@ -82,7 +87,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\DeleteTokenHandler
         arguments:
             - "@apisearch.app_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteToken }
 
@@ -90,7 +95,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\DeleteTokensHandler
         arguments:
             - "@apisearch.app_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteTokens }
 
@@ -98,7 +103,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\AddInteractionHandler
         arguments:
             - "@apisearch.user_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\AddInteraction }
 
@@ -106,7 +111,7 @@ services:
         class: Apisearch\Server\Domain\CommandHandler\DeleteAllInteractionsHandler
         arguments:
             - "@apisearch.user_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteAllInteractions }
 
@@ -117,7 +122,7 @@ services:
         class: Apisearch\Server\Domain\QueryHandler\QueryHandler
         arguments:
             - "@apisearch.repository_main.default"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\Query }
 
@@ -146,7 +151,7 @@ services:
         class: Apisearch\Server\Domain\QueryHandler\GetTokensHandler
         arguments:
             - "@apisearch.app_repository_main"
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\GetTokens }
 
@@ -188,20 +193,20 @@ services:
     apisearch_server.middleware.ignore_events:
         class: Apisearch\Server\Domain\Middleware\DomainEvents\IgnoreDomainEventsMiddleware
         arguments:
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
         public: false
 
     apisearch_server.middleware.inline_events:
         class: Apisearch\Server\Domain\Middleware\DomainEvents\InlineDomainEventsMiddleware
         arguments:
+            - "@apisearch_server.inline_event_publisher"
             - "@apisearch_server.event_publisher"
-            - "@apisearch_server.event_store"
         public: false
 
     apisearch_server.middleware.queue_events:
         class: Apisearch\Server\Domain\Middleware\DomainEvents\QueueDomainEventsMiddleware
         arguments:
-            - "@apisearch_server.event_publisher"
+            - "@apisearch_server.inline_event_publisher"
             - "@rs_queue.producer"
         public: false
 

@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class DeleteItemsController.
  */
-class DeleteItemsController extends ControllerWithBusAndEventRepository
+class DeleteItemsController extends ControllerWithBus
 {
     /**
      * Delete items.
@@ -39,7 +39,6 @@ class DeleteItemsController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
         $itemsUUIDAsArray = $this->getRequestContentObject(
             $request,

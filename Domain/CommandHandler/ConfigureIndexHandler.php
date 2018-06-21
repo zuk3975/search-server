@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\ConfigureIndex;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\IndexWasConfigured;
 use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
 
@@ -44,6 +45,9 @@ class ConfigureIndexHandler extends WithRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new IndexWasConfigured($config));
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new IndexWasConfigured($config)
+            ));
     }
 }

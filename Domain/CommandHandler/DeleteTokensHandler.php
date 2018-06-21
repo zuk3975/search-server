@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\DeleteTokens;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\TokensWereDeleted;
 use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
@@ -43,6 +44,9 @@ class DeleteTokensHandler extends WithAppRepositoryAndEventPublisher
 
         $this
             ->eventPublisher
-            ->publish(new TokensWereDeleted());
+            ->publish(new DomainEventWithRepositoryReference(
+                $repositoryReference,
+                new TokensWereDeleted()
+            ));
     }
 }

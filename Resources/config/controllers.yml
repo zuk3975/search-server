@@ -1,116 +1,98 @@
 services:
 
-    _defaults:
-        autowire: false
-        autoconfigure: false
-        public: true
-
     #
     # Controllers with command bus
     #
-    apisearch_server.create_index_controller:
-        class: Apisearch\Server\Controller\CreateIndexController
+    apisearch_server.controller_with_command_bus:
+        class: Apisearch\Server\Controller\ControllerWithBus
+        abstract: true
         arguments:
             - "@apisearch_server.command_bus"
+
+    apisearch_server.create_index_controller:
+        class: Apisearch\Server\Controller\CreateIndexController
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.delete_index_controller:
         class: Apisearch\Server\Controller\DeleteIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.reset_index_controller:
         class: Apisearch\Server\Controller\ResetIndexController
-        arguments:
-            - "@apisearch_server.command_bus"
-            - "@apisearch_server.events_repository"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.add_token_controller:
         class: Apisearch\Server\Controller\AddTokenController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.delete_token_controller:
         class: Apisearch\Server\Controller\DeleteTokenController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.delete_tokens_controller:
         class: Apisearch\Server\Controller\DeleteTokensController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.add_interaction_controller:
         class: Apisearch\Server\Controller\AddInteractionController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.delete_all_interactions_controller:
         class: Apisearch\Server\Controller\DeleteAllInteractionsController
-        arguments:
-            - "@apisearch_server.command_bus"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.index_items_controller:
         class: Apisearch\Server\Controller\IndexItemsController
-        arguments:
-            - "@apisearch_server.command_bus"
-            - "@apisearch_server.events_repository"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.update_items_controller:
         class: Apisearch\Server\Controller\UpdateItemsController
-        arguments:
-            - "@apisearch_server.command_bus"
-            - "@apisearch_server.events_repository"
+        parent: apisearch_server.controller_with_command_bus
 
     apisearch_server.delete_items_controller:
         class: Apisearch\Server\Controller\DeleteItemsController
-        arguments:
-            - "@apisearch_server.command_bus"
-            - "@apisearch_server.events_repository"
+        parent: apisearch_server.controller_with_command_bus
 
     #
     # Controllers with query bus
     #
-    apisearch_server.query_controller:
-        class: Apisearch\Server\Controller\QueryController
+    apisearch_server.controller_with_query_bus:
+        class: Apisearch\Server\Controller\ControllerWithBus
+        abstract: true
         arguments:
             - "@apisearch_server.query_bus"
-            - "@apisearch_server.events_repository"
+
+    apisearch_server.query_controller:
+        class: Apisearch\Server\Controller\QueryController
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.events_controller:
         class: Apisearch\Server\Controller\EventsController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.logs_controller:
         class: Apisearch\Server\Controller\LogsController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.configure_index_controller:
         class: Apisearch\Server\Controller\ConfigureIndexController
-        arguments:
-            - "@apisearch_server.query_bus"
-            - "@apisearch_server.events_repository"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.check_health_controller:
         class: Apisearch\Server\Controller\CheckHealthController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.ping_controller:
         class: Apisearch\Server\Controller\PingController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.check_index_controller:
         class: Apisearch\Server\Controller\CheckIndexController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
     apisearch_server.get_tokens_controller:
         class: Apisearch\Server\Controller\GetTokensController
-        arguments:
-            - "@apisearch_server.query_bus"
+        parent: apisearch_server.controller_with_query_bus
 
 
     #

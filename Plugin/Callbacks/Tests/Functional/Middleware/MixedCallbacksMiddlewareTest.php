@@ -61,8 +61,6 @@ class MixedCallbacksMiddlewareTest extends EndpointsFunctionalTest
 
     /**
      * Test something.
-     *
-     * @group lala
      */
     public function testSomething()
     {

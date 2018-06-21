@@ -40,13 +40,13 @@ class EventPublisher
     /**
      * Publish event.
      *
-     * @param DomainEvent $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function publish(DomainEvent $event)
+    public function publish(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
     {
         foreach ($this->subscribers as $subscriber) {
-            if ($subscriber->shouldHandleEvent($event)) {
-                $subscriber->handle($event);
+            if ($subscriber->shouldHandleEvent($domainEventWithRepositoryReference)) {
+                $subscriber->handle($domainEventWithRepositoryReference);
             }
         }
     }

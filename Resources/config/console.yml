@@ -72,7 +72,7 @@ services:
         class: Apisearch\Server\Console\EventStoreConsumer
         arguments:
             - "@rs_queue.consumer"
-            - "@apisearch_server.event_store"
+            - "@apisearch_server.event_publisher"
             - "@rs_queue.publisher"
         tags:
             -  { name: console.command, command: apisearch-worker:domain-events-consumer }

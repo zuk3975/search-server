@@ -1,0 +1,6 @@
+services:
+
+    apisearch_server.test.in_memory_domain_event_collector:
+        class: Apisearch\Server\Domain\Event\CollectInMemoryDomainEventSubscriber
+        tags:
+             - { name: apisearch_server.domain_event_subscriber }

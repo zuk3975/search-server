@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class QueryController.
  */
-class QueryController extends ControllerWithBusAndEventRepository
+class QueryController extends ControllerWithBus
 {
     /**
      * Make a query.
@@ -39,7 +39,6 @@ class QueryController extends ControllerWithBusAndEventRepository
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $this->configureEventRepository($request);
         $query = $request->query;
 
         $queryAsArray = $this->getRequestContentObject(

@@ -15,8 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Middleware\DomainEvents;
 
-use Apisearch\Repository\WithRepositoryReference;
-use Apisearch\Server\Domain\Event\DomainEvent;
+use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\EventPublisher;
 use League\Tactician\Middleware;
 use RSQueue\Services\Producer as QueueProducer;
@@ -51,14 +50,12 @@ class QueueDomainEventsMiddleware extends DomainEventsMiddleware implements Midd
     /**
      * Process events.
      *
-     * @param WithRepositoryReference $command
-     * @param DomainEvent             $event
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
      */
-    public function processEvent(
-        WithRepositoryReference $command,
-        DomainEvent $event
-    ) {
-        $repositoryReference = $command->getRepositoryReference();
+    public function processEvent(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
+    {
+        $repositoryReference = $domainEventWithRepositoryReference->getRepositoryReference();
+        $domainEvent = $domainEventWithRepositoryReference->getDomainEvent();
         $this
             ->queueProducer
             ->produce(
@@ -66,7 +63,7 @@ class QueueDomainEventsMiddleware extends DomainEventsMiddleware implements Midd
                 [
                     'app_id' => $repositoryReference->getAppId(),
                     'index_id' => $repositoryReference->getIndex(),
-                    'event' => $event->toArray(),
+                    'event' => $domainEvent->toArray(),
                 ]
             );
     }
