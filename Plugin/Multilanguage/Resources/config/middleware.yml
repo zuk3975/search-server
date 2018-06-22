@@ -1,0 +1,37 @@
+services:
+
+    #
+    # Middlewares
+    #
+    apisearch_plugin.multilanguage.index_items:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\IndexItemsMiddleware
+        arguments:
+            - "@apisearch_server.command_bus.asynchronous"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.delete_items:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\DeleteItemsMiddleware
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.query:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\QueryMiddleware
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.configure_environment:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\ConfigureEnvironmentMiddleware
+        arguments:
+            - "@apisearch_server.elastica_client"
+            - "@apisearch_server.item_elastica_wrapper"
+            - "%apisearch_server.config.repository%"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.clean_environment:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\CleanEnvironmentMiddleware
+        arguments:
+            - "@apisearch_server.elastica_client"
+        tags:
+            - { name: apisearch_plugin.middleware }

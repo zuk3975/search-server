@@ -28,6 +28,8 @@ use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Command\AddInteraction;
 use Apisearch\Server\Domain\Command\AddToken;
+use Apisearch\Server\Domain\Command\CleanEnvironment;
+use Apisearch\Server\Domain\Command\ConfigureEnvironment;
 use Apisearch\Server\Domain\Command\ConfigureIndex;
 use Apisearch\Server\Domain\Command\CreateIndex;
 use Apisearch\Server\Domain\Command\DeleteAllInteractions;
@@ -578,5 +580,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     public function checkHealth(Token $token = null): array
     {
         return self::getStatic('apisearch_server.query_bus')->handle(new CheckHealth());
+    }
+
+    /**
+     * Configure environment.
+     */
+    public static function configureEnvironment()
+    {
+        self::getStatic('apisearch_server.command_bus')->handle(new ConfigureEnvironment());
+    }
+
+    /**
+     * Clean environment.
+     */
+    public static function cleanEnvironment()
+    {
+        self::getStatic('apisearch_server.command_bus')->handle(new CleanEnvironment());
     }
 }

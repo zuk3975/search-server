@@ -17,7 +17,6 @@ namespace Apisearch\Plugin\MetadataFields\Domain\Middleware;
 
 use Apisearch\Plugin\MetadataFields\Domain\Repository\MetadataRepository;
 use Apisearch\Result\Result;
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 use Apisearch\Server\Domain\Query\Query;
 
@@ -46,13 +45,13 @@ class QueryMiddleware implements PluginMiddleware
     /**
      * Execute middleware.
      *
-     * @param CommandWithRepositoryReferenceAndToken $command
-     * @param callable                               $next
+     * @param mixed    $command
+     * @param callable $next
      *
      * @return mixed
      */
     public function execute(
-        CommandWithRepositoryReferenceAndToken $command,
+        $command,
         $next
     ) {
         /**

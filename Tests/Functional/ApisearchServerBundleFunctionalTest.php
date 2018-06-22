@@ -405,6 +405,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+        static::configureEnvironment();
         static::resetScenario();
     }
 
@@ -415,6 +416,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     public static function tearDownAfterClass()
     {
         static::deleteEverything();
+        static::cleanEnvironment();
     }
 
     /**
@@ -443,7 +445,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         string $appId = null,
         string $index = null
     ) {
-        $items = Yaml::parse(file_get_contents(__DIR__.'/../items.yml'));
+        $items = Yaml::parse(file_get_contents(static::getItemsFilePath()));
         $itemsInstances = [];
         foreach ($items['items'] as $item) {
             if (isset($item['indexed_metadata']['created_at'])) {
@@ -453,6 +455,16 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             $itemsInstances[] = Item::createFromArray($item);
         }
         static::indexItems($itemsInstances, $appId, $index);
+    }
+
+    /**
+     * Get items file path.
+     *
+     * @return string
+     */
+    public static function getItemsFilePath(): string
+    {
+        return __DIR__.'/../items.yml';
     }
 
     /**
@@ -766,6 +778,16 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @return array
      */
     abstract public function checkHealth(Token $token = null): array;
+
+    /**
+     * Configure environment.
+     */
+    abstract public static function configureEnvironment();
+
+    /**
+     * Clean environment.
+     */
+    abstract public static function cleanEnvironment();
 
     /**
      * Get token id.

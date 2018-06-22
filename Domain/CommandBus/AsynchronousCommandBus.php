@@ -50,6 +50,7 @@ class AsynchronousCommandBus extends CommandBus
     ) {
         parent::__construct([]);
         $this->producer = $producer;
+        $this->commandBus = $commandBus;
     }
 
     /**

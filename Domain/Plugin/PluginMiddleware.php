@@ -15,8 +15,6 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Plugin;
 
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
-
 /**
  * Interface PluginMiddleware.
  */
@@ -25,13 +23,13 @@ interface PluginMiddleware
     /**
      * Execute middleware.
      *
-     * @param CommandWithRepositoryReferenceAndToken $command
-     * @param callable                               $next
+     * @param mixed    $command
+     * @param callable $next
      *
      * @return mixed
      */
     public function execute(
-        CommandWithRepositoryReferenceAndToken $command,
+        $command,
         $next
     );
 

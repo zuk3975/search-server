@@ -17,6 +17,7 @@ namespace Apisearch\Server\Domain\Event;
 
 use Apisearch\Event\Event;
 use Apisearch\Event\EventRepository;
+use Apisearch\Repository\RepositoryReference;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -60,9 +61,16 @@ class EventStore implements EventSubscriber
      */
     public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
     {
+        $onlyAppRepositoryReference = RepositoryReference::create(
+            $domainEventWithRepositoryReference
+                ->getRepositoryReference()
+                ->getAppId(),
+            ''
+        );
+
         $this
             ->eventRepository
-            ->setRepositoryReference($domainEventWithRepositoryReference->getRepositoryReference());
+            ->setRepositoryReference($onlyAppRepositoryReference);
 
         $domainEvent = $domainEventWithRepositoryReference->getDomainEvent();
         $this

@@ -82,12 +82,16 @@ class CommandsConsumer extends ConsumerCommand
             return;
         }
 
+        $output->write('Consuming '.$class.' ... ');
         try {
             $this
                 ->commandBus
                 ->handle($class::fromArray($data));
+            $output->write('Ok');
         } catch (Exception $e) {
             // Silent pass
+            $output->write('Fail ['.$e->getMessage().']');
         }
+        $output->writeln('');
     }
 }

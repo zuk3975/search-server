@@ -111,4 +111,23 @@ class ElasticaLanguages
             ? $value
             : (string) $value;
     }
+
+    /**
+     * Get languages.
+     */
+    public static function getLanguages()
+    {
+        return [
+            'ba',
+            'br',
+            'ca',
+            'en',
+            'fr',
+            'ga',
+            'gr',
+            'it',
+            'ru',
+            'es',
+        ];
+    }
 }

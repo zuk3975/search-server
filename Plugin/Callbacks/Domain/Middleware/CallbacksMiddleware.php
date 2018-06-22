@@ -22,7 +22,6 @@ use Apisearch\Plugin\Callbacks\Domain\Callbacks;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\Command\AddToken;
 use Apisearch\Server\Domain\Command\IndexItems;
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 use Apisearch\Server\Domain\Query\Query;
 
@@ -72,13 +71,13 @@ class CallbacksMiddleware implements PluginMiddleware
     /**
      * Execute middleware.
      *
-     * @param CommandWithRepositoryReferenceAndToken $command
-     * @param callable                               $next
+     * @param mixed    $command
+     * @param callable $next
      *
      * @return mixed
      */
     public function execute(
-        CommandWithRepositoryReferenceAndToken $command,
+        $command,
         $next
     ) {
         $commandNamespace = get_class($command);
