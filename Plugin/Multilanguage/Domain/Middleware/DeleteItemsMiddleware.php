@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Plugin\MetadataFields\Domain\Middleware;
+namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
-use Apisearch\Plugin\MetadataFields\Domain\Repository\MetadataRepository;
+use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteItems;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 
@@ -24,23 +24,6 @@ use Apisearch\Server\Domain\Plugin\PluginMiddleware;
  */
 class DeleteItemsMiddleware implements PluginMiddleware
 {
-    /**
-     * @var MetadataRepository
-     *
-     * Metadata repository
-     */
-    private $metadataRepository;
-
-    /**
-     * OnItemsWereIndexed constructor.
-     *
-     * @param MetadataRepository $metadataRepository
-     */
-    public function __construct(MetadataRepository $metadataRepository)
-    {
-        $this->metadataRepository = $metadataRepository;
-    }
-
     /**
      * Execute middleware.
      *
@@ -53,15 +36,17 @@ class DeleteItemsMiddleware implements PluginMiddleware
         $command,
         $next
     ) {
-        /*
-         * @var DeleteItems $command
-         */
-        $this
-            ->metadataRepository
-            ->deleteItemsMetadata(
-                $command->getRepositoryReference(),
-                $command->getItemsUUID()
-            );
+        $index = $command->getIndex();
+        $indices = explode(',', $index);
+        $indices = array_map(function (string $index) {
+            return $index.'_language_*';
+        }, $indices);
+
+        $indices = implode(',', $indices);
+        $command->setRepositoryReference(RepositoryReference::create(
+            $command->getAppId(),
+            $indices
+        ));
 
         return $next($command);
     }

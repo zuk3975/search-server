@@ -19,6 +19,16 @@ services:
     #
     # Command handlers
     #
+    apisearch_server.comand_handler.configure_environment:
+        class: Apisearch\Server\Domain\CommandHandler\ConfigureEnvironmentHandler
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\ConfigureEnvironment }
+
+    apisearch_server.comand_handler.clean_environment:
+        class: Apisearch\Server\Domain\CommandHandler\CleanEnvironmentHandler
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Command\CleanEnvironment }
+
     apisearch_server.comand_handler.create_index:
         class: Apisearch\Server\Domain\CommandHandler\CreateIndexHandler
         arguments:

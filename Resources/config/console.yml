@@ -17,6 +17,18 @@ services:
             - "@apisearch_server.query_bus"
             - "%apisearch_server.god_token%"
 
+    apisearch_server.configure_environment_command:
+        class: Apisearch\Server\Console\ConfigureEnvironmentCommand
+        parent: apisearch_server.command_with_command_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:configure-environment }
+
+    apisearch_server.clean_environment_command:
+        class: Apisearch\Server\Console\CleanEnvironmentCommand
+        parent: apisearch_server.command_with_command_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:clean-environment }
+
     apisearch_server.create_index_command:
         class: Apisearch\Server\Console\CreateIndexCommand
         parent: apisearch_server.command_with_command_bus_and_god_token

@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Plugin;
 
-use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use League\Tactician\Middleware;
 
 /**
@@ -91,16 +90,13 @@ class PluginMiddlewareCollector implements Middleware
     {
         $lastCallable = $next;
 
-        if (
-            $command instanceof CommandWithRepositoryReferenceAndToken &&
-            isset($this->pluginMiddlewares[get_class($command)])
-        ) {
+        if (isset($this->pluginMiddlewares[get_class($command)])) {
             /**
              * @var PluginMiddleware
              */
             $middlewares = $this->pluginMiddlewares[get_class($command)];
             foreach ($middlewares as $pluginMiddleware) {
-                $lastCallable = function (CommandWithRepositoryReferenceAndToken $command) use ($pluginMiddleware, $lastCallable) {
+                $lastCallable = function ($command) use ($pluginMiddleware, $lastCallable) {
                     return $pluginMiddleware->execute(
                         $command,
                         $lastCallable

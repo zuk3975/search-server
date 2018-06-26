@@ -136,7 +136,6 @@ services:
         tags:
             - {name: "apisearch_server.logs_repository"}
 
-
     #
     # Middlewares
     #

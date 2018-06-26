@@ -14,8 +14,7 @@
     <testsuites>
         <testsuite name="Test Suite">
             <directory>./Tests</directory>
-            <directory>./Plugin/Callbacks/Tests</directory>
-            <directory>./Plugin/MetadataFields/Tests</directory>
+            <directory>./Plugin/*/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

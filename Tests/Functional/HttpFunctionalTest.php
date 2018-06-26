@@ -388,6 +388,22 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
     }
 
     /**
+     * Configure environment.
+     */
+    public static function configureEnvironment()
+    {
+        // Pass
+    }
+
+    /**
+     * Clean environment.
+     */
+    public static function cleanEnvironment()
+    {
+        // Pass
+    }
+
+    /**
      * Configure repository.
      *
      * @param string $appId

@@ -381,7 +381,7 @@ abstract class ElasticaWrapper
         $splittedIndexId = explode(',', $indexId);
 
         return implode(',', array_map(function (string $indexId) use ($prefix, $appId) {
-            return "{$prefix}_{$appId}_$indexId";
+            return trim("{$prefix}_{$appId}_$indexId", '_ ');
         }, $splittedIndexId));
     }
 }
