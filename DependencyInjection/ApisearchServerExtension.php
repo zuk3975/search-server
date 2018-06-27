@@ -72,9 +72,6 @@ class ApisearchServerExtension extends BaseExtension
             'domain',
             'controllers',
             'console',
-            'elastica',
-            'neo4j',
-            'redis',
         ];
     }
 
@@ -98,10 +95,6 @@ class ApisearchServerExtension extends BaseExtension
             'apisearch_server.middleware_logs_service' => $config['middleware_logs_service'],
             'apisearch_server.command_bus_service' => $config['command_bus_service'],
             'apisearch_server.token_repository_service' => $config['token_repository_service'],
-            'apisearch_server.config.repository' => $config['config']['repository'],
-            'apisearch_server.config.event_repository' => $config['config']['event_repository'],
-            'apisearch_server.config.log_repository' => $config['config']['log_repository'],
-            'apisearch_server.cluster' => ['servers' => $config['cluster']],
             'apisearch_server.god_token' => $config['god_token'],
             'apisearch_server.ping_token' => $config['ping_token'],
         ];

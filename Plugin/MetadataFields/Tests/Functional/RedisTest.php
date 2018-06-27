@@ -29,7 +29,7 @@ class RedisTest extends MetadataFieldsFunctionalTest
      */
     public function testBasicUsage()
     {
-        $redisClient = self::get('apisearch_server.redis_wrapper')->getClient();
+        $redisClient = self::get('apisearch_plugin.redis.redis_wrapper')->getClient();
         $this->assertCount(5, $redisClient->hGetAll(RedisMetadataRepository::PLUGIN_KEY));
         $item = $this->query(Query::createMatchAll())->getFirstItem();
         $this->assertTrue(isset($item->getMetadata()['array_of_arrays']));

@@ -16,8 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional\Domain\Repository;
 
 use Apisearch\Model\ItemUUID;
-use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Elastica\Repository\ItemElasticaWrapper;
+use Apisearch\Query\Query;
 
 /**
  * Class DeletionTest.
@@ -57,15 +56,9 @@ trait DeletionTest
      */
     private function assertNbItems(int $nb)
     {
-        $this->assertSame($nb, $this
-            ->get('apisearch_server.item_elastica_wrapper')
-            ->getType(
-                RepositoryReference::create(
-                    self::$appId,
-                    self::$index
-                ),
-                ItemElasticaWrapper::ITEM_TYPE
-            )->count()
+        $this->assertCount($nb, $this
+            ->query(Query::createMatchAll())
+            ->getItems()
         );
     }
 }

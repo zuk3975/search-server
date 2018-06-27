@@ -1,0 +1,137 @@
+services:
+
+    #
+    # Elastica related services
+    #
+    apisearch_plugin.elastica.elastica_client:
+        class: Elastica\Client
+        arguments:
+            - "%elastica_plugin.cluster%"
+
+    apisearch_plugin.elastica.query_builder:
+        class: Apisearch\Plugin\Elastica\Domain\Builder\QueryBuilder
+
+    apisearch_plugin.elastica.result_builder:
+        class: Apisearch\Plugin\Elastica\Domain\Builder\ResultBuilder
+
+    apisearch_plugin.elastica.time_format_builder:
+        class: Apisearch\Plugin\Elastica\Domain\Builder\TimeFormatBuilder
+
+    #
+    # Elastica repositories
+    #
+    apisearch_plugin.elastica.item_elastica_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\ItemElasticaWrapper
+        arguments:
+            - "@apisearch_plugin.elastica.elastica_client"
+
+    apisearch_plugin.elastica.item_elastica_with_app_id_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\ElasticaWithAppIdWrapper
+        abstract: true
+        public: false
+        arguments:
+            - "@apisearch_plugin.elastica.item_elastica_wrapper"
+            - "%elastica_plugin.config.repository%"
+
+    apisearch_plugin.elastica.elastica_query_repository:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\QueryRepository
+        parent: apisearch_plugin.elastica.item_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.query_builder"
+            - "@apisearch_plugin.elastica.result_builder"
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
+    apisearch_plugin.elastica.elastica_index_repository:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\IndexRepository
+        parent: apisearch_plugin.elastica.item_elastica_with_app_id_wrapper
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
+    apisearch_plugin.elastica.update_repository:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\UpdateRepository
+        parent: apisearch_plugin.elastica.item_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.query_builder"
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
+    apisearch_plugin.elastica.elastica_delete_repository:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\DeleteRepository
+        parent: apisearch_plugin.elastica.item_elastica_with_app_id_wrapper
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
+    apisearch_plugin.elastica.elastica_config_repository:
+        class: Apisearch\Plugin\Elastica\Domain\Repository\ConfigRepository
+        parent: apisearch_plugin.elastica.item_elastica_with_app_id_wrapper
+        tags:
+            - {name: "apisearch_server.items_repository"}
+
+
+    #
+    # Elastica event repositories
+    #
+    apisearch_plugin.elastica.event_elastica_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\EventRepository\EventElasticaWrapper
+        arguments:
+            - "@apisearch_plugin.elastica.elastica_client"
+
+    apisearch_plugin.elastica.event_elastica_with_app_id_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\ElasticaWithAppIdWrapper
+        abstract: true
+        public: false
+        arguments:
+            - "@apisearch_plugin.elastica.event_elastica_wrapper"
+            - "%elastica_plugin.config.event_repository%"
+
+    apisearch_plugin.elastica.elastica_query_event_repository:
+        class: Apisearch\Plugin\Elastica\Domain\EventRepository\QueryRepository
+        parent: apisearch_plugin.elastica.event_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.query_builder"
+            - "@apisearch_plugin.elastica.result_builder"
+        tags:
+            - {name: "apisearch_server.events_repository"}
+
+    apisearch_plugin.elastica.elastica_index_event_repository:
+        class: Apisearch\Plugin\Elastica\Domain\EventRepository\IndexRepository
+        parent: apisearch_plugin.elastica.event_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.time_format_builder"
+        tags:
+            - {name: "apisearch_server.events_repository"}
+
+
+    #
+    # Elastica log repositories
+    #
+    apisearch_plugin.elastica.log_elastica_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\LogRepository\LogElasticaWrapper
+        arguments:
+            - "@apisearch_plugin.elastica.elastica_client"
+
+    apisearch_plugin.elastica.log_elastica_with_app_id_wrapper:
+        class: Apisearch\Plugin\Elastica\Domain\ElasticaWithAppIdWrapper
+        abstract: true
+        public: false
+        arguments:
+            - "@apisearch_plugin.elastica.log_elastica_wrapper"
+            - "%elastica_plugin.config.log_repository%"
+
+    apisearch_plugin.elastica.elastica_query_log_repository:
+        class: Apisearch\Plugin\Elastica\Domain\LogRepository\QueryRepository
+        parent: apisearch_plugin.elastica.log_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.query_builder"
+            - "@apisearch_plugin.elastica.result_builder"
+        tags:
+            - {name: "apisearch_server.logs_repository"}
+
+    apisearch_plugin.elastica.elastica_index_log_repository:
+        class: Apisearch\Plugin\Elastica\Domain\LogRepository\IndexRepository
+        parent: apisearch_plugin.elastica.log_elastica_with_app_id_wrapper
+        arguments:
+            - "@apisearch_plugin.elastica.time_format_builder"
+        tags:
+            - {name: "apisearch_server.logs_repository"}

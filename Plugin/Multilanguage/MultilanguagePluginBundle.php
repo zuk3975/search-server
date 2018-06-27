@@ -15,10 +15,13 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage;
 
+use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
 use Apisearch\Plugin\Multilanguage\DependencyInjection\MultilanguagePluginExtension;
+use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class MultilanguagePluginBundle.
@@ -33,6 +36,23 @@ class MultilanguagePluginBundle extends BaseBundle implements Plugin
     public function getContainerExtension()
     {
         return new MultilanguagePluginExtension();
+    }
+
+    /**
+     * Return all bundle dependencies.
+     *
+     * Values can be a simple bundle namespace or its instance
+     *
+     * @param KernelInterface $kernel
+     *
+     * @return array
+     */
+    public static function getBundleDependencies(KernelInterface $kernel): array
+    {
+        return [
+            ApisearchServerBundle::class,
+            ElasticaPluginBundle::class,
+        ];
     }
 
     /**

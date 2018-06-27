@@ -1,0 +1,20 @@
+services:
+
+    apisearch_plugin.redis.redis_wrapper:
+        class: Apisearch\Plugin\Redis\Domain\RedisWrapper
+        lazy: true
+        arguments:
+            - "@rs_queue.redis_factory"
+
+    apisearch_plugin.redis.redis_token_repository:
+        class: Apisearch\Plugin\Redis\Domain\Token\TokenRedisRepository
+        arguments:
+            - "@apisearch_plugin.redis.redis_wrapper"
+        tags:
+            - {name: "apisearch_server.app_repository"}
+
+    #
+    # By using this plugin, we overwrire the token locator implementation
+    #
+    apisearch_server.token_locator:
+        alias: apisearch_plugin.redis.redis_token_repository
