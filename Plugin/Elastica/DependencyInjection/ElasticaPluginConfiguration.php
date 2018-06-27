@@ -81,7 +81,7 @@ class ElasticaPluginConfiguration extends BaseConfiguration
                             ->scalarNode('host')
                                 ->defaultTrue()
                             ->end()
-                            ->integerNode('port')
+                            ->scalarNode('port')
                                 ->defaultNull()
                             ->end()
                         ->end()

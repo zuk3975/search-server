@@ -22,10 +22,12 @@ RUN apt-get install -y curl && \
     mv composer.phar /usr/bin/composer
 
 RUN mkdir /var/www/apisearch
-VOLUME /var/www/apisearch
-VOLUME /var/log/supervisor
+COPY . /var/www/apisearch
+RUN cd /var/www/apisearch && \
+    composer install -n --prefer-dist && \
+    composer dump-autoload
 
-COPY supervisor-search-server.conf /etc/supervisor/conf.d/search-server.conf
-COPY docker-entrypoint.sh /
+COPY docker/supervisor-search-server.conf /etc/supervisor/conf.d/search-server.conf
+COPY docker/docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
