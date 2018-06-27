@@ -29,31 +29,13 @@ use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\ApisearchServerBundle;
-use Apisearch\Server\Domain\Command\AddInteraction;
-use Apisearch\Server\Domain\Command\AddToken;
-use Apisearch\Server\Domain\Command\ConfigureIndex;
-use Apisearch\Server\Domain\Command\CreateIndex;
-use Apisearch\Server\Domain\Command\DeleteAllInteractions;
-use Apisearch\Server\Domain\Command\DeleteIndex;
-use Apisearch\Server\Domain\Command\DeleteItems;
-use Apisearch\Server\Domain\Command\DeleteToken;
-use Apisearch\Server\Domain\Command\IndexItems;
-use Apisearch\Server\Domain\Command\ResetIndex;
-use Apisearch\Server\Domain\Command\UpdateItems;
-use Apisearch\Server\Domain\Query\CheckHealth;
-use Apisearch\Server\Domain\Query\CheckIndex;
-use Apisearch\Server\Domain\Query\Ping;
-use Apisearch\Server\Domain\Query\Query;
-use Apisearch\Server\Domain\Query\QueryEvents;
-use Apisearch\Server\Domain\Query\QueryLogs;
 use Apisearch\Server\Exception\ErrorException;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
-use Apisearch\User\Interaction;
-use Dotenv\Dotenv;
 use Mmoreram\BaseBundle\BaseBundle;
 use Mmoreram\BaseBundle\Kernel\BaseKernel;
 use Mmoreram\BaseBundle\Tests\BaseFunctionalTest;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -172,11 +154,19 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                 'god_token' => self::$godToken,
                 'ping_token' => self::$pingToken,
             ],
+            'rs_queue' => [
+                'server' => [
+                    'redis' => [
+                        'host' => $_ENV['REDIS_HOST'],
+                        'port' => $_ENV['REDIS_PORT'],
+                    ]
+                ]
+            ],
             'elastica_plugin' => [
                 'cluster' => [
                     'localhost' => [
-                        'host' => 'localhost',
-                        'port' => 9200,
+                        'host' => $_ENV['ELASTICSEARCH_HOST'],
+                        'port' => $_ENV['ELASTICSEARCH_PORT'],
                     ],
                 ],
                 'config' => [
@@ -264,8 +254,11 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      */
     protected static function loadEnv()
     {
-        $dotenv = new Dotenv(__DIR__.'/../..');
-        $dotenv->load();
+        $envPath = __DIR__.'/../../.env';
+        if (file_exists($envPath)) {
+            $dotenv = new Dotenv();
+            $dotenv->load($envPath);
+        }
     }
 
     /**

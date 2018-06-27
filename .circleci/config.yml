@@ -1,0 +1,54 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+
+    build:
+        docker:
+            - image: docker:stable
+        working_directory: ~/
+        steps:
+            - checkout
+            - setup_remote_docker:
+                docker_layer_caching: true
+
+            - run:
+                name: Run elasticsearch
+                command: |
+                    docker run -d \
+                        -p 9200:9200 \
+                        --name="apisearch_elasticsearch" \
+                        -e "cluster.name=apisearch" \
+                        -e "http.host=0.0.0.0" \
+                        -e "transport.host=0.0.0.0" \
+                        -e "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
+                        -e "action.auto_create_index=+apisearch_item_*_*_plugin_*,+apisearch_log_*,+apisearch_event_*,-apisearch*,+*" \
+                        -e "node.max_local_storage_nodes=10" \
+                        -e "discovery.type=single-node" \
+                         docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+
+            - run:
+                name: Run Redis
+                command: |
+                    docker run -d \
+                        --name="apisearch_redis" \
+                        redis:4-alpine \
+                        redis-server --appendonly yes
+
+            - run:
+                name: Build Apisearch
+                command: |
+                    cp .circleci/.env.test .env
+                    docker build -t apisearch/server .
+
+            - run:
+                name: Run Apisearch
+                command: |
+                    docker run -d -p 8100:8200 --name "apisearch_server" --link "apisearch_redis" --link "apisearch_elasticsearch" apisearch/server
+
+            - run:
+                name: Run tests
+                command: |
+                    docker exec -i -t $(docker ps -qf "name=apisearch_server") /var/www/apisearch/scripts/run-tests

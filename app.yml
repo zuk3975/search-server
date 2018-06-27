@@ -34,6 +34,12 @@ config:
                 path: '%kernel.logs_dir%/%kernel.environment%.log'
                 level: debug
 
+    rs_queue:
+        server:
+            redis:
+                host: "%env(REDIS_HOST)%"
+                port: "%env(REDIS_PORT)%"
+
     #
     # Enable for Redis Cluster
     #
@@ -69,14 +75,10 @@ config:
                 shards: 1
                 replicas: 0
 
-        #
-        # Enable for Elasticsearch Cluster
-        #
-        # cluster:
-        #    localhost_9200:
-        #        host: localhost
-        #        port: 9200
-        #
+        cluster:
+            docker_elasticsearch_service:
+                host: "%env(ELASTICSEARCH_HOST)%"
+                port: "%env(ELASTICSEARCH_PORT)%"
 
     apisearch:
         repositories:

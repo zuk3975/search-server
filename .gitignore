@@ -2,5 +2,5 @@ vendor
 /var
 /bin/console
 /bin/server
-app_deploy.yml
+/app_deploy.yml
 /.env
