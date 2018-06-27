@@ -34,7 +34,10 @@ interface PluginMiddleware
     );
 
     /**
-     * Events subscribed namespace.
+     * Events subscribed namespace. Can refer to specific class namespace, any
+     * parent class or any interface.
+     *
+     * By returning an empty array, means coupled to all.
      *
      * @return string[]
      */

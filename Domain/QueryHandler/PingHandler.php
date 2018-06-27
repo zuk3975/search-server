@@ -16,30 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\QueryHandler;
 
 use Apisearch\Server\Domain\Query\Ping;
-use Elastica\Client;
 
 /**
  * Class PingHandler.
  */
 class PingHandler
 {
-    /**
-     * @var Client
-     *
-     * Elasticsearch Client
-     */
-    protected $client;
-
-    /**
-     * QueryHandler constructor.
-     *
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * Ping.
      *

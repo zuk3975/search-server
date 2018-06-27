@@ -19,8 +19,6 @@ use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query;
-use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Elastica\Repository\ItemElasticaWrapper;
 
 /**
  * Class SearchTest.
@@ -32,19 +30,10 @@ trait SearchTest
      */
     public function testMatchAll()
     {
-        $result = $this->query(Query::createMatchAll());
-
-        $this->assertSame(
-            count($result->getItems()),
+        $this->assertCount(5,
             $this
-                ->get('apisearch_server.item_elastica_wrapper')
-                ->getType(
-                    RepositoryReference::create(
-                        self::$appId,
-                        self::$index
-                    ),
-                    ItemElasticaWrapper::ITEM_TYPE
-                )->count()
+                ->query(Query::createMatchAll())
+                ->getItems()
         );
     }
 

@@ -17,10 +17,13 @@ namespace Apisearch\Plugin\MetadataFields;
 
 use Apisearch\Plugin\MetadataFields\DependencyInjection\CompilerPass\RepositoryCompilerPass;
 use Apisearch\Plugin\MetadataFields\DependencyInjection\MetadataFieldsPluginExtension;
+use Apisearch\Plugin\Redis\RedisPluginBundle;
+use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class MetadataFieldsPluginBundle.
@@ -46,6 +49,23 @@ class MetadataFieldsPluginBundle extends BaseBundle implements Plugin
     {
         return [
             new RepositoryCompilerPass(),
+        ];
+    }
+
+    /**
+     * Return all bundle dependencies.
+     *
+     * Values can be a simple bundle namespace or its instance
+     *
+     * @param KernelInterface $kernel
+     *
+     * @return array
+     */
+    public static function getBundleDependencies(KernelInterface $kernel): array
+    {
+        return [
+            ApisearchServerBundle::class,
+            RedisPluginBundle::class,
         ];
     }
 

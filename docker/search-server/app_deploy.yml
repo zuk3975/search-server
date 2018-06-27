@@ -6,6 +6,8 @@ rs_queue:
 apisearch_server:
     middleware_domain_events_service: apisearch_server.middleware.ignore_events
     middleware_logs_service: apisearch_server.middleware.ignore_logs
+
+elastica_plugin:
     cluster:
         docker_elasticsearch_service:
             host: apisearch_elasticsearch

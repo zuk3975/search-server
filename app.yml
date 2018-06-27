@@ -1,5 +1,7 @@
 bundles:
     - Apisearch\Server\ApisearchServerBundle
+    - Apisearch\Plugin\Elastica\ElasticaPluginBundle
+    - Apisearch\Plugin\Redis\RedisPluginBundle
 routes:
     - "@ApisearchServerBundle/Resources/config/routing.yml"
 config:
@@ -48,15 +50,13 @@ config:
         middleware_domain_events_service: "apisearch_server.middleware.ignore_events"
         middleware_logs_service: "apisearch_server.middleware.ignore_logs"
 
-        #
-        # Enable for Elasticsearch Cluster
-        #
-        # cluster:
-        #    localhost_9200:
-        #        host: localhost
-        #        port: 9200
-        #
-
+    #
+    # Elastica plugin for Apisearch
+    #
+    # Configure your elasticsearch cluster and the way your indices are
+    # created
+    #
+    elastica_plugin:
         config:
             repository:
                 config_path: '/tmp/config_{app_id}_{index_id}'
@@ -68,6 +68,15 @@ config:
             log_repository:
                 shards: 1
                 replicas: 0
+
+        #
+        # Enable for Elasticsearch Cluster
+        #
+        # cluster:
+        #    localhost_9200:
+        #        host: localhost
+        #        port: 9200
+        #
 
     apisearch:
         repositories:

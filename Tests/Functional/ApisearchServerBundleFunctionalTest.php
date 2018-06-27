@@ -21,6 +21,9 @@ use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
+use Apisearch\Plugin\Neo4j\Neo4jPluginBundle;
+use Apisearch\Plugin\Redis\RedisPluginBundle;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
@@ -136,6 +139,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         $bundles = [
             BaseBundle::class,
             ApisearchServerBundle::class,
+            ElasticaPluginBundle::class,
+            RedisPluginBundle::class,
+            Neo4jPluginBundle::class,
         ];
 
         $configuration = [
@@ -163,11 +169,10 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                 'command_bus_service' => static::asynchronousCommands()
                     ? 'apisearch_server.command_bus.asynchronous'
                     : 'apisearch_server.command_bus.inline',
-                'token_repository_service' => static::tokensInRedis()
-                    ? 'apisearch_server.redis_token_repository'
-                    : 'apisearch_server.in_memory_token_locator',
                 'god_token' => self::$godToken,
                 'ping_token' => self::$pingToken,
+            ],
+            'elastica_plugin' => [
                 'cluster' => [
                     'localhost' => [
                         'host' => 'localhost',

@@ -8,7 +8,6 @@ tactician:
                 - apisearch_server.middleware.token
                 - apisearch_server.middleware.plugins
                 - apisearch_server.middleware.logs
-                - apisearch_server.middleware.transaction
                 # - apisearch_server.middleware.interactions
                 - apisearch_server.middleware.domain_events
                 - tactician.middleware.command_handler

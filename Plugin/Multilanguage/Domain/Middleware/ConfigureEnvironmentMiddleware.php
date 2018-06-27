@@ -16,11 +16,11 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
 use Apisearch\Config\ImmutableConfig;
+use Apisearch\Plugin\Elastica\Domain\ElasticaLanguages;
+use Apisearch\Plugin\Elastica\Domain\Repository\ItemElasticaWrapper;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\ConfigureEnvironment;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
-use Apisearch\Server\Elastica\ElasticaLanguages;
-use Apisearch\Server\Elastica\Repository\ItemElasticaWrapper;
 use Elastica\Client;
 use Elastica\Type\Mapping;
 
@@ -140,7 +140,10 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
     }
 
     /**
-     * Events subscribed namespace.
+     * Events subscribed namespace. Can refer to specific class namespace, any
+     * parent class or any interface.
+     *
+     * By returning an empty array, means coupled to all.
      *
      * @return string[]
      */

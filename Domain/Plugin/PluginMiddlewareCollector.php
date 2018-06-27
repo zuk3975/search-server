@@ -27,7 +27,7 @@ class PluginMiddlewareCollector implements Middleware
      *
      * Plugin middleware
      */
-    private $pluginMiddlewares = [];
+    private $pluginMiddlewares = ['_all' => []];
 
     /**
      * @var string[]
@@ -53,7 +53,7 @@ class PluginMiddlewareCollector implements Middleware
      */
     public function addPluginMiddleware(PluginMiddleware $pluginMiddleware)
     {
-        $commanddNamespaces = $pluginMiddleware->getSubscribedEvents();
+        $commandNamespaces = $pluginMiddleware->getSubscribedEvents();
 
         if (!array_reduce($this->enabledPlugins, function (bool $found, array $plugin) use ($pluginMiddleware) {
             return $found || (0 === strpos(get_class($pluginMiddleware), $plugin['path']));
@@ -61,7 +61,13 @@ class PluginMiddlewareCollector implements Middleware
             return;
         }
 
-        foreach ($commanddNamespaces as $commandNamespace) {
+        if (empty($commandNamespaces)) {
+            $this->pluginMiddlewares['_all'][] = $pluginMiddleware;
+
+            return;
+        }
+
+        foreach ($commandNamespaces as $commandNamespace) {
             if (!isset($this->pluginMiddlewares[$commandNamespace])) {
                 $this->pluginMiddlewares[$commandNamespace] = [];
             }
@@ -89,12 +95,20 @@ class PluginMiddlewareCollector implements Middleware
     public function execute($command, callable $next)
     {
         $lastCallable = $next;
+        $middlewares = $this->pluginMiddlewares['_all'];
+        foreach ($this->getNamespaceCollectionOfClass($command) as $namespace) {
+            if (isset($this->pluginMiddlewares[$namespace])) {
+                $middlewares = array_merge(
+                    $middlewares,
+                    $this->pluginMiddlewares[$namespace]
+                );
+            }
+        }
 
-        if (isset($this->pluginMiddlewares[get_class($command)])) {
-            /**
+        if (!empty($middlewares)) {
+            /*
              * @var PluginMiddleware
              */
-            $middlewares = $this->pluginMiddlewares[get_class($command)];
             foreach ($middlewares as $pluginMiddleware) {
                 $lastCallable = function ($command) use ($pluginMiddleware, $lastCallable) {
                     return $pluginMiddleware->execute(
@@ -106,5 +120,21 @@ class PluginMiddlewareCollector implements Middleware
         }
 
         return $lastCallable($command);
+    }
+
+    /**
+     * Return class namespace, all parent namespaces and interfaces of a class.
+     *
+     * @param object $object
+     *
+     * @return string[]
+     */
+    private function getNamespaceCollectionOfClass($object): array
+    {
+        return array_merge(
+            [get_class($object)],
+            class_parents($object, false),
+            class_implements($object, false)
+        );
     }
 }

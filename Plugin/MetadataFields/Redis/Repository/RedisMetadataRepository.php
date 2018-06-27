@@ -18,8 +18,8 @@ namespace Apisearch\Plugin\MetadataFields\Redis\Repository;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Plugin\MetadataFields\Domain\Repository\MetadataRepository;
+use Apisearch\Plugin\Redis\Domain\RedisWrapper;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Redis\RedisWrapper;
 
 /**
  * Class RedisMetadataRepository.

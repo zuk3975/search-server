@@ -167,16 +167,11 @@ services:
 
     apisearch_server.query_handler.check_health:
         class: Apisearch\Server\Domain\QueryHandler\CheckHealthHandler
-        arguments:
-            - "@apisearch_server.elastica_client"
-            - "@apisearch_server.redis_wrapper"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\CheckHealth }
 
     apisearch_server.query_handler.ping:
         class: Apisearch\Server\Domain\QueryHandler\PingHandler
-        arguments:
-            - "@apisearch_server.elastica_client"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\Ping }
 
@@ -284,6 +279,9 @@ services:
     #
     apisearch_server.in_memory_token_locator:
         class: Apisearch\Server\Domain\Repository\AppRepository\InMemoryTokenRepository
+
+    apisearch_server.token_locator:
+        alias: apisearch_server.in_memory_token_locator
 
     apisearch_server.token_validator:
         class: Apisearch\Server\Domain\Token\TokenValidator

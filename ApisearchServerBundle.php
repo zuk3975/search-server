@@ -92,7 +92,6 @@ class ApisearchServerBundle extends BaseBundle
             new CompilerPass\ItemRepositoriesCompilerPass(),
             new CompilerPass\EventRepositoriesCompilerPass(),
             new CompilerPass\LogRepositoriesCompilerPass(),
-            new CompilerPass\ElasticaConfigPathCompilerPass(),
             new CompilerPass\DomainEventsMiddlewareCompilerPass(),
             new CompilerPass\LogsMiddlewareCompilerPass(),
             new CompilerPass\AppRepositoriesCompilerPass(),
@@ -100,7 +99,6 @@ class ApisearchServerBundle extends BaseBundle
             new CompilerPass\CommandBusCompilerPass(),
             new CompilerPass\PluginsMiddlewareCompilerPass(),
             new CompilerPass\EnabledPluginsMiddlewareCompilerPass($this->kernel),
-            new CompilerPass\TokenRepositoryCompilerPass(),
             new CompilerPass\DomainEventsSubscribersCompilerPass(),
         ];
     }
