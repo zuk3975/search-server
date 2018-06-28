@@ -159,8 +159,8 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                     'redis' => [
                         'host' => $_ENV['REDIS_HOST'],
                         'port' => $_ENV['REDIS_PORT'],
-                    ]
-                ]
+                    ],
+                ],
             ],
             'elastica_plugin' => [
                 'cluster' => [
