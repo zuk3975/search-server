@@ -87,13 +87,28 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
+        $appId = $input->getArgument('app-id');
+        $index = $input->getArgument('index');
+
+        $this->printInfoMessage(
+            $output,
+            $this->getHeader(),
+            "App ID: <strong>$appId</strong>"
+        );
+
+        $this->printInfoMessage(
+            $output,
+            $this->getHeader(),
+            "Index ID: <strong>$index</strong>"
+        );
+
         try {
             $this
                 ->commandBus
                 ->handle(new CreateIndex(
                     RepositoryReference::create(
-                        $input->getArgument('app-id'),
-                        $input->getArgument('index')
+                        $appId,
+                        $index
                     ),
                     $this->createGodToken($input->getArgument('app-id')),
                     ImmutableConfig::createFromArray([
@@ -125,6 +140,6 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return 'Indices created properly';
+        return 'Index created properly';
     }
 }

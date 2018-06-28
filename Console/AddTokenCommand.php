@@ -110,6 +110,21 @@ class AddTokenCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
+        $appId = $input->getArgument('app-id');
+        $uuid = $input->getArgument('uuid');
+
+        $this->printInfoMessage(
+            $output,
+            $this->getHeader(),
+            "App ID: <strong>$appId</strong>"
+        );
+
+        $this->printInfoMessage(
+            $output,
+            $this->getHeader(),
+            "Token UUID: <strong>$uuid</strong>"
+        );
+
         $endpoints = $this->getEndpoints($input, $output);
         $this
             ->commandBus
@@ -118,10 +133,10 @@ class AddTokenCommand extends CommandWithBusAndGodToken
                     $input->getArgument('app-id'),
                     '~~~'
                 ),
-                $this->createGodToken($input->getArgument('app-id')),
+                $this->createGodToken($appId),
                 new Token(
-                    TokenUUID::createById($input->getArgument('uuid')),
-                    (string) $input->getArgument('app-id'),
+                    TokenUUID::createById($uuid),
+                    (string) $appId,
                     $input->getOption('index'),
                     $input->getOption('http-referrer'),
                     $endpoints,
@@ -155,9 +170,6 @@ class AddTokenCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return sprintf(
-            'Token with UUID <%s> added properly',
-            $input->getArgument('uuid')
-        );
+        return 'Token added properly';
     }
 }

@@ -67,7 +67,7 @@ class AddTokenCommandTest extends CommandTest
             'app-id' => self::$appId,
         ]);
 
-        preg_match('~UUID <(.*?)> added~', $output, $match);
+        preg_match('~Token UUID: (.*?)~', $output, $match);
         $this->assertTokenNotExists($match[1]);
     }
 }

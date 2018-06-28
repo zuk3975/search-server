@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "f5dcba3a72f0e23a1ac26751f214a8e13eabd726"
+                "reference": "b7bd55fad9a4e5aff945d54b3844307d40528e41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/f5dcba3a72f0e23a1ac26751f214a8e13eabd726",
-                "reference": "f5dcba3a72f0e23a1ac26751f214a8e13eabd726",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/b7bd55fad9a4e5aff945d54b3844307d40528e41",
+                "reference": "b7bd55fad9a4e5aff945d54b3844307d40528e41",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-13 16:11:25"
+            "time": "2018-06-28T06:48:50+00:00"
         },
         {
             "name": "apisearch-io/php-client",
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-14 16:51:59"
+            "time": "2018-06-14T16:51:59+00:00"
         },
         {
             "name": "apisearch-io/react-socket-middleware-finite-server",

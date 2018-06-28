@@ -64,8 +64,14 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
-        $appId = (string) $input->getArgument('app-id');
+        $appId = $input->getArgument('app-id');
         $godToken = $this->createGodToken($appId);
+
+        $this->printInfoMessage(
+            $output,
+            $this->getHeader(),
+            "App ID: <strong>$appId</strong>"
+        );
 
         foreach ([
             'admin' => [],
@@ -136,7 +142,7 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "Token with UUID $tokenId generated for $name"
+            "Token with UUID <strong>$tokenId</strong> generated for $name"
         );
     }
 }
