@@ -36,9 +36,9 @@ class IndexItemsTest extends TestCase
         $repositoryReference = RepositoryReference::create('main', 'default');
         $token = new Token(TokenUUID::createById('9999'), 'main');
         $items = [
-            Item::create(ItemUUID::createByComposedUUID('123~~product')),
-            Item::create(ItemUUID::createByComposedUUID('456~~product')),
-            Item::create(ItemUUID::createByComposedUUID('123~~lala')),
+            Item::create(ItemUUID::createByComposedUUID('123~product')),
+            Item::create(ItemUUID::createByComposedUUID('456~product')),
+            Item::create(ItemUUID::createByComposedUUID('123~lala')),
         ];
 
         $command = new IndexItems(

@@ -381,14 +381,14 @@ class QueryBuilder
 
                 return new ElasticaQuery\GeoPolygon(
                     $filter->getField(),
-                    $locationRangeData
+                    $locationRangeData['coordinates']
                 );
 
             case Square::class:
 
                 return new ElasticaQuery\GeoBoundingBox(
                     $filter->getField(),
-                    $locationRangeData
+                    array_values($locationRangeData)
                 );
         }
     }
