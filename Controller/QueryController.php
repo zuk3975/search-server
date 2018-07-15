@@ -48,6 +48,17 @@ class QueryController extends ControllerWithBus
             []
         );
 
+        /*
+         * We accept queries as well by GET in order to be able to cache them in
+         * CDNs by using Cache headers
+         */
+        if ([] === $queryAsArray) {
+            $possibleQuery = $request->query->get(Http::QUERY_FIELD);
+            if (is_string($possibleQuery)) {
+                $queryAsArray = json_decode($possibleQuery, true);
+            }
+        }
+
         $responseAsArray = $this
             ->commandBus
             ->handle(new Query(

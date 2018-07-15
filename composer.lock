@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f7d3c5f06b59542142f1afc8d700120",
+    "content-hash": "cb678e5d720cde2a4503402305894c50",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -1413,16 +1413,16 @@
         },
         {
             "name": "one-bundle-app/one-bundle-app",
-            "version": "1.0.10",
+            "version": "1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/one-bundle-app/one-bundle-app.git",
-                "reference": "8c69cdd38d87005521ba0a06051f4c62c52a03b3"
+                "reference": "bdbcfe178e065c1c4141b610cfcf588bbe11cccc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/8c69cdd38d87005521ba0a06051f4c62c52a03b3",
-                "reference": "8c69cdd38d87005521ba0a06051f4c62c52a03b3",
+                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/bdbcfe178e065c1c4141b610cfcf588bbe11cccc",
+                "reference": "bdbcfe178e065c1c4141b610cfcf588bbe11cccc",
                 "shasum": ""
             },
             "require": {
@@ -1471,7 +1471,7 @@
                 "bundle",
                 "symfony"
             ],
-            "time": "2018-07-07T09:35:09+00:00"
+            "time": "2018-07-07T12:03:43+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2390,16 +2390,16 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v0.5.2",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "e94985d93c689c554265b01014f8c3064921ca27"
+                "reference": "0266aff7aa7b0613b1f38a723e14a0ebc55cfca3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/e94985d93c689c554265b01014f8c3064921ca27",
-                "reference": "e94985d93c689c554265b01014f8c3064921ca27",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/0266aff7aa7b0613b1f38a723e14a0ebc55cfca3",
+                "reference": "0266aff7aa7b0613b1f38a723e14a0ebc55cfca3",
                 "shasum": ""
             },
             "require": {
@@ -2427,7 +2427,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2018-04-24T11:23:06+00:00"
+            "time": "2018-07-11T14:37:46+00:00"
         },
         {
             "name": "react/http",
@@ -2626,16 +2626,16 @@
         },
         {
             "name": "react/stream",
-            "version": "v0.7.7",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "10100896018fd847a257cd81143b8e1b7be08e40"
+                "reference": "fdd0140f42805d65bf9687636503db0b326d2244"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/10100896018fd847a257cd81143b8e1b7be08e40",
-                "reference": "10100896018fd847a257cd81143b8e1b7be08e40",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/fdd0140f42805d65bf9687636503db0b326d2244",
+                "reference": "fdd0140f42805d65bf9687636503db0b326d2244",
                 "shasum": ""
             },
             "require": {
@@ -2668,7 +2668,7 @@
                 "stream",
                 "writable"
             ],
-            "time": "2018-01-19T15:04:38+00:00"
+            "time": "2018-07-11T14:38:16+00:00"
         },
         {
             "name": "ringcentral/psr7",

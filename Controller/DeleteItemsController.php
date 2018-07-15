@@ -43,7 +43,7 @@ class DeleteItemsController extends ControllerWithBus
         $itemsUUIDAsArray = $this->getRequestContentObject(
             $request,
             Http::ITEMS_FIELD,
-            InvalidFormatException::itemsUUIDRepresentationNotValid($request->getContent()),
+            InvalidFormatException::itemUUIDRepresentationNotValid($request->getContent()),
             []
         );
 
