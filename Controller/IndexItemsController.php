@@ -43,7 +43,7 @@ class IndexItemsController extends ControllerWithBus
         $itemsAsArray = $this->getRequestContentObject(
             $request,
             Http::ITEMS_FIELD,
-            InvalidFormatException::itemsRepresentationNotValid($request->getContent()),
+            InvalidFormatException::itemRepresentationNotValid($request->getContent()),
             []
         );
 

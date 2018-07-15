@@ -35,9 +35,9 @@ class DeleteItemsTest extends TestCase
         $repositoryReference = RepositoryReference::create('main', 'default');
         $token = new Token(TokenUUID::createById('9999'), 'main');
         $itemsUUID = [
-            ItemUUID::createByComposedUUID('123~~product'),
-            ItemUUID::createByComposedUUID('456~~product'),
-            ItemUUID::createByComposedUUID('123~~lala'),
+            ItemUUID::createByComposedUUID('123~product'),
+            ItemUUID::createByComposedUUID('456~product'),
+            ItemUUID::createByComposedUUID('123~lala'),
         ];
 
         $command = new DeleteItems(

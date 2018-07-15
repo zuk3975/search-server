@@ -153,12 +153,12 @@ trait LocationFiltersTest
     {
         $this->assertResults(
             $this->query($this->createLocatedQuery()->filterUniverseByLocation(
-                new Polygon(
+                new Polygon([
                     new Coordinate(46.0, 44.0),
                     new Coordinate(44.0, 44.0),
                     new Coordinate(44.0, 46.0),
-                    new Coordinate(46.0, 46.0)
-                ),
+                    new Coordinate(46.0, 46.0),
+                ]),
                 [],
                 []
             )),
@@ -167,12 +167,12 @@ trait LocationFiltersTest
 
         $this->assertResults(
             $this->query($this->createLocatedQuery()->filterUniverseByLocation(
-                new Polygon(
+                new Polygon([
                     new Coordinate(61.0, 29.0),
                     new Coordinate(29.0, 29.0),
                     new Coordinate(29.0, 61.0),
-                    new Coordinate(61.0, 61.0)
-                ),
+                    new Coordinate(61.0, 61.0),
+                ]),
                 [],
                 []
             )),
@@ -181,12 +181,12 @@ trait LocationFiltersTest
 
         $this->assertResults(
             $this->query($this->createLocatedQuery()->filterUniverseByLocation(
-                new Polygon(
+                new Polygon([
                     new Coordinate(61.0, 29.0),
                     new Coordinate(29.0, 29.0),
                     new Coordinate(60.5, 72.0),
-                    new Coordinate(70.0, 45.0)
-                ),
+                    new Coordinate(70.0, 45.0),
+                ]),
                 [],
                 []
             )),
