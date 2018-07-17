@@ -74,6 +74,7 @@ class CommandsConsumer extends ConsumerCommand
         OutputInterface $output,
         array $data
     ) {
+        $this->printHeader($input, $output);
         $class = 'Apisearch\Server\Domain\Command\\'.$data['class'];
         if (
             !class_exists($class) ||
@@ -93,5 +94,24 @@ class CommandsConsumer extends ConsumerCommand
             $output->write('Fail ['.$e->getMessage().']');
         }
         $output->writeln('');
+    }
+
+    /**
+     * Print header
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     */
+    private function printHeader(
+        InputInterface $input,
+        OutputInterface $output
+    )
+    {
+        $output->writeln('========');
+        $output->writeln('========');
+        $output->writeln('=== Command consumer');
+        $output->writeln('=== env = ' . $input->getOption('env'));
+        $output->writeln('========');
+        $output->writeln('========');
     }
 }

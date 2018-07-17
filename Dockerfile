@@ -6,7 +6,6 @@ RUN apt-get update && \
     apt-get install -y \
         libzip-dev \
         zip \
-        supervisor \
     && docker-php-ext-configure zip --with-libzip \
     && docker-php-ext-install zip bcmath
 
@@ -25,9 +24,11 @@ RUN mkdir /var/www/apisearch
 COPY . /var/www/apisearch
 RUN cd /var/www/apisearch && \
     composer install -n --prefer-dist && \
-    composer dump-autoload
+    composer dump-autoload && \
+    php /var/www/apisearch/bin/console cache:warmup --env=prod
 
-COPY docker/supervisor-search-server.conf /etc/supervisor/conf.d/search-server.conf
-COPY docker/docker-entrypoint.sh /
+COPY docker/* /
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+EXPOSE 8200
+
+ENTRYPOINT ["/server-entrypoint.sh"]
