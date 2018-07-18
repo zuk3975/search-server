@@ -48,6 +48,7 @@ abstract class EndpointsFunctionalTest extends ServiceFunctionalTest
      */
     protected static function decorateConfiguration(array $configuration): array
     {
+        $configuration['imports'][] = ['resource' => '@CallbacksPluginBundle/Resources/test/adapters.yml'];
         $configuration['services']['apisearch_plugin.callbacks_test_register'] = [
             'class' => Register::class,
         ];

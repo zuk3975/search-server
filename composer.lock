@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb678e5d720cde2a4503402305894c50",
+    "content-hash": "cd38e4748c97827e73551b46ef6643cf",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -349,6 +349,73 @@
                 "stream_filter_register"
             ],
             "time": "2017-08-18T09:54:01+00:00"
+        },
+        {
+            "name": "ekino/newrelic-bundle",
+            "version": "2.0.0-beta5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ekino/EkinoNewRelicBundle.git",
+                "reference": "d23b2648eb457ee50042c27925d369a99785d079"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ekino/EkinoNewRelicBundle/zipball/d23b2648eb457ee50042c27925d369a99785d079",
+                "reference": "d23b2648eb457ee50042c27925d369a99785d079",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "symfony/config": "^3.4 || ^4.0",
+                "symfony/console": "^3.4 || ^4.0",
+                "symfony/dependency-injection": "^3.4 || ^4.0",
+                "symfony/event-dispatcher": "^3.4 || ^4.0",
+                "symfony/http-kernel": "^3.4 || ^4.0"
+            },
+            "conflict": {
+                "twig/twig": "<1.32"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.11",
+                "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+                "nyholm/symfony-bundle-test": "^1.4",
+                "symfony/monolog-bundle": "^3.2",
+                "symfony/phpunit-bridge": "^4.0",
+                "twig/twig": "^1.32 || ^2.4"
+            },
+            "suggest": {
+                "symfony/monolog-bundle": "^3.2"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ekino\\NewRelicBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Rabaix",
+                    "email": "thomas.rabaix@ekino.com",
+                    "homepage": "http://ekino.com"
+                }
+            ],
+            "description": "Integrate New Relic into Symfony2",
+            "homepage": "https://github.com/ekino/EkinoNewRelicBundle",
+            "keywords": [
+                "metric",
+                "monitoring",
+                "performance"
+            ],
+            "time": "2018-07-03T11:04:55+00:00"
         },
         {
             "name": "elasticsearch/elasticsearch",
@@ -6352,6 +6419,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "graphaware/neo4j-php-client": 15,
+        "ekino/newrelic-bundle": 10,
         "apisearch-io/apisearch-bundle": 20,
         "apisearch-io/php-client": 20
     },

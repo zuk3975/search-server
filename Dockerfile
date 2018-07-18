@@ -2,13 +2,21 @@ FROM php:7.1-cli
 
 WORKDIR /var/www
 
-RUN apt-get update && \
-    apt-get install -y \
+#
+# Dependencies
+#
+RUN apt-get update \
+    && apt-get install -y \
         libzip-dev \
         zip \
+        wget \
+        gnupg \
     && docker-php-ext-configure zip --with-libzip \
     && docker-php-ext-install zip bcmath
 
+#
+# Redis
+#
 RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/4.0.2.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
     && rm -r /tmp/redis.tar.gz \
@@ -16,10 +24,25 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/4.
     && mv phpredis-4.0.2 /usr/src/php/ext/redis \
     && docker-php-ext-install redis
 
-RUN apt-get install -y curl && \
-    curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/bin/composer
+#
+# Composer
+#
+RUN apt-get install -y curl \
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/bin/composer
 
+#
+# New Relic
+#
+RUN echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+    && wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+    && apt-get update \
+    && apt-get install -y newrelic-php5 \
+    && newrelic-install install
+
+#
+# Apisearch installation
+#
 RUN mkdir /var/www/apisearch
 COPY . /var/www/apisearch
 RUN cd /var/www/apisearch && \

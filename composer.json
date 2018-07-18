@@ -28,6 +28,7 @@
         "cboden/ratchet": "^0.4",
         "clue/redis-react": "^2.2",
         "ramsey/uuid": "^3.7.1",
+        "ekino/newrelic-bundle": "^2.0.0@beta",
 
         "rsqueue/rsqueue": "^0.1.0",
         "rsqueue/rsqueue-bundle": "^0.1.0",

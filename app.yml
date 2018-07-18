@@ -1,7 +1,6 @@
 bundles:
     - Apisearch\Server\ApisearchServerBundle
-    - Apisearch\Plugin\Elastica\ElasticaPluginBundle
-    - Apisearch\Plugin\Redis\RedisPluginBundle
+    - Apisearch\Server\ApisearchPluginsBundle
 routes:
     - "@ApisearchServerBundle/Resources/config/routing.yml"
 config:
@@ -96,14 +95,6 @@ config:
                     repository_service: "apisearch_server.logs_repository"
                 indexes:
                     default: default
-
-            apisearch:
-                adapter: http
-                endpoint: https://apisearch.global.ssl.fastly.net
-                app_id: 54725861
-                token: 02f378c6-c754-b7d1-11a8-b79cae0783e4
-                indexes:
-                    music: "66777162"
 
             #
             # Enable for custom HTTP endpoint

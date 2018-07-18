@@ -97,7 +97,7 @@ class CommandsConsumer extends ConsumerCommand
     }
 
     /**
-     * Print header
+     * Print header.
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -105,12 +105,11 @@ class CommandsConsumer extends ConsumerCommand
     private function printHeader(
         InputInterface $input,
         OutputInterface $output
-    )
-    {
+    ) {
         $output->writeln('========');
         $output->writeln('========');
         $output->writeln('=== Command consumer');
-        $output->writeln('=== env = ' . $input->getOption('env'));
+        $output->writeln('=== env = '.$input->getOption('env'));
         $output->writeln('========');
         $output->writeln('========');
     }
