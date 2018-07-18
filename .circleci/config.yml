@@ -35,7 +35,7 @@ jobs:
                     docker run -d \
                         --name="apisearch_redis" \
                         redis:4-alpine \
-                        redis-server --appendonly yes
+                        redis-server
 
             - run:
                 name: Build Apisearch
@@ -44,9 +44,25 @@ jobs:
                     docker build -t apisearch/server .
 
             - run:
-                name: Run Apisearch
+                name: Run Apisearch in server mode, listening to port 8100
                 command: |
-                    docker run -d -p 8100:8200 --name "apisearch_server" --link "apisearch_redis" --link "apisearch_elasticsearch" apisearch/server
+                    docker run -d \
+                    --name "apisearch_server" \
+                    -p 8100:8200 \
+                    --link "apisearch_redis" \
+                    --link "apisearch_elasticsearch" \
+                    --entrypoint "/server-entrypoint.sh" \
+                    apisearch/server
+
+            - run:
+                name: Run Apisearch in worker mode
+                command: |
+                    docker run -d \
+                    --name "apisearch_command_worker" \
+                    --link "apisearch_redis" \
+                    --link "apisearch_elasticsearch" \
+                    --entrypoint "/command-worker-entrypoint.sh" \
+                    apisearch/server
 
             - run:
                 name: Run tests

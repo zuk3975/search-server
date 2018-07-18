@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-06-28T06:48:50+00:00"
+            "time": "2018-06-28 06:48:50"
         },
         {
             "name": "apisearch-io/php-client",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "ec4e0131425e621f60176db953a1d13db40cbd0c"
+                "reference": "13179cac60cde59ebb84b83d8ea0d95cb35b6e70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/ec4e0131425e621f60176db953a1d13db40cbd0c",
-                "reference": "ec4e0131425e621f60176db953a1d13db40cbd0c",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/13179cac60cde59ebb84b83d8ea0d95cb35b6e70",
+                "reference": "13179cac60cde59ebb84b83d8ea0d95cb35b6e70",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-07-06T06:24:56+00:00"
+            "time": "2018-07-18 07:44:02"
         },
         {
             "name": "apisearch-io/react-socket-middleware-finite-server",
