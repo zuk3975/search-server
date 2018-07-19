@@ -77,6 +77,13 @@ services:
         tags:
             -  { name: console.command, command: apisearch-server:print-tokens }
 
+    apisearch_server.configuration:
+        class: Apisearch\Server\Console\ServerConfigurationCommand
+        arguments:
+            - "@kernel"
+        tags:
+            -  { name: console.command, command: apisearch-server:server-configuration }
+
     #
     # Consumer workers
     #

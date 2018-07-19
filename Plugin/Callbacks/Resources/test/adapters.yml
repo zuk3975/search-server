@@ -1,0 +1,11 @@
+services:
+
+    #
+    # HTTP Adapters
+    #
+    apisearch_plugin.callbacks.test_http_adapter:
+        class: Apisearch\Http\TestClient
+        arguments:
+            - "@test.client"
+            - ""
+            - "@apisearch_plugin.callbacks.retry_map"
