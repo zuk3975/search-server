@@ -39,6 +39,7 @@ COPY . /var/www/apisearch
 RUN cd /var/www/apisearch && \
     composer install -n --prefer-dist && \
     composer dump-autoload && \
+    rm -Rf /var/www/apisearch/var/cache && \
     php /var/www/apisearch/bin/console cache:warmup --env=prod
 
 COPY docker/* /
