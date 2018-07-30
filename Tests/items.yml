@@ -10,10 +10,12 @@ items:
             array_of_arrays:
                 - {id: 1, name: "number_1"}
                 - {id: 2, name: "number_2"}
+            stored_field_boolean_false: false
         indexed_metadata:
             field_text: "This is my field one"
             field_keyword: "my_keyword"
             field_boolean: true
+            field_boolean_false: false
             field_integer: 10
             simple_int: 7
             simple_string: hola
