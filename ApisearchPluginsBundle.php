@@ -17,6 +17,10 @@ namespace Apisearch\Server;
 
 use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
+use Apisearch\Plugin\MetadataFields\MetadataFieldsPluginBundle;
+use Apisearch\Plugin\Multilanguage\MultilanguagePluginBundle;
+use Apisearch\Plugin\Neo4j\Neo4jPluginBundle;
+use Apisearch\Plugin\NewRelic\NewRelicPluginBundle;
 use Apisearch\Plugin\Redis\RedisPluginBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Mmoreram\BaseBundle\BaseBundle;
@@ -45,6 +49,7 @@ class ApisearchPluginsBundle extends BaseBundle
         $pluginsAsString = $_ENV['APISEARCH_ENABLED_PLUGINS'] ?? '';
         $pluginsAsArray = explode(',', $pluginsAsString);
         $pluginsAsArray = array_map('trim', $pluginsAsArray);
+        $pluginsAsArray = self::resolveAliases($pluginsAsArray);
 
         $pluginsAsArray = array_filter($pluginsAsArray, function (string $pluginNamespace) {
             if (
@@ -60,5 +65,37 @@ class ApisearchPluginsBundle extends BaseBundle
         });
 
         return array_merge($plugins, $pluginsAsArray);
+    }
+
+    /**
+     * Resolve aliases.
+     *
+     * @param array $bundles
+     *
+     * @return array
+     */
+    private static function resolveAliases(array $bundles): array
+    {
+        $aliases = [
+            'metadatafields' => MetadataFieldsPluginBundle::class,
+            'multilanguage' => MultilanguagePluginBundle::class,
+            'newrelic' => NewRelicPluginBundle::class,
+            'neo4j' => Neo4jPluginBundle::class,
+        ];
+
+        $combined = array_combine(
+            array_values($bundles),
+            array_values($bundles)
+        );
+
+        return array_values(
+            array_replace(
+                $combined,
+                array_intersect_key(
+                    $aliases,
+                    $combined
+                )
+            )
+        );
     }
 }
