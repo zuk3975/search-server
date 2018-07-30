@@ -191,4 +191,24 @@ trait SearchTest
                 ->composeUUID()
         );
     }
+
+    /**
+     * Test false values
+     */
+    public function testFalseValues()
+    {
+        $item = $this
+            ->query(Query::createByUUID(ItemUUID::createByComposedUUID('1~product')))
+            ->getFirstItem();
+
+        $this->assertEquals(
+            false,
+            $item->get('stored_field_boolean_false')
+        );
+
+        $this->assertEquals(
+            false,
+            $item->get('field_boolean_false')
+        );
+    }
 }
