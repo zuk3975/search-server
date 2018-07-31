@@ -172,13 +172,15 @@ class QueryBuilder
      * @param Filter $filter
      * @param bool   $onlyAddDefinedTermFilter
      * @param bool   $takeInAccountDefinedTermFilter
+     * @param bool   $checkNested
      *
      * @return ElasticaQuery\AbstractQuery
      */
     private function createQueryFilterByApplicationType(
         Filter $filter,
         bool $onlyAddDefinedTermFilter,
-        bool $takeInAccountDefinedTermFilter
+        bool $takeInAccountDefinedTermFilter,
+        bool $checkNested = true
     ) {
         $verb = 'addMust';
         switch ($filter->getApplicationType()) {
@@ -194,7 +196,8 @@ class QueryBuilder
             $filter,
             $verb,
             $onlyAddDefinedTermFilter,
-            $takeInAccountDefinedTermFilter
+            $takeInAccountDefinedTermFilter,
+            $checkNested
         );
     }
 
@@ -205,6 +208,7 @@ class QueryBuilder
      * @param string $method
      * @param bool   $onlyAddDefinedTermFilter
      * @param bool   $takeInAccountDefinedTermFilter
+     * @param bool   $checkNested
      *
      * @return ElasticaQuery\AbstractQuery
      */
@@ -212,14 +216,16 @@ class QueryBuilder
         Filter $filter,
         string $method,
         bool $onlyAddDefinedTermFilter,
-        bool $takeInAccountDefinedTermFilter
+        bool $takeInAccountDefinedTermFilter,
+        bool $checkNested = true
     ) {
         $boolQueryFilter = new ElasticaQuery\BoolQuery();
         if (!$onlyAddDefinedTermFilter) {
             foreach ($filter->getValues() as $value) {
                 $queryFilter = $this->createQueryFilter(
                     $filter,
-                    $value
+                    $value,
+                    $checkNested
                 );
 
                 if ($queryFilter instanceof ElasticaQuery\AbstractQuery) {
@@ -244,7 +250,8 @@ class QueryBuilder
                     ->createQueryFilterByApplicationType(
                         $filteringFilter,
                         false,
-                        false
+                        false,
+                        $checkNested
                     )
             );
         }
@@ -257,18 +264,21 @@ class QueryBuilder
      *
      * @param Filter $filter
      * @param mixed  $value
+     * @param bool   $checkNested
      *
      * @return null|ElasticaQuery\AbstractQuery
      */
     private function createQueryFilter(
         Filter $filter,
-        $value
+        $value,
+        bool $checkNested = true
     ): ? ElasticaQuery\AbstractQuery {
         switch ($filter->getFilterType()) {
             case Filter::TYPE_FIELD:
                 return $this->createTermFilter(
                     $filter,
-                    $value
+                    $value,
+                    $checkNested
                 );
                 break;
 
@@ -276,7 +286,8 @@ class QueryBuilder
             case Filter::TYPE_DATE_RANGE:
                 return $this->createRangeFilter(
                     $filter,
-                    $value
+                    $value,
+                    $checkNested
                 );
                 break;
         }
@@ -288,14 +299,20 @@ class QueryBuilder
      *
      * @param Filter $filter
      * @param mixed  $value
+     * @param bool   $checkNested
      *
      * @return ElasticaQuery\AbstractQuery
      */
     private function createTermFilter(
         Filter $filter,
-        $value
+        $value,
+        bool $checkNested = true
     ): ? ElasticaQuery\AbstractQuery {
-        return $this->createMultipleTermFilter($filter->getField(), $value);
+        return $this->createMultipleTermFilter(
+            $filter->getField(),
+            $value,
+            $checkNested
+        );
     }
 
     /**
@@ -303,25 +320,62 @@ class QueryBuilder
      *
      * @param string          $field
      * @param string|string[] $value
+     * @param bool            $checkNested
      *
      * @return ElasticaQuery\AbstractQuery
      */
     private function createMultipleTermFilter(
         string $field,
-        $value
+        $value,
+        bool $checkNested
     ): ElasticaQuery\AbstractQuery {
         if (!is_array($value)) {
-            return new ElasticaQuery\Term([$field => $value]);
+            return $this->createTermFilterOrNestedFilterDependingOnTheField(
+                $field,
+                $value,
+                $checkNested
+            );
         }
 
         $multipleBoolQuery = new ElasticaQuery\BoolQuery();
         foreach ($value as $singleValue) {
             $multipleBoolQuery->addShould(
-                new ElasticaQuery\Term([$field => $singleValue])
+                $this->createTermFilterOrNestedFilterDependingOnTheField(
+                    $field,
+                    $singleValue,
+                    $checkNested
+                )
             );
         }
 
         return $multipleBoolQuery;
+    }
+
+    /**
+     * Create term filter or nested depending on the field.
+     *
+     * @param string          $field
+     * @param string|string[] $value
+     * @param bool            $checkNested
+     *
+     * @return ElasticaQuery\AbstractQuery
+     */
+    private function createTermFilterOrNestedFilterDependingOnTheField(
+        string $field,
+        $value,
+        bool $checkNested
+    ): ElasticaQuery\AbstractQuery {
+        $termFilter = new ElasticaQuery\Term([$field => $value]);
+        $fieldParts = explode('.', $field, 3);
+        if ($checkNested && 3 === count($fieldParts)) {
+            $nested = new ElasticaQuery\Nested();
+            $nested->setPath($fieldParts[0].'.'.$fieldParts[1]);
+            $nested->setQuery($termFilter);
+
+            return $nested;
+        }
+
+        return $termFilter;
     }
 
     /**
@@ -654,6 +708,7 @@ class QueryBuilder
                 if (!is_null($filter)) {
                     $sortBy[$key]['nested']['filter'] = $this->createQueryFilterByApplicationType(
                         $filter,
+                        false,
                         false,
                         false
                     );
