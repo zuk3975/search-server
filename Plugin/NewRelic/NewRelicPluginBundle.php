@@ -15,12 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\NewRelic;
 
-use Apisearch\Plugin\NewRelic\DependencyInjection\CompilerPass\NewRelicParamsCompilerPass;
+use Apisearch\Plugin\NewRelic\DependencyInjection\NewRelicPluginExtension;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Ekino\NewRelicBundle\EkinoNewRelicBundle;
 use Mmoreram\BaseBundle\SimpleBaseBundle;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -28,6 +28,16 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class NewRelicPluginBundle extends SimpleBaseBundle implements Plugin
 {
+    /**
+     * Returns the bundle's container extension.
+     *
+     * @return ExtensionInterface|null The container extension
+     */
+    public function getContainerExtension()
+    {
+        return new NewRelicPluginExtension();
+    }
+
     /**
      * Return all bundle dependencies.
      *
@@ -65,17 +75,5 @@ class NewRelicPluginBundle extends SimpleBaseBundle implements Plugin
     public function getPluginName(): string
     {
         return 'new_relic';
-    }
-
-    /**
-     * Return a CompilerPass instance array.
-     *
-     * @return CompilerPassInterface[]
-     */
-    public function getCompilerPasses(): array
-    {
-        return [
-            new NewRelicParamsCompilerPass(),
-        ];
     }
 }
