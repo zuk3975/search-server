@@ -193,7 +193,7 @@ trait SearchTest
     }
 
     /**
-     * Test false values
+     * Test false values.
      */
     public function testFalseValues()
     {
