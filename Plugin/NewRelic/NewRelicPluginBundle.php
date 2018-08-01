@@ -19,14 +19,14 @@ use Apisearch\Plugin\NewRelic\DependencyInjection\NewRelicPluginExtension;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Ekino\NewRelicBundle\EkinoNewRelicBundle;
-use Mmoreram\BaseBundle\SimpleBaseBundle;
+use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class NewRelicPluginBundle.
  */
-class NewRelicPluginBundle extends SimpleBaseBundle implements Plugin
+class NewRelicPluginBundle extends BaseBundle implements Plugin
 {
     /**
      * Returns the bundle's container extension.
@@ -52,18 +52,6 @@ class NewRelicPluginBundle extends SimpleBaseBundle implements Plugin
         return [
             ApisearchServerBundle::class,
             EkinoNewRelicBundle::class,
-        ];
-    }
-
-    /**
-     * get config files.
-     *
-     * @return array
-     */
-    public function getConfigFiles(): array
-    {
-        return [
-            'listeners',
         ];
     }
 
