@@ -36,6 +36,16 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
     private $tokens = [];
 
     /**
+     * Locator is enabled.
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return true;
+    }
+
+    /**
      * Add token.
      *
      * @param Token $token

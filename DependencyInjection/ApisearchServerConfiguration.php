@@ -47,8 +47,11 @@ class ApisearchServerConfiguration extends BaseConfiguration
                 ->scalarNode('god_token')
                     ->isRequired()
                 ->end()
+                ->scalarNode('readonly_token')
+                    ->defaultValue('')
+                ->end()
                 ->scalarNode('ping_token')
-                    ->isRequired()
+                    ->defaultValue('')
                 ->end();
     }
 }

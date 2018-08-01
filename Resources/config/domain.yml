@@ -277,15 +277,14 @@ services:
     #
     # Token
     #
-    apisearch_server.in_memory_token_locator:
-        class: Apisearch\Server\Domain\Repository\AppRepository\InMemoryTokenRepository
-
-    apisearch_server.token_locator:
-        alias: apisearch_server.in_memory_token_locator
+    apisearch_server.static_token_locator:
+        class: Apisearch\Server\Domain\Token\StaticTokenLocator
+        arguments:
+            - "%apisearch_server.god_token%"
+            - "%apisearch_server.readonly_token%"
+            - "%apisearch_server.ping_token%"
+        tags:
+            - { name: apisearch_server.token_locator }
 
     apisearch_server.token_validator:
         class: Apisearch\Server\Domain\Token\TokenValidator
-        arguments:
-            - "@apisearch_server.token_locator"
-            - "%apisearch_server.god_token%"
-            - "%apisearch_server.ping_token%"

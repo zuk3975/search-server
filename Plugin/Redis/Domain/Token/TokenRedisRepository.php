@@ -45,13 +45,34 @@ class TokenRedisRepository implements TokenRepository, TokenLocator, WithReposit
     private $redisWrapper;
 
     /**
+     * @var bool
+     *
+     * Enabled
+     */
+    private $enabled;
+
+    /**
      * TokenRedisRepository constructor.
      *
      * @param RedisWrapper $redisWrapper
+     * @param bool         $enabled
      */
-    public function __construct(RedisWrapper $redisWrapper)
-    {
+    public function __construct(
+        RedisWrapper $redisWrapper,
+        bool $enabled
+    ) {
         $this->redisWrapper = $redisWrapper;
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Locator is enabled.
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return $this->enabled;
     }
 
     /**

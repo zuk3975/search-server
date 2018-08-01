@@ -13,15 +13,15 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\DependencyInjection;
+namespace Apisearch\Plugin\StaticTokens\DependencyInjection;
 
 use Mmoreram\BaseBundle\DependencyInjection\BaseExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Class ApisearchServerExtension.
+ * Class StaticTokensPluginExtension.
  */
-class ApisearchServerExtension extends BaseExtension
+class StaticTokensPluginExtension extends BaseExtension
 {
     /**
      * Returns the recommended alias to use in XML.
@@ -32,7 +32,7 @@ class ApisearchServerExtension extends BaseExtension
      */
     public function getAlias()
     {
-        return 'apisearch_server';
+        return 'apisearch_plugin_static_tokens';
     }
 
     /**
@@ -70,8 +70,6 @@ class ApisearchServerExtension extends BaseExtension
     {
         return [
             'domain',
-            'controllers',
-            'console',
         ];
     }
 
@@ -91,13 +89,7 @@ class ApisearchServerExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         return [
-            'apisearch_server.middleware_domain_events_service' => $config['middleware_domain_events_service'],
-            'apisearch_server.middleware_logs_service' => $config['middleware_logs_service'],
-            'apisearch_server.command_bus_service' => $config['command_bus_service'],
-            'apisearch_server.token_repository_service' => $config['token_repository_service'],
-            'apisearch_server.god_token' => $config['god_token'],
-            'apisearch_server.readonly_token' => $config['readonly_token'],
-            'apisearch_server.ping_token' => $config['ping_token'],
+            'apisearch_plugin.static_tokens.tokens' => $config['tokens'],
         ];
     }
 
@@ -115,6 +107,6 @@ class ApisearchServerExtension extends BaseExtension
      */
     protected function getConfigurationInstance(): ? ConfigurationInterface
     {
-        return new ApisearchServerConfiguration($this->getAlias());
+        return new StaticTokensPluginConfiguration($this->getAlias());
     }
 }

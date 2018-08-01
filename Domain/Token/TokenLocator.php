@@ -23,6 +23,13 @@ use Apisearch\Token\Token;
 interface TokenLocator
 {
     /**
+     * Locator is enabled.
+     *
+     * @return bool
+     */
+    public function isValid(): bool;
+
+    /**
      * Get token by reference.
      *
      * @param string $appId

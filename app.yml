@@ -51,6 +51,7 @@ config:
 
     apisearch_server:
         god_token: "%env(APISEARCH_GOD_TOKEN)%"
+        readonly_token: "%env(APISEARCH_READONLY_TOKEN)%"
         ping_token: "%env(APISEARCH_PING_TOKEN)%"
         middleware_domain_events_service: "apisearch_server.middleware.ignore_events"
         middleware_logs_service: "apisearch_server.middleware.ignore_logs"

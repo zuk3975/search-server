@@ -105,6 +105,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         self::loadEnv();
         self::$godToken = $_ENV['APISEARCH_GOD_TOKEN'];
         self::$pingToken = $_ENV['APISEARCH_PING_TOKEN'];
+        self::$readonlyToken = $_ENV['APISEARCH_READONLY_TOKEN'];
         $imports = [
             ['resource' => '@ApisearchServerBundle/Resources/config/tactician.yml'],
             [
@@ -153,6 +154,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                     : 'apisearch_server.command_bus.inline',
                 'god_token' => self::$godToken,
                 'ping_token' => self::$pingToken,
+                'readonly_token' => self::$readonlyToken,
             ],
             'rs_queue' => [
                 'server' => [
@@ -353,6 +355,13 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * God token
      */
     public static $godToken;
+
+    /**
+     * @var string
+     *
+     * Readonly token
+     */
+    public static $readonlyToken;
 
     /**
      * @var string

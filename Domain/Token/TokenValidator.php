@@ -17,7 +17,6 @@ namespace Apisearch\Server\Domain\Token;
 
 use Apisearch\Exception\InvalidTokenException;
 use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Carbon\Carbon;
 
 /**
@@ -26,41 +25,20 @@ use Carbon\Carbon;
 class TokenValidator
 {
     /**
-     * @var TokenLocator
+     * @var TokenLocator[]
      *
-     * Token locator
+     * Token locators
      */
-    private $tokenLocator;
+    private $tokenLocators = [];
 
     /**
-     * @var string
-     *
-     * God token
-     */
-    private $godToken;
-
-    /**
-     * @var string
-     *
-     * Ping token
-     */
-    private $pingToken;
-
-    /**
-     * TokenValidator constructor.
+     * Add token locator.
      *
      * @param TokenLocator $tokenLocator
-     * @param string       $godToken
-     * @param string       $pingToken
      */
-    public function __construct(
-        TokenLocator $tokenLocator,
-        string $godToken,
-        string $pingToken
-    ) {
-        $this->tokenLocator = $tokenLocator;
-        $this->godToken = $godToken;
-        $this->pingToken = $pingToken;
+    public function addTokenLocator(TokenLocator $tokenLocator)
+    {
+        $this->tokenLocators[] = $tokenLocator;
     }
 
     /**
@@ -86,17 +64,19 @@ class TokenValidator
         string $verb
     ): Token {
         $token = null;
-        if ($tokenReference === $this->godToken) {
-            $token = $this->createGodToken($appId);
-        } elseif ($tokenReference === $this->pingToken) {
-            $token = $this->createPingToken();
-        } else {
-            $token = $this
-                ->tokenLocator
-                ->getTokenByReference(
-                    $appId,
-                    $tokenReference
-                );
+        foreach ($this->tokenLocators as $tokenLocator) {
+            if (!$tokenLocator->isValid()) {
+                continue;
+            }
+
+            $token = $tokenLocator->getTokenByReference(
+                $appId,
+                $tokenReference
+            );
+
+            if ($token instanceof Token) {
+                break;
+            }
         }
 
         $endpoint = strtolower($verb.'~~'.trim($path, '/'));
@@ -128,50 +108,5 @@ class TokenValidator
         }
 
         return $token;
-    }
-
-    /**
-     * Create god token instance.
-     *
-     * @param string $appId
-     *
-     * @return Token
-     */
-    private function createGodToken(string $appId): Token
-    {
-        return new Token(
-            TokenUUID::createById($this->godToken),
-            $appId,
-            [],
-            [],
-            [],
-            [],
-            Token::INFINITE_DURATION,
-            Token::INFINITE_HITS_PER_QUERY,
-            Token::NO_CACHE
-        );
-    }
-
-    /**
-     * Create ping token instance.
-     *
-     * @return Token
-     */
-    private function createPingToken(): Token
-    {
-        return new Token(
-            TokenUUID::createById($this->pingToken),
-            '',
-            [],
-            [],
-            [
-                'head~~/', // Ping
-                'get~~/health', // Check health
-            ],
-            [],
-            Token::INFINITE_DURATION,
-            Token::INFINITE_HITS_PER_QUERY,
-            Token::NO_CACHE
-        );
     }
 }
