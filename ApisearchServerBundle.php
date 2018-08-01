@@ -100,6 +100,7 @@ class ApisearchServerBundle extends BaseBundle
             new CompilerPass\PluginsMiddlewareCompilerPass(),
             new CompilerPass\EnabledPluginsMiddlewareCompilerPass($this->kernel),
             new CompilerPass\DomainEventsSubscribersCompilerPass(),
+            new CompilerPass\TokenLocatorsCompilerPass(),
         ];
     }
 }

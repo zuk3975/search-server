@@ -19,6 +19,8 @@ use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query;
+use Apisearch\Token\Token;
+use Apisearch\Token\TokenUUID;
 
 /**
  * Class SearchTest.
@@ -44,6 +46,26 @@ trait SearchTest
     {
         $result = $this->query(Query::create('badal'));
         $this->assertNTypeElementId($result, 0, '5');
+    }
+
+    /**
+     * Test basic search.
+     *
+     * @group hola
+     */
+    public function testBasicSearchUsingSearchToken()
+    {
+        $this->assertCount(
+            5,
+            $this
+                ->query(
+                    Query::createMatchAll(),
+                    null,
+                    null,
+                    new Token(TokenUUID::createById(self::$readonlyToken), self::$appId)
+                )
+                ->getItems()
+        );
     }
 
     /**

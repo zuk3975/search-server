@@ -13,19 +13,19 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Plugin\Redis;
+namespace Apisearch\Plugin\StaticTokens;
 
-use Apisearch\Plugin\Redis\DependencyInjection\RedisPluginExtension;
+use Apisearch\Plugin\StaticTokens\DependencyInjection\StaticTokensPluginExtension;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
-use Mmoreram\BaseBundle\BaseBundle;
+use Mmoreram\BaseBundle\SimpleBaseBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class RedisPluginBundle.
+ * Class StaticTokensPluginBundle.
  */
-class RedisPluginBundle extends BaseBundle implements Plugin
+class StaticTokensPluginBundle extends SimpleBaseBundle implements Plugin
 {
     /**
      * Return all bundle dependencies.
@@ -52,7 +52,7 @@ class RedisPluginBundle extends BaseBundle implements Plugin
      */
     public function getContainerExtension()
     {
-        return new RedisPluginExtension();
+        return new StaticTokensPluginExtension();
     }
 
     /**
@@ -62,6 +62,6 @@ class RedisPluginBundle extends BaseBundle implements Plugin
      */
     public function getPluginName(): string
     {
-        return 'redis';
+        return 'static_tokens';
     }
 }

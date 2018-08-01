@@ -13,15 +13,15 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\DependencyInjection;
+namespace Apisearch\Plugin\Redis\DependencyInjection;
 
 use Mmoreram\BaseBundle\DependencyInjection\BaseExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Class ApisearchServerExtension.
+ * Class RedisPluginExtension.
  */
-class ApisearchServerExtension extends BaseExtension
+class RedisPluginExtension extends BaseExtension
 {
     /**
      * Returns the recommended alias to use in XML.
@@ -32,7 +32,24 @@ class ApisearchServerExtension extends BaseExtension
      */
     public function getAlias()
     {
-        return 'apisearch_server';
+        return 'apisearch_plugin_redis';
+    }
+
+    /**
+     * Return a new Configuration instance.
+     *
+     * If object returned by this method is an instance of
+     * ConfigurationInterface, extension will use the Configuration to read all
+     * bundle config definitions.
+     *
+     * Also will call getParametrizationValues method to load some config values
+     * to internal parameters.
+     *
+     * @return ConfigurationInterface|null
+     */
+    protected function getConfigurationInstance(): ? ConfigurationInterface
+    {
+        return new RedisPluginConfiguration($this->getAlias());
     }
 
     /**
@@ -70,8 +87,7 @@ class ApisearchServerExtension extends BaseExtension
     {
         return [
             'domain',
-            'controllers',
-            'console',
+            'middlewares',
         ];
     }
 
@@ -91,30 +107,7 @@ class ApisearchServerExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         return [
-            'apisearch_server.middleware_domain_events_service' => $config['middleware_domain_events_service'],
-            'apisearch_server.middleware_logs_service' => $config['middleware_logs_service'],
-            'apisearch_server.command_bus_service' => $config['command_bus_service'],
-            'apisearch_server.token_repository_service' => $config['token_repository_service'],
-            'apisearch_server.god_token' => $config['god_token'],
-            'apisearch_server.readonly_token' => $config['readonly_token'],
-            'apisearch_server.ping_token' => $config['ping_token'],
+            'apisearch_plugin.redis.locator_enabled' => (bool) ($_ENV['REDIS_LOCATOR'] ?? $config['locator_enabled']),
         ];
-    }
-
-    /**
-     * Return a new Configuration instance.
-     *
-     * If object returned by this method is an instance of
-     * ConfigurationInterface, extension will use the Configuration to read all
-     * bundle config definitions.
-     *
-     * Also will call getParametrizationValues method to load some config values
-     * to internal parameters.
-     *
-     * @return ConfigurationInterface|null
-     */
-    protected function getConfigurationInstance(): ? ConfigurationInterface
-    {
-        return new ApisearchServerConfiguration($this->getAlias());
     }
 }
