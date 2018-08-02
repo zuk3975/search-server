@@ -12,7 +12,7 @@ exec 6>&-
 exec 6<&-
 
 echo $(curl "http://apisearch_elasticsearch:9200/_cluster/health?wait_for_status=green&timeout=10s")
-until $(curl --output /dev/null --silent --fail "http://apisearch_elasticsearch:9200/_cluster/health?wait_for_status=green&timeout=10s"); do
+until $(curl --output /dev/null --silent --fail "http://apisearch_elasticsearch:9200/_cluster/health?wait_for_status=yellow&timeout=10s"); do
     echo "$(date) - can't connect to apisearch_elasticsearch:9200"
     sleep 1
 done
