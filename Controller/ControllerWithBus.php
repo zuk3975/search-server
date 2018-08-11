@@ -69,7 +69,8 @@ abstract class ControllerWithBus extends BaseController
 
         if (
             !is_array($requestBody) ||
-            !isset($requestBody[$field])
+            !isset($requestBody[$field]) ||
+            !is_array($requestBody[$field])
         ) {
             if (is_null($default)) {
                 throw $exception;
