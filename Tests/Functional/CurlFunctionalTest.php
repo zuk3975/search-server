@@ -508,21 +508,21 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
     /**
      * Make a curl execution.
      *
-     * @param string      $routeName
-     * @param null|string $appId
-     * @param null|string $index
-     * @param null|Token  $token
-     * @param array       $body
+     * @param string       $routeName
+     * @param null|string  $appId
+     * @param null|string  $index
+     * @param null|Token   $token
+     * @param array|string $body
      *
-     * @return string
+     * @return array
      */
-    private static function makeCurl(
+    protected static function makeCurl(
         string $routeName,
         ?string $appId,
         ?string $index,
         ?Token $token,
-        array $body = []
-    ) {
+        $body = []
+    ): array {
         $endpoint = Endpoints::all()[$routeName];
         $tmpFile = tempnam('/tmp', 'curl_tmp');
         $command = sprintf('curl -s -o %s -w "%%{http_code}" %s %s "http://localhost:'.static::HTTP_TEST_SERVICE_PORT.'%s?app_id=%s&index=%s&token=%s" -d\'%s\'',
@@ -543,7 +543,9 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
             $token
                 ? $token->getTokenUUID()->composeUUID()
                 : self::getParameterStatic('apisearch_server.god_token'),
-            json_encode($body)
+            is_string($body)
+                ? $body
+                : json_encode($body)
         );
 
         $command = str_replace("-d'[]'", '', $command);
