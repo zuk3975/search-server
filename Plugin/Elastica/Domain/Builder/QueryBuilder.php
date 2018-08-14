@@ -575,7 +575,7 @@ class QueryBuilder
         if (empty($queryString)) {
             $match = new ElasticaQuery\MatchAll();
         } else {
-            $match = new ElasticaQuery\MultiMatch();
+            $fuzziness = $query->getFuzziness();
             $filterFields = empty($filterFields)
                 ? [
                     'searchable_metadata.*',
@@ -583,9 +583,17 @@ class QueryBuilder
                 ]
                 : $filterFields;
 
-            $match
-                ->setFields($filterFields)
-                ->setQuery($queryString);
+            $match = is_array($fuzziness)
+                ? $this->createMainQueryObjectAsFuzzy(
+                    $queryString,
+                    $filterFields,
+                    $fuzziness
+                )
+                : $this->createMainQueryObjectAsMatchAll(
+                    $queryString,
+                    $filterFields,
+                    $fuzziness
+                );
         }
 
         $match = $this->setScoreType(
@@ -594,6 +602,74 @@ class QueryBuilder
         );
 
         return $match;
+    }
+
+    /**
+     * Create main query object as a multimatch.
+     *
+     * @param string            $queryString
+     * @param array             $filterFields
+     * @param null|float|string $fuzziness
+     *
+     * @return ElasticaQuery\AbstractQuery
+     */
+    private function createMainQueryObjectAsMatchAll(
+        string $queryString,
+        array $filterFields,
+        $fuzziness
+    ): ElasticaQuery\AbstractQuery {
+        $match = new ElasticaQuery\MultiMatch();
+        $match
+            ->setFields($filterFields)
+            ->setQuery($queryString);
+
+        if (!is_null($fuzziness)) {
+            $match->setFuzziness($fuzziness);
+        }
+
+        return $match;
+    }
+
+    /**
+     * Create main query object as a multimatch.
+     *
+     * @param string $queryString
+     * @param array  $filterFields
+     * @param array  $fuzziness
+     *
+     * @return ElasticaQuery\AbstractQuery
+     */
+    private function createMainQueryObjectAsFuzzy(
+        string $queryString,
+        array $filterFields,
+        array $fuzziness
+    ): ElasticaQuery\AbstractQuery {
+        $boolQuery = new ElasticaQuery\BoolQuery();
+        foreach ($filterFields as $filterField) {
+            $filterFieldParts = explode('^', $filterField, 2);
+            $filterFieldWithoutWeight = $filterFieldParts[0];
+            $specificFuzziness = $fuzziness[$filterFieldWithoutWeight] ?? false;
+            $match = new ElasticaQuery\Match($filterFieldWithoutWeight);
+            $match->setFieldQuery($filterFieldWithoutWeight, $queryString);
+
+            if (isset($filterFieldParts[1])) {
+                $match->setFieldBoost(
+                    $filterFieldWithoutWeight,
+                    (float) ($filterFieldParts[1])
+                );
+            }
+
+            if ($specificFuzziness) {
+                $match->setFieldFuzziness(
+                    $filterFieldWithoutWeight,
+                    $specificFuzziness
+                );
+            }
+
+            $boolQuery->addShould($match);
+        }
+
+        return $boolQuery;
     }
 
     /**

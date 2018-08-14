@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd38e4748c97827e73551b46ef6643cf",
+    "content-hash": "30f7723c305dabe90c94b4285bba5d5d",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "13179cac60cde59ebb84b83d8ea0d95cb35b6e70"
+                "reference": "29f618384e76dd7d8ab48e6db2e9a50a73300742"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/13179cac60cde59ebb84b83d8ea0d95cb35b6e70",
-                "reference": "13179cac60cde59ebb84b83d8ea0d95cb35b6e70",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/29f618384e76dd7d8ab48e6db2e9a50a73300742",
+                "reference": "29f618384e76dd7d8ab48e6db2e9a50a73300742",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-07-18T07:44:02+00:00"
+            "time": "2018-08-14T01:23:40+00:00"
         },
         {
             "name": "cboden/ratchet",
