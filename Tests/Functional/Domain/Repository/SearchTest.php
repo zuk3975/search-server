@@ -50,8 +50,6 @@ trait SearchTest
 
     /**
      * Test basic search.
-     *
-     * @group hola
      */
     public function testBasicSearchUsingSearchToken()
     {

@@ -28,7 +28,6 @@ class QueryBadFormatTest extends HttpFunctionalTest
     /**
      * Test query with bad format.
      *
-     * @group rupinet
      * @expectedException \Apisearch\Exception\InvalidFormatException
      */
     public function testQueryBadFormat()
