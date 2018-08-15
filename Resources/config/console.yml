@@ -77,6 +77,12 @@ services:
         tags:
             -  { name: console.command, command: apisearch-server:print-tokens }
 
+    apisearch_server.check_health_command:
+        class: Apisearch\Server\Console\CheckHealthCommand
+        parent: apisearch_server.command_with_query_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:check-health }
+
     apisearch_server.configuration:
         class: Apisearch\Server\Console\ServerConfigurationCommand
         arguments:

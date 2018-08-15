@@ -104,6 +104,7 @@ abstract class CommandWithBusAndGodToken extends ApisearchCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->startCommand($output);
+        $result = null;
         try {
             $result = $this->dispatchDomainEvent(
                 $input,
@@ -125,6 +126,10 @@ abstract class CommandWithBusAndGodToken extends ApisearchCommand
         }
 
         $this->finishCommand($output);
+
+        return is_int($result)
+            ? $result
+            : 0;
     }
 
     /**

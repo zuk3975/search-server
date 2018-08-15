@@ -32,6 +32,7 @@ class CheckHealthHandler
     public function handle(CheckHealth $checkHealth): array
     {
         return [
+            'healthy' => true,
             'status' => [],
             'process' => [
                 'memory_used' => memory_get_usage(false),
