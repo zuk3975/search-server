@@ -52,6 +52,7 @@ class HealthTest extends HttpFunctionalTest
 
         if (200 === $responseCode) {
             $content = json_decode($response->getContent(), true);
+            $this->assertTrue($content['healthy']);
             $this->assertTrue($content['status']['redis']);
             $this->assertTrue(
                 in_array(

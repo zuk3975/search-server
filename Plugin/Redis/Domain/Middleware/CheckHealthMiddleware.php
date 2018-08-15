@@ -54,7 +54,9 @@ class CheckHealthMiddleware implements PluginMiddleware
         $next
     ) {
         $data = $next($command);
-        $data['status']['redis'] = $this->getRedisStatus();
+        $redisStatus = $this->getRedisStatus();
+        $data['status']['redis'] = $redisStatus;
+        $data['healthy'] = $data['healthy'] && $redisStatus;
 
         return $data;
     }

@@ -54,11 +54,16 @@ class CheckHealthMiddleware implements PluginMiddleware
         $next
     ) {
         $data = $next($command);
-        $data['status']['elasticsearch'] = $this
+        $elasticsearchStatus = $this
             ->client
             ->getCluster()
             ->getHealth()
             ->getStatus();
+        $data['status']['elasticsearch'] = $elasticsearchStatus;
+        $data['healthy'] = $data['healthy'] && in_array(strtolower($elasticsearchStatus), [
+            'yellow',
+            'green',
+        ]);
 
         return $data;
     }
