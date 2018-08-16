@@ -215,20 +215,144 @@ trait SearchTest
     /**
      * Test false values.
      */
-    public function testFalseValues()
+    public function testUselessValuesOnIndex()
     {
+        $this->indexItems([
+            Item::create(
+                ItemUUID::createByComposedUUID('999~default'),
+                [
+                    'value' => 'value',
+                    'null' => null,
+                    'false' => false,
+                    'true' => true,
+                    'empty_array' => [],
+                    'array_null' => [
+                        null,
+                    ],
+                    'array' => [
+                        [
+                            'null' => null,
+                            'false' => false,
+                            'true' => true,
+                            'empty_array' => [],
+                            'array_null' => [
+                                null,
+                            ],
+                            'value' => 'value',
+                        ],
+                    ],
+                ],
+                [
+                    'value' => 'value',
+                    'null' => null,
+                    'false' => false,
+                    'true' => true,
+                    'empty_array' => [],
+                    'array_null' => [
+                        null,
+                    ],
+                    'array' => [
+                        [
+                            'null' => null,
+                            'false' => false,
+                            'true' => true,
+                            'empty_array' => [],
+                            'array_null' => [
+                                null,
+                            ],
+                            'value' => 'value',
+                        ],
+                    ],
+                ],
+                [
+                    'value' => 'value',
+                    'null' => null,
+                    'false' => false,
+                    'true' => true,
+                    'empty_array' => [],
+                    'array_null' => [
+                        null,
+                    ],
+                    'empty_value' => '',
+                    'array' => [
+                        false,
+                        true,
+                    ],
+                ],
+                [
+                    'value',
+                    '',
+                    true,
+                    false,
+                    null,
+                ],
+                [
+                    'value',
+                    '',
+                    true,
+                    false,
+                    null,
+                ]
+            ),
+        ]);
+
         $item = $this
-            ->query(Query::createByUUID(ItemUUID::createByComposedUUID('1~product')))
+            ->query(Query::createByUUID(ItemUUID::createByComposedUUID('999~default')))
             ->getFirstItem();
 
         $this->assertEquals(
-            false,
-            $item->get('stored_field_boolean_false')
+            [
+                'value' => 'value',
+                'false' => false,
+                'true' => true,
+                'array' => [
+                    [
+                        'false' => false,
+                        'true' => true,
+                        'value' => 'value',
+                    ],
+                ],
+            ],
+            $item->getMetadata()
         );
 
         $this->assertEquals(
-            false,
-            $item->get('field_boolean_false')
+            [
+                'value' => 'value',
+                'false' => false,
+                'true' => true,
+                'array' => [
+                    [
+                        'false' => false,
+                        'true' => true,
+                        'value' => 'value',
+                    ],
+                ],
+            ],
+            $item->getIndexedMetadata()
         );
+
+        $this->assertEquals(
+            [
+                'value' => 'value',
+            ],
+            $item->getSearchableMetadata()
+        );
+
+        $this->assertEquals(
+            [
+                'value',
+            ],
+            $item->getExactMatchingMetadata()
+        );
+
+        $this->assertEquals(
+            [
+                'value',
+            ],
+            $item->getSuggest()
+        );
+
+        self::resetScenario();
     }
 }
