@@ -144,26 +144,55 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
                     ->getCoordinate()
                     ->toArray()
                 : null,
-            'metadata' => array_filter($item->getMetadata()),
-            'indexed_metadata' => array_filter($item->getIndexedMetadata()),
-            'searchable_metadata' => array_filter(
-                $item->getSearchableMetadata(),
-                [$this, 'filterElement']
+            'metadata' => $this->filterElementRecursively(
+                $item->getMetadata()
+            ),
+            'indexed_metadata' => $this->filterElementRecursively(
+                $item->getIndexedMetadata()
+            ),
+            'searchable_metadata' => $this->filterSearchableElementRecursively(
+                $item->getSearchableMetadata()
             ),
             'exact_matching_metadata' => array_values(
-                array_filter(
-                    $item->getExactMatchingMetadata(),
-                    [$this, 'filterElement']
+                $this->filterSearchableElementRecursively(
+                    $item->getExactMatchingMetadata()
                 )
             ),
-            'suggest' => array_filter($item->getSuggest()),
+            'suggest' => array_values(
+                $this->filterSearchableElementRecursively(
+                    $item->getSuggest()
+                )
+            ),
         ];
 
         return new ElasticaDocument($uuid->composeUUID(), $itemDocument);
     }
 
     /**
-     * Specific array filter.
+     * Filter recursively element for index and data.
+     *
+     * @param mixed $elements
+     *
+     * @return mixed $element
+     */
+    private function filterElementRecursively(array $elements)
+    {
+        foreach ($elements as $key => $element) {
+            if (is_array($element)) {
+                $elements[$key] = $this->filterElementRecursively($element);
+            }
+        }
+
+        $elements = array_filter(
+            $elements,
+            [$this, 'filterElement']
+        );
+
+        return $elements;
+    }
+
+    /**
+     * Filter element for index and data.
      *
      * @param mixed $element
      *
@@ -173,7 +202,46 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
     {
         return !(
             is_null($element) ||
-            (is_bool($element) && !$element) ||
+            (is_array($element) && empty($element))
+        );
+    }
+
+    /**
+     * Filter element for search.
+     *
+     * @param array $elements
+     *
+     * @return mixed $element
+     */
+    private function filterSearchableElementRecursively(array $elements)
+    {
+        foreach ($elements as $key => $element) {
+            if (is_array($element)) {
+                $elements[$key] = $this->filterSearchableElementRecursively($element);
+            }
+        }
+
+        $elements = array_filter(
+            $elements,
+            [$this, 'filterSearchableElement']
+        );
+
+        return $elements;
+    }
+
+    /**
+     * Filter element for search.
+     *
+     * @param mixed $element
+     *
+     * @return mixed $element
+     */
+    private function filterSearchableElement($element)
+    {
+        return !(
+            is_null($element) ||
+            is_bool($element) ||
+            (is_string($element) && empty($element)) ||
             (is_array($element) && empty($element))
         );
     }

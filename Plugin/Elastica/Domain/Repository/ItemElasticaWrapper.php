@@ -221,9 +221,12 @@ class ItemElasticaWrapper extends ElasticaWrapper
             ],
         ]);
 
-        $sourceExcludes = ['exact_matching_metadata'];
+        $sourceExcludes = [];
         if (!$config->shouldSearchableMetadataBeStored()) {
-            $sourceExcludes[] = 'searchable_metadata';
+            $sourceExcludes = [
+                'searchable_metadata',
+                'exact_matching_metadata',
+            ];
         }
 
         $mapping->setSource(['excludes' => $sourceExcludes]);
