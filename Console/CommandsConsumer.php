@@ -74,7 +74,6 @@ class CommandsConsumer extends ConsumerCommand
         OutputInterface $output,
         array $data
     ) {
-        $this->printHeader($input, $output);
         $class = 'Apisearch\Server\Domain\Command\\'.$data['class'];
         if (
             !class_exists($class) ||
@@ -83,34 +82,30 @@ class CommandsConsumer extends ConsumerCommand
             return;
         }
 
-        $output->write('Consuming '.$class.' ... ');
+        $success = true;
+        $message = '';
+        $command = $data['class'];
+        $from = microtime(true);
         try {
             $this
                 ->commandBus
                 ->handle($class::fromArray($data));
-            $output->write('Ok');
         } catch (Exception $e) {
             // Silent pass
-            $output->write('Fail ['.$e->getMessage().']');
+            $success = false;
+            $message = $e->getMessage();
         }
-        $output->writeln('');
-    }
+        $to = microtime(true);
+        $elapsedTime = (int) (($to - $from) * 1000000);
 
-    /**
-     * Print header.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     */
-    private function printHeader(
-        InputInterface $input,
-        OutputInterface $output
-    ) {
-        $output->writeln('========');
-        $output->writeln('========');
-        $output->writeln('=== Command consumer');
-        $output->writeln('=== env = '.$input->getOption('env'));
-        $output->writeln('========');
-        $output->writeln('========');
+        echo $success === true
+            ? "\033[01;32mOk  \033[0m"
+            : "\033[01;31mFail\033[0m";
+        echo " $command ";
+        echo "(\e[00;37m".$elapsedTime." ms\e[0m)";
+        if ($success === false) {
+            echo " - \e[00;37m".$message."\e[0m";
+        }
+        echo PHP_EOL;
     }
 }
