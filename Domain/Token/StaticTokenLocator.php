@@ -145,7 +145,7 @@ class StaticTokenLocator implements TokenLocator
             [],
             Token::INFINITE_DURATION,
             Token::INFINITE_HITS_PER_QUERY,
-            Token::NO_CACHE
+            Token::DEFAULT_TTL
         );
     }
 
