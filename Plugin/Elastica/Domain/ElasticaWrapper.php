@@ -19,6 +19,7 @@ use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Server\Exception\ParsedCreatingIndexException;
 use Elastica\Client;
 use Elastica\Document;
 use Elastica\Exception\Bulk\ResponseException as BulkResponseException;
@@ -207,11 +208,7 @@ abstract class ElasticaWrapper
                 $replicas
             ));
         } catch (ResponseException $exception) {
-            /*
-             * The index resource cannot be deleted.
-             * This means that the resource is not available
-             */
-            throw $this->getIndexNotAvailableException($exception->getMessage());
+            throw ParsedCreatingIndexException::parse($exception->getMessage());
         }
     }
 

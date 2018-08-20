@@ -57,6 +57,6 @@ class CreateIndexController extends ControllerWithBus
                 ImmutableConfig::createFromArray($configAsArray)
             ));
 
-        return new JsonResponse('Index created', 200);
+        return new JsonResponse('Index created', JsonResponse::HTTP_CREATED);
     }
 }
