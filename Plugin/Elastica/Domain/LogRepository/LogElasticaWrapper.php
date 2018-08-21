@@ -43,6 +43,11 @@ class LogElasticaWrapper extends ElasticaWrapper
         return self::ITEM_TYPE;
     }
 
+    public function getIndexPrefix(): string
+    {
+        return 'apisearch_log';
+    }
+
     /**
      * Get index name.
      *
@@ -54,7 +59,7 @@ class LogElasticaWrapper extends ElasticaWrapper
     {
         return $this->buildIndexReference(
             $repositoryReference,
-            'apisearch_log'
+            $this->getIndexPrefix()
         );
     }
 

@@ -18,6 +18,7 @@ namespace Apisearch\Server\Tests\Functional;
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Model\Changes;
+use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
@@ -42,6 +43,7 @@ use Apisearch\Server\Domain\Command\ResetIndex;
 use Apisearch\Server\Domain\Command\UpdateItems;
 use Apisearch\Server\Domain\Query\CheckHealth;
 use Apisearch\Server\Domain\Query\CheckIndex;
+use Apisearch\Server\Domain\Query\GetIndices;
 use Apisearch\Server\Domain\Query\GetTokens;
 use Apisearch\Server\Domain\Query\Ping;
 use Apisearch\Server\Domain\Query\Query;
@@ -211,6 +213,17 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appId ?? self::$appId
                     )
             ));
+    }
+
+    /**
+     * @param string|null $appId
+     *
+     * @return array|Index[]
+     */
+    public function getIndices(string $appId = null): array
+    {
+        return self::getStatic('apisearch_server.query_bus')
+            ->handle(new GetIndices($appId));
     }
 
     /**

@@ -95,6 +95,11 @@ services:
         parent: apisearch_server.controller_with_query_bus
 
 
+    apisearch_server.get_indices_controller:
+        class: Apisearch\Server\Controller\GetIndicesController
+        parent: apisearch_server.controller_with_query_bus
+
+
     #
     # Controller listener
     #

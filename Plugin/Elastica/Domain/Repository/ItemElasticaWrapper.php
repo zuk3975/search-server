@@ -50,6 +50,14 @@ class ItemElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * @return string
+     */
+    public function getIndexPrefix(): string
+    {
+        return 'apisearch_item';
+    }
+
+    /**
      * Get index name.
      *
      * @param RepositoryReference $repositoryReference
@@ -60,7 +68,7 @@ class ItemElasticaWrapper extends ElasticaWrapper
     {
         return $this->buildIndexReference(
             $repositoryReference,
-            'apisearch_item'
+            $this->getIndexPrefix()
         );
     }
 

@@ -621,6 +621,13 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     );
 
     /**
+     * @param string|null $appId
+     *
+     * @return array|Index[]
+     */
+    abstract public function getIndices(string $appId = null): array;
+
+    /**
      * Check index.
      *
      * @param string $appId

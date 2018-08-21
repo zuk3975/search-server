@@ -1,3 +1,9 @@
+search_server_api_get_indices:
+    path: /v1/indices
+    methods: ["GET"]
+    defaults:
+        _controller: apisearch_server.get_indices_controller
+
 search_server_api_create_index:
     path: /v1/index
     methods: ["POST"]
