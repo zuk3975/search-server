@@ -96,7 +96,10 @@ class CommandsConsumer extends ConsumerCommand
             $message = $e->getMessage();
         }
         $to = microtime(true);
-        $elapsedTime = (int) (($to - $from) * 1000000);
+        $elapsedTime = (int) (($to - $from) * 1000);
+        if ($elapsedTime === 0) {
+            $elapsedTime = '<1';
+        }
 
         echo true === $success
             ? "\033[01;32mOk  \033[0m"
