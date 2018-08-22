@@ -44,7 +44,7 @@ class ParsedResourceNotAvailableException
     private static function transformToHumanFormat(string $message): string
     {
         if (1 === preg_match(
-            '#/apisearch_(?P<app_id>.*?)_(?P<index_id>.*?)/item/(?P<id>.*?)~(?P<type>.*?)caused failed to parse \[(?P<group>\w*?)\.(?P<field>\w*?)\]#i',
+            '#/apisearch_item_(?P<index_name>.*?)?/item/(?P<id>.*?)~(?P<type>.*?)caused failed to parse \[(?P<group>\w*?)\.(?P<field>\w*?)\]#i',
             $message,
             $match)) {
             return sprintf('Error while indexing item [id: %s, type: %s]. Field %s in %s is malformed',
@@ -53,6 +53,20 @@ class ParsedResourceNotAvailableException
                 $match['field'],
                 $match['group']
             );
+        }
+
+        if (1 === preg_match(
+            '#apisearch_item_(?P<index_name>.*?)?/item/.*caused no such index#i',
+            $message,
+            $match)) {
+            return $match['index_name'];
+        }
+
+        if (1 === preg_match(
+            '#no such index \[.*apisearch_item_(?P<index_name>.*?)\]#i',
+            $message,
+            $match)) {
+            return $match['index_name'];
         }
 
         return $message;

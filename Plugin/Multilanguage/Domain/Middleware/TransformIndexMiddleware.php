@@ -16,13 +16,14 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
 use Apisearch\Repository\RepositoryReference;
+use Apisearch\Server\Domain\Command\DeleteIndex;
 use Apisearch\Server\Domain\Command\DeleteItems;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 
 /**
- * Class DeleteItemsMiddleware.
+ * Class TransformIndexMiddleware.
  */
-class DeleteItemsMiddleware implements PluginMiddleware
+class TransformIndexMiddleware implements PluginMiddleware
 {
     /**
      * Execute middleware.
@@ -39,7 +40,7 @@ class DeleteItemsMiddleware implements PluginMiddleware
         $index = $command->getIndex();
         $indices = explode(',', $index);
         $indices = array_map(function (string $index) {
-            return $index.'_language_*';
+            return $index.'_plugin_language_*';
         }, $indices);
 
         $indices = implode(',', $indices);
@@ -61,6 +62,9 @@ class DeleteItemsMiddleware implements PluginMiddleware
      */
     public function getSubscribedEvents(): array
     {
-        return [DeleteItems::class];
+        return [
+            DeleteItems::class,
+            DeleteIndex::class,
+        ];
     }
 }

@@ -21,7 +21,7 @@ use Apisearch\Token\TokenUUID;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class CreateIndexTest
+ * Class CreateIndexTest.
  */
 class CreateIndexTest extends HttpFunctionalTest
 {
@@ -43,7 +43,7 @@ class CreateIndexTest extends HttpFunctionalTest
         $testRoute = $this->get('router')->generate('search_server_api_create_index', [
             'token' => $token,
             'app_id' => self::$appId,
-            'index' => self::$index
+            'index' => self::$index,
         ]);
 
         $client->request(

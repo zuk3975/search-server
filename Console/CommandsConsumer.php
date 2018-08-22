@@ -98,12 +98,12 @@ class CommandsConsumer extends ConsumerCommand
         $to = microtime(true);
         $elapsedTime = (int) (($to - $from) * 1000000);
 
-        echo $success === true
+        echo true === $success
             ? "\033[01;32mOk  \033[0m"
             : "\033[01;31mFail\033[0m";
         echo " $command ";
         echo "(\e[00;37m".$elapsedTime." ms\e[0m)";
-        if ($success === false) {
+        if (false === $success) {
             echo " - \e[00;37m".$message."\e[0m";
         }
         echo PHP_EOL;
