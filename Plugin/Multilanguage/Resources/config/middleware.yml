@@ -10,13 +10,18 @@ services:
         tags:
             - { name: apisearch_plugin.middleware }
 
-    apisearch_plugin.multilanguage.delete_items:
-        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\DeleteItemsMiddleware
+    apisearch_plugin.multilanguage.query:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\QueryMiddleware
         tags:
             - { name: apisearch_plugin.middleware }
 
-    apisearch_plugin.multilanguage.query:
-        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\QueryMiddleware
+    apisearch_plugin.multilanguage.create_index:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\CreateIndexMiddleware
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.transform_index:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\TransformIndexMiddleware
         tags:
             - { name: apisearch_plugin.middleware }
 

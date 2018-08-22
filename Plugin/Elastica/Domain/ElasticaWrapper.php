@@ -347,8 +347,8 @@ abstract class ElasticaWrapper
         try {
             $this
                 ->getType($repositoryReference, $this->getItemType())
-                ->deleteIds($documentsId);
-        } catch (BulkResponseException $exception) {
+                ->deleteByQuery(new Query\Ids(array_values($documentsId)));
+        } catch (ResponseException $exception) {
             /*
              * The index resource cannot be deleted.
              * This means that the resource is not available

@@ -65,19 +65,15 @@ class IndexItemsMiddleware implements PluginMiddleware
         /**
          * @var IndexItems
          */
-        $itemsSplittedByLanguage = [];
-        $itemsWithoutLanguage = [];
-        foreach ($command->getItems() as $item) {
-            $language = $item->get('language');
-            if (is_null($language)) {
-                $itemsWithoutLanguage[] = $item;
-                continue;
-            }
+        $itemsSplittedByLanguage = [
+            'xx' => [],
+        ];
 
+        foreach ($command->getItems() as $item) {
+            $language = $item->get('language') ?? 'xx';
             if (!isset($itemsSplittedByLanguage[$language])) {
                 $itemsSplittedByLanguage[$language] = [];
             }
-
             $itemsSplittedByLanguage[$language][] = $item;
         }
 
@@ -94,13 +90,6 @@ class IndexItemsMiddleware implements PluginMiddleware
                 $command,
                 $items,
                 $language
-            );
-        }
-
-        if (!empty($itemsWithoutLanguage)) {
-            $this->enqueueWithoutLanguageIndexItems(
-                $command,
-                $itemsWithoutLanguage
             );
         }
     }
@@ -124,30 +113,6 @@ class IndexItemsMiddleware implements PluginMiddleware
                     RepositoryReference::create(
                         $command->getAppId(),
                         $command->getIndex().'_plugin_language_'.$language
-                    ),
-                    $command->getToken(),
-                    $items
-                )
-            );
-    }
-
-    /**
-     * Enqueue new command.
-     *
-     * @param IndexItems $command
-     * @param Item[]     $items
-     */
-    private function enqueueWithoutLanguageIndexItems(
-        IndexItems $command,
-        array $items
-    ) {
-        $this
-            ->commandBus
-            ->handle(
-                new IndexItems(
-                    RepositoryReference::create(
-                        $command->getAppId(),
-                        $command->getIndex()
                     ),
                     $command->getToken(),
                     $items

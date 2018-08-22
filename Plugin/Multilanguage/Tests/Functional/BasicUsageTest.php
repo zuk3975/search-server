@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage\Tests\Functional;
 
+use Apisearch\Model\ItemUUID;
 use Apisearch\Query\Query;
 
 /**
@@ -40,6 +41,10 @@ class BasicUsageTest extends MultilanguageFunctionalTest
             $this->checkIndex(self::$appId, self::$index.'_plugin_language_en')
         );
 
+        $this->assertTrue(
+            $this->checkIndex(self::$appId, self::$index.'_plugin_language_xx')
+        );
+
         $this->assertCount(3, $this->query(Query::createMatchAll())->getItems());
         $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['ca']))->getItems());
         $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['es']))->getItems());
@@ -47,13 +52,30 @@ class BasicUsageTest extends MultilanguageFunctionalTest
         $this->assertCount(2, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca']))->getItems());
         $this->assertCount(3, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca', 'es']))->getItems());
 
-        $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['ca']))->getItems(), self::$appId, self::$index.'_plugin_language_en');
-        $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['es']))->getItems(), self::$appId, self::$index.'_plugin_language_en');
-        $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en']))->getItems(), self::$appId, self::$index.'_plugin_language_en');
-
         $this->assertCount(
             0,
             $this->query(Query::create('per'))->getItems()
         );
+
+        $this->deleteItems([
+            ItemUUID::createByComposedUUID('1~item'),
+        ]);
+        $this->assertCount(2, $this->query(Query::createMatchAll())->getItems());
+        $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['ca']))->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['es']))->getItems());
+        $this->assertCount(1, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en']))->getItems());
+        $this->assertCount(2, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca']))->getItems());
+        $this->assertCount(2, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca', 'es']))->getItems());
+
+        $this->deleteItems([
+            ItemUUID::createByComposedUUID('2~item'),
+            ItemUUID::createByComposedUUID('3~item'),
+        ]);
+        $this->assertCount(0, $this->query(Query::createMatchAll())->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['ca']))->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['es']))->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en']))->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca']))->getItems());
+        $this->assertCount(0, $this->query(Query::createMatchAll()->filterBy('language', 'language', ['en', 'ca', 'es']))->getItems());
     }
 }

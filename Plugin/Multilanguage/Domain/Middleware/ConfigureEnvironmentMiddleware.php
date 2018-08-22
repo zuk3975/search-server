@@ -79,6 +79,14 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
         $command,
         $next
     ) {
+        $this
+            ->client
+            ->request(
+                '_template/apisearch_template_plugin_language_xx',
+                'PUT',
+                $this->createBody('xx')
+            );
+
         foreach (ElasticaLanguages::getLanguages() as $language) {
             $templateName = 'apisearch_template_plugin_language_'.$language;
 
@@ -102,7 +110,9 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
     private function createBody(string $language): array
     {
         $immutableConfig = ImmutableConfig::createFromArray([
-            'language' => $language,
+            'language' => 'xx' != $language
+                ? $language
+                : null,
         ]);
         $configuration = $this
             ->itemElasticaWrapper
@@ -125,9 +135,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
             ->itemElasticaWrapper
             ->buildIndexMapping(
                 $mapping,
-                ImmutableConfig::createFromArray([
-                    'language' => $language,
-                ])
+                $immutableConfig
             );
 
         return [

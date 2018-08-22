@@ -18,33 +18,21 @@ namespace Apisearch\Plugin\Multilanguage\Tests\Functional;
 use Apisearch\Query\Query;
 
 /**
- * Class BasicUsageTest.
+ * Class SomeLanguageTest.
  */
-class PluginDisabledTest extends MultilanguageFunctionalTest
+class SomeLanguageTest extends MultilanguageFunctionalTest
 {
-    /**
-     * Decorate bundles.
-     *
-     * @param array $bundles
-     *
-     * @return array
-     */
-    protected static function decorateBundles(array $bundles): array
-    {
-        return $bundles;
-    }
-
     /**
      * Basic usage.
      */
     public function testBasicUsage()
     {
-        usleep(200000);
-        $this->assertFalse(
+        usleep(500000);
+        $this->assertTrue(
             $this->checkIndex(self::$appId, self::$index.'_plugin_language_es')
         );
 
-        $this->assertFalse(
+        $this->assertTrue(
             $this->checkIndex(self::$appId, self::$index.'_plugin_language_ca')
         );
 
@@ -52,17 +40,24 @@ class PluginDisabledTest extends MultilanguageFunctionalTest
             $this->checkIndex(self::$appId, self::$index.'_plugin_language_en')
         );
 
-        $this->assertFalse(
+        $this->assertTrue(
             $this->checkIndex(self::$appId, self::$index.'_plugin_language_xx')
         );
 
-        $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index)
-        );
-
+        $this->assertCount(4, $this->query(Query::createMatchAll())->getItems());
         $this->assertCount(
-            1,
+            0,
             $this->query(Query::create('per'))->getItems()
         );
+    }
+
+    /**
+     * Get items file path.
+     *
+     * @return string
+     */
+    public static function getItemsFilePath(): string
+    {
+        return __DIR__.'/items_some_language.yml';
     }
 }
