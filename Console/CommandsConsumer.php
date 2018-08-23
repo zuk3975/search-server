@@ -97,7 +97,7 @@ class CommandsConsumer extends ConsumerCommand
         }
         $to = microtime(true);
         $elapsedTime = (int) (($to - $from) * 1000);
-        if ($elapsedTime === 0) {
+        if (0 === $elapsedTime) {
             $elapsedTime = '<1';
         }
 
