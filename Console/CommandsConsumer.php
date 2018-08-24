@@ -105,7 +105,7 @@ class CommandsConsumer extends ConsumerCommand
             ? "\033[01;32mOk  \033[0m"
             : "\033[01;31mFail\033[0m";
         echo " $command ";
-        echo "(\e[00;37m".$elapsedTime." ms\e[0m)";
+        echo "(\e[00;37m".$elapsedTime.' ms, '.((int) (memory_get_usage() / 1000000))." MB\e[0m)";
         if (false === $success) {
             echo " - \e[00;37m".$message."\e[0m";
         }
