@@ -66,7 +66,7 @@
             "vendor/bin/php-formatter f:u:s . --exclude=vendor --exclude=web --exclude=bin --exclude=var"
         ],
         "clean-for-test": [
-            "rm -Rf /tmp/base-kernel*",
+            "export SYMFONY_BASE_KERNEL_DIR=$(php -r \"echo sys_get_temp_dir() . '/base-kernel/*';\") && rm -Rf $SYMFONY_BASE_KERNEL_DIR",
             "rm -Rf var/cache/*",
             "curl -XDELETE http://apisearch_elasticsearch:9200/apisearch_*_test_*",
             "curl -XDELETE http://apisearch_elasticsearch:9200/apisearch_*_test"
