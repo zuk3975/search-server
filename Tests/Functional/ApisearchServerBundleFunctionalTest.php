@@ -237,6 +237,17 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                             self::$anotherIndex => self::$anotherIndex,
                         ],
                     ],
+                    'search_inaccessible' => [
+                        'adapter' => 'http',
+                        'endpoint' => 'http://127.0.0.1:9999',
+                        'app_id' => self::$appId,
+                        'token' => self::$godToken,
+                        'test' => true,
+                        'indexes' => [
+                            self::$index => self::$index,
+                            self::$anotherIndex => self::$anotherIndex,
+                        ],
+                    ],
                 ],
             ],
         ];
