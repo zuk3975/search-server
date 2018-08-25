@@ -46,6 +46,7 @@ trait AllTests
     use SuggestTest;
     use StopwordsSteemerTest;
     use FuzzinessTest;
+    use GetIndicesTest;
 
     /**
      * Assert IDS sequence.

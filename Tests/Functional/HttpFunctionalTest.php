@@ -21,6 +21,7 @@ use Apisearch\Config\ImmutableConfig;
 use Apisearch\Event\EventRepository;
 use Apisearch\Log\LogRepository;
 use Apisearch\Model\Changes;
+use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
@@ -30,6 +31,7 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
+use Apisearch\Server\Domain\Repository\Repository\IndexRepository;
 use Apisearch\Token\Token;
 use Apisearch\Token\TokenUUID;
 use Apisearch\User\Interaction;
@@ -137,6 +139,21 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
     ) {
         self::configureRepository($appId, $index, $token)
             ->resetIndex();
+    }
+
+    /**
+     * @param string|null $appId
+     *
+     * @return array|Index[]
+     */
+    public function getIndices(string $appId = null): array
+    {
+        /**
+         * @var IndexRepository
+         */
+        $repository = self::getStatic('apisearch.repository_main.default');
+
+        return $repository->getIndices($appId);
     }
 
     /**

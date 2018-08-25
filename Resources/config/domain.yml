@@ -165,6 +165,13 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\GetTokens }
 
+    apisearch_server.query_handler.get_indices:
+        class: Apisearch\Server\Domain\QueryHandler\GetIndicesHandler
+        arguments:
+            - "@apisearch.repository_main.default"
+        tags:
+            - { name: tactician.handler, command: Apisearch\Server\Domain\Query\GetIndices }
+
     apisearch_server.query_handler.check_health:
         class: Apisearch\Server\Domain\QueryHandler\CheckHealthHandler
         tags:

@@ -17,6 +17,7 @@ namespace Apisearch\Plugin\Elastica\Domain\Repository;
 
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Model\Coordinate;
+use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Plugin\Elastica\Domain\ElasticaWrapperWithRepositoryReference;
 use Apisearch\Server\Domain\Repository\Repository\IndexRepository as IndexRepositoryInterface;
@@ -29,6 +30,18 @@ use Elastica\Index\Stats;
  */
 class IndexRepository extends ElasticaWrapperWithRepositoryReference implements IndexRepositoryInterface
 {
+    /**
+     * @param string|null $appId
+     *
+     * @return Index[]
+     */
+    public function getIndices(string $appId = null): array
+    {
+        return $this
+            ->elasticaWrapper
+            ->getIndices($appId);
+    }
+
     /**
      * Create the index.
      *

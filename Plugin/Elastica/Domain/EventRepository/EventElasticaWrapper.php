@@ -44,6 +44,14 @@ class EventElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * @return string
+     */
+    public function getIndexPrefix(): string
+    {
+        return 'apisearch_event';
+    }
+
+    /**
      * Get index name.
      *
      * @param RepositoryReference $repositoryReference
@@ -54,7 +62,7 @@ class EventElasticaWrapper extends ElasticaWrapper
     {
         return $this->buildIndexReference(
             $repositoryReference,
-            'apisearch_event'
+            $this->getIndexPrefix()
         );
     }
 

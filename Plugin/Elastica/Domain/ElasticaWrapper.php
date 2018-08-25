@@ -18,6 +18,7 @@ namespace Apisearch\Plugin\Elastica\Domain;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\Index as ApisearchIndex;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Exception\ParsedCreatingIndexException;
 use Elastica\Client;
@@ -28,6 +29,7 @@ use Elastica\Index;
 use Elastica\Query;
 use Elastica\Type;
 use Elastica\Type\Mapping;
+use Elasticsearch\Endpoints\Cat\Indices;
 
 /**
  * Class ElasticaWrapper.
@@ -57,6 +59,13 @@ abstract class ElasticaWrapper
      * @return string
      */
     abstract public function getItemType(): string;
+
+    /**
+     * Get index prefix.
+     *
+     * @return string
+     */
+    abstract public function getIndexPrefix(): string;
 
     /**
      * Get index name.
@@ -114,6 +123,50 @@ abstract class ElasticaWrapper
         return $this
             ->client
             ->getIndex($this->getIndexName($repositoryReference));
+    }
+
+    /**
+     * @param string|null $appId
+     *
+     * @return array
+     */
+    public function getIndices(string $appId = null): array
+    {
+        $indexSearchKeyword = $this->getIndexPrefix().
+            (!empty($appId) ? '_'.$appId : '').
+            '*';
+        $elasticaResponse = $this->client->requestEndpoint((new Indices())->setIndex($indexSearchKeyword));
+
+        if (empty($elasticaResponse->getData())) {
+            return [];
+        }
+
+        $regexToParse = '/^'.
+            '(?P<color>[^\ ]+)\s+'.
+            '(?P<status>[^\ ]+)\s+'.
+            ''.$this->getIndexPrefix().'\_(?P<app_id>[^\_]+)\_(?P<index_name>[^\ ]+)\s+'.
+            '(?P<uuid>[^\ ]+)\s+'.
+            '(?P<primary_shards>[^\ ]+)\s+'.
+            '(?P<replica_shards>[^\ ]+)\s+'.
+            '(?P<doc_count>[^\ ]+)\s+'.
+            '(?P<doc_deleted>[^\ ]+)\s+'.
+            '(?P<index_size>[^\ ]+)\s+'.
+            '(?P<storage_size>[^\ ]+)'.
+            '$/im';
+
+        $indices = [];
+        preg_match_all($regexToParse, $elasticaResponse->getData()['message'], $matches, PREG_SET_ORDER, 0);
+        if ($matches) {
+            foreach ($matches as $metaData) {
+                $indices[] = ApisearchIndex::createFromArray([
+                    'app_id' => $metaData['app_id'],
+                    'name' => $metaData['index_name'],
+                    'doc_count' => (int) $metaData['doc_count'],
+                ]);
+            }
+        }
+
+        return $indices;
     }
 
     /**

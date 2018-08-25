@@ -21,6 +21,7 @@ use Apisearch\Exception\ConnectionException;
 use Apisearch\Http\Endpoints;
 use Apisearch\Http\HttpResponsesToException;
 use Apisearch\Model\Changes;
+use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
@@ -161,6 +162,30 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
             $index,
             $token
         );
+    }
+
+    /**
+     * @param string|null $appId
+     *
+     * @return array|Index[]
+     */
+    public function getIndices(string $appId = null): array
+    {
+        $result = self::makeCurl(
+            'v1-indices-get',
+            $appId,
+            null,
+            null,
+            []
+        );
+
+        $indices = [];
+        $body = $result['body'];
+        foreach ($body as $item) {
+            $indices[] = Index::createFromArray($item);
+        }
+
+        return $indices;
     }
 
     /**
