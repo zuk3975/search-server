@@ -18,7 +18,7 @@ namespace Apisearch\Server\Tests\Functional\Http;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 
 /**
- * Class HealthTest.
+ * Class PingTest.
  */
 class PingTest extends HttpFunctionalTest
 {

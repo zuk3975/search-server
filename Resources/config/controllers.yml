@@ -108,6 +108,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
+    apisearch_server.router_redirection_to_json_response:
+        class: Apisearch\Server\Controller\Listener\RouterRedirectionToJsonResponse
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
+
     apisearch_server.content_type_validation_over_http:
         class: Apisearch\Server\Controller\Listener\ContentTypeValidationOverHTTP
         tags:
