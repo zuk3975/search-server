@@ -76,7 +76,7 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
             ? $input->getOption('token')
             : $this->godToken;
 
-        $this
+        return $this
             ->commandBus
             ->handle(new CheckIndex(
                 RepositoryReference::create(
