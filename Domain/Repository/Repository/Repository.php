@@ -61,6 +61,7 @@ class Repository extends BaseRepository
 
     /**
      * @param string|null $appId
+     *
      * @return array|Index[]
      */
     public function getIndices(string $appId = null): array
@@ -69,7 +70,6 @@ class Repository extends BaseRepository
             ->getRepository(IndexRepository::class)
             ->getIndices($appId);
     }
-
 
     /**
      * Search across the index types.
@@ -155,6 +155,8 @@ class Repository extends BaseRepository
                 ->getRepository(IndexRepository::class)
                 ->getIndexStats();
         } catch (TransportableException $exception) {
+            echo $exception->getMessage();
+
             return false;
         }
 

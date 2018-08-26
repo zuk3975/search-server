@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\QueryHandler;
 
 use Apisearch\Model\Index;
-use Apisearch\Server\Domain\Query\GetIndices;
 use Apisearch\Repository\Repository;
+use Apisearch\Server\Domain\Query\GetIndices;
 
 /**
  * Class GetIndicesHandler.
@@ -35,7 +35,7 @@ class GetIndicesHandler
     }
 
     /**
-     * Get indices handler method
+     * Get indices handler method.
      *
      * @param GetIndices $getIndices
      *

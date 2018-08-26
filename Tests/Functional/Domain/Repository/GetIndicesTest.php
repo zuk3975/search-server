@@ -34,7 +34,7 @@ trait GetIndicesTest
         }
         $indices = array_values($this->getIndices(self::$appId));
         /**
-         * @var Index|null $index
+         * @var Index|null
          */
         $index = array_shift($indices);
 

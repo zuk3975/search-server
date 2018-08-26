@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 /**
- * File header placeholder.
+ * Class PHPExceptionToJsonResponse.
  */
 class PHPExceptionToJsonResponse
 {
