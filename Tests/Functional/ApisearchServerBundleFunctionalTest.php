@@ -21,8 +21,8 @@ use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
-use Apisearch\Plugin\Neo4j\Neo4jPluginBundle;
 use Apisearch\Plugin\Redis\RedisPluginBundle;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Result\Events;
@@ -124,7 +124,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             ApisearchServerBundle::class,
             ElasticaPluginBundle::class,
             RedisPluginBundle::class,
-            Neo4jPluginBundle::class,
+            CallbacksPluginBundle::class,
         ];
 
         $configuration = [

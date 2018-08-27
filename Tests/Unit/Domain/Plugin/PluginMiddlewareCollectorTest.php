@@ -30,10 +30,7 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testSubscribedToAll()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([]);
         $middleware->execute(Argument::cetera())->shouldBeCalledTimes(2);
@@ -49,10 +46,7 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testSubscribedToSpecific()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([FakeCommand::class, AnotherFakeCommand::class]);
         $middleware->execute(Argument::cetera())->shouldBeCalledTimes(1);
@@ -66,10 +60,7 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testNotSubscribed()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([FakeCommand::class]);
         $middleware->execute(Argument::cetera())->shouldNotBeCalled();
@@ -82,10 +73,7 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testSubscribedToAbstract()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([AbstractFakeCommand::class]);
         $middleware->execute(Argument::cetera())->shouldBeCalled();
@@ -98,10 +86,7 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testSubscribedToMultiple()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([AnotherFakeCommand::class, FakeCommand::class]);
         $middleware->execute(Argument::cetera())->shouldBeCalledTimes(2);
@@ -115,30 +100,10 @@ class PluginMiddlewareCollectorTest extends TestCase
      */
     public function testSubscribedToInterface()
     {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'Double'],
-        ]);
-
+        $pluginMiddlewareCollector = new PluginMiddlewareCollector();
         $middleware = $this->prophesize(PluginMiddleware::class);
         $middleware->getSubscribedEvents()->willReturn([FakeInterface::class]);
         $middleware->execute(Argument::cetera())->shouldBeCalledTimes(1);
-        $pluginMiddlewareCollector->addPluginMiddleware($middleware->reveal());
-        $pluginMiddlewareCollector->execute(new FakeCommand(), function () {});
-        $pluginMiddlewareCollector->execute(new AnotherFakeCommand(), function () {});
-    }
-
-    /**
-     * Test plugins disabled.
-     */
-    public function testPluginsDisabled()
-    {
-        $pluginMiddlewareCollector = new PluginMiddlewareCollector([
-            ['path' => 'NotDouble'],
-        ]);
-
-        $middleware = $this->prophesize(PluginMiddleware::class);
-        $middleware->getSubscribedEvents()->willReturn([AnotherFakeCommand::class, FakeCommand::class]);
-        $middleware->execute(Argument::cetera())->shouldNotBeCalled();
         $pluginMiddlewareCollector->addPluginMiddleware($middleware->reveal());
         $pluginMiddlewareCollector->execute(new FakeCommand(), function () {});
         $pluginMiddlewareCollector->execute(new AnotherFakeCommand(), function () {});

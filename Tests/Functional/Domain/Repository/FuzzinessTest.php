@@ -143,8 +143,6 @@ trait FuzzinessTest
 
     /**
      * Test array fuzziness.
-     *
-     * @group bebe
      */
     public function testChangedCharsFuzziness()
     {

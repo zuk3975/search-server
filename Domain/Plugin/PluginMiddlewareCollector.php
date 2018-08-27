@@ -30,23 +30,6 @@ class PluginMiddlewareCollector implements Middleware
     private $pluginMiddlewares = ['_all' => []];
 
     /**
-     * @var string[]
-     *
-     * Enabled plugins
-     */
-    private $enabledPlugins;
-
-    /**
-     * PluginMiddlewareCollector constructor.
-     *
-     * @param string[] $enabledPlugins
-     */
-    public function __construct(array $enabledPlugins)
-    {
-        $this->enabledPlugins = $enabledPlugins;
-    }
-
-    /**
      * Add plugin middleware.
      *
      * @param PluginMiddleware $pluginMiddleware
@@ -54,12 +37,6 @@ class PluginMiddlewareCollector implements Middleware
     public function addPluginMiddleware(PluginMiddleware $pluginMiddleware)
     {
         $commandNamespaces = $pluginMiddleware->getSubscribedEvents();
-
-        if (!array_reduce($this->enabledPlugins, function (bool $found, array $plugin) use ($pluginMiddleware) {
-            return $found || (0 === strpos(get_class($pluginMiddleware), $plugin['path']));
-        }, false)) {
-            return;
-        }
 
         if (empty($commandNamespaces)) {
             $this->pluginMiddlewares['_all'][] = $pluginMiddleware;

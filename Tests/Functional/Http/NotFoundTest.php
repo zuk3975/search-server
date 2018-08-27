@@ -18,19 +18,19 @@ namespace Apisearch\Server\Tests\Functional\Http;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 
 /**
- * Class RedirectTest.
+ * Class NotFoundTest.
  */
-class RedirectTest extends HttpFunctionalTest
+class NotFoundTest extends HttpFunctionalTest
 {
     /**
-     * Test redirection on some path.
+     * Test not found on some non existing path.
      */
-    public function testRedirection()
+    public function testNotFoundResponse()
     {
         $client = self::createClient();
         $client->request(
             'get',
-            '/v1/',
+            '/v2',
             [
                 'app_id' => self::$appId,
                 'index' => self::$index,
@@ -40,13 +40,8 @@ class RedirectTest extends HttpFunctionalTest
 
         $response = $client->getResponse();
         $this->assertEquals(
-            301,
+            404,
             $response->getStatusCode()
-        );
-
-        $this->assertEquals(
-            sprintf('http://localhost/v1?app_id=%s&index=%s&token=%s', self::$appId, self::$index, self::$godToken),
-            $response->headers->get('location')
         );
     }
 }

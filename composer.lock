@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "0ecd92aa6dd929904cb8ae572613775eae6680cc"
+                "reference": "c14965f74d8f7bd44052068bc4b7ad05e1c0540f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/0ecd92aa6dd929904cb8ae572613775eae6680cc",
-                "reference": "0ecd92aa6dd929904cb8ae572613775eae6680cc",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/c14965f74d8f7bd44052068bc4b7ad05e1c0540f",
+                "reference": "c14965f74d8f7bd44052068bc4b7ad05e1c0540f",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-08-24T23:49:16+00:00"
+            "time": "2018-08-26T23:21:11+00:00"
         },
         {
             "name": "cboden/ratchet",
@@ -1440,16 +1440,16 @@
         },
         {
             "name": "one-bundle-app/one-bundle-app",
-            "version": "1.0.16",
+            "version": "1.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/one-bundle-app/one-bundle-app.git",
-                "reference": "b9e9b5a4ffed15dc26b61b7db2ab145ce171ff0b"
+                "reference": "4ddffcac1f1bcaff7be2b0cc93d103f68c9f37f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/b9e9b5a4ffed15dc26b61b7db2ab145ce171ff0b",
-                "reference": "b9e9b5a4ffed15dc26b61b7db2ab145ce171ff0b",
+                "url": "https://api.github.com/repos/one-bundle-app/one-bundle-app/zipball/4ddffcac1f1bcaff7be2b0cc93d103f68c9f37f9",
+                "reference": "4ddffcac1f1bcaff7be2b0cc93d103f68c9f37f9",
                 "shasum": ""
             },
             "require": {
@@ -1497,7 +1497,7 @@
                 "bundle",
                 "symfony"
             ],
-            "time": "2018-08-24T21:46:53+00:00"
+            "time": "2018-08-27T00:06:57+00:00"
         },
         {
             "name": "paragonie/random_compat",

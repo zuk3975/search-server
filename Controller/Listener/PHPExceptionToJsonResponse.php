@@ -15,9 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Controller\Listener;
 
+use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Exception\TransportableException;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class PHPExceptionToJsonResponse.
@@ -32,6 +35,7 @@ class PHPExceptionToJsonResponse
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
+        $exception = $this->toOwnException($exception);
         $exceptionErrorCode = $exception instanceof TransportableException
             ? $exception::getTransportableHTTPError()
             : 500;
@@ -42,5 +46,23 @@ class PHPExceptionToJsonResponse
         ], $exceptionErrorCode));
 
         $event->stopPropagation();
+    }
+
+    /**
+     * To own exceptions.
+     *
+     * @param Exception $exception
+     *
+     * @return Exception
+     */
+    private function toOwnException(Exception $exception): Exception
+    {
+        if ($exception instanceof NotFoundHttpException) {
+            preg_match('~No route found for "(.*)"~', $exception->getMessage(), $match);
+
+            return ResourceNotAvailableException::routeNotAvailable($match[1] ?? $exception->getMessage());
+        }
+
+        return $exception;
     }
 }

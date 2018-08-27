@@ -258,10 +258,15 @@ services:
         class: Apisearch\Server\Domain\Middleware\TokenMiddleware
         public: false
 
-    apisearch_server.middleware.plugins:
-        class: Apisearch\Server\Domain\Plugin\PluginMiddlewareCollector
+    apisearch_server.middleware.check_health_plugins:
+        class: Apisearch\Server\Domain\Middleware\CheckHealthPluginsMiddleware
         arguments:
             - "%apisearch_server.enabled_plugins%"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_server.middleware.plugins:
+        class: Apisearch\Server\Domain\Plugin\PluginMiddlewareCollector
 
     #
     # Repositories
