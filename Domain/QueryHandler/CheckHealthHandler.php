@@ -34,6 +34,7 @@ class CheckHealthHandler
         return [
             'healthy' => true,
             'status' => [],
+            'info' => [],
             'process' => [
                 'memory_used' => memory_get_usage(false),
             ],

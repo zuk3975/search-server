@@ -15,6 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Functional\Http;
 
+use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
+use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
+use Apisearch\Plugin\Redis\RedisPluginBundle;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 
 /**
@@ -29,6 +32,8 @@ class HealthTest extends HttpFunctionalTest
      * @param int    $responseCode
      *
      * @dataProvider dataCheckHealth
+     *
+     * @group healthcheck
      */
     public function testCheckHealth(
         string $token,
@@ -59,6 +64,14 @@ class HealthTest extends HttpFunctionalTest
                     $content['status']['elasticsearch'],
                     ['green', 'yellow']
                 )
+            );
+            $this->assertEquals(
+                [
+                    'callbacks' => CallbacksPluginBundle::class,
+                    'elastica' => ElasticaPluginBundle::class,
+                    'redis' => RedisPluginBundle::class,
+                ],
+                $content['info']['plugins']
             );
         }
     }

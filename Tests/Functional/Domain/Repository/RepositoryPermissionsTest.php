@@ -29,8 +29,6 @@ trait RepositoryPermissionsTest
      *
      * @expectedException \Apisearch\Exception\ResourceNotAvailableException
      * @dataProvider dataBadPermissions
-     *
-     * @group permissions
      */
     public function testBadPermissions($appId, $index, $method, $data = null)
     {

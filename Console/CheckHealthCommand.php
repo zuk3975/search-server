@@ -57,6 +57,7 @@ class CheckHealthCommand extends CommandWithBusAndGodToken
             ->handle(new CheckHealth());
 
         $this->printInfoMessage($output, 'Memory Used', $health['process']['memory_used']);
+        $this->printInfoMessage($output, 'Plugins', implode(', ', array_keys($health['info']['plugins'])));
         $this->printInfoMessage($output, 'Elasticsearch', $health['status']['elasticsearch']);
         $this->printInfoMessage($output, 'Redis', '1' == $health['status']['redis']
             ? 'Ok'
