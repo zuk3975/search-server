@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "c14965f74d8f7bd44052068bc4b7ad05e1c0540f"
+                "reference": "519d439dd7022c02f26321e1c74beb937cb32ea2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/c14965f74d8f7bd44052068bc4b7ad05e1c0540f",
-                "reference": "c14965f74d8f7bd44052068bc4b7ad05e1c0540f",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/519d439dd7022c02f26321e1c74beb937cb32ea2",
+                "reference": "519d439dd7022c02f26321e1c74beb937cb32ea2",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-08-26T23:21:11+00:00"
+            "time": "2018-08-27T00:45:44+00:00"
         },
         {
             "name": "cboden/ratchet",
