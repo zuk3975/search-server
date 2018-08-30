@@ -16,8 +16,9 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Command\ApisearchCommand;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Exception;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,33 +62,33 @@ abstract class CommandWithBusAndGodToken extends ApisearchCommand
     /**
      * Create token instance.
      *
-     * @param string $uuid
-     * @param string $appId
+     * @param TokenUUID $tokenUUID
+     * @param AppUUID   $appUUID
      *
      * @return Token
      */
     protected function createToken(
-        string $uuid,
-        string $appId
+        TokenUUID $tokenUUID,
+        AppUUID $appUUID
     ): Token {
         return new Token(
-            TokenUUID::createById($uuid),
-            $appId
+            $tokenUUID,
+            $appUUID
         );
     }
 
     /**
      * Create god token instance.
      *
-     * @param string $appId
+     * @param AppUUID $appUUID
      *
      * @return Token
      */
-    protected function createGodToken(string $appId): Token
+    protected function createGodToken(AppUUID $appUUID): Token
     {
         return $this->createToken(
-            $this->godToken,
-            $appId
+            TokenUUID::createById($this->godToken),
+            $appUUID
         );
     }
 

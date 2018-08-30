@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Event;
 
-use Apisearch\Token\TokenUUID;
+use Apisearch\Model\TokenUUID;
 
 /**
  * Class TokenWasDeleted.

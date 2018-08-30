@@ -38,14 +38,14 @@ class RepositoryReferenceMiddleware implements Middleware
         if ($hasRepositoryReference) {
             if (
                 ($command instanceof AppRequiredCommand) &&
-                empty($command->getAppId())
+                empty($command->getAppUUID())
             ) {
                 throw ForbiddenException::createAppIdIsRequiredException();
             }
 
             if (
                 ($command instanceof IndexRequiredCommand) &&
-                empty($command->getIndex())
+                empty($command->getIndexUUID())
             ) {
                 throw ForbiddenException::createIndexIsRequiredException();
             }

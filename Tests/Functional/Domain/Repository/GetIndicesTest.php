@@ -24,26 +24,23 @@ trait GetIndicesTest
 {
     /**
      * Test index check.
+     *
+     * @group hola
+     */
+    public function testGetIndicesWithAppid(): void
+    {
+        $indices = $this->getIndices(self::$appId);
+        $this->assertTrue(count($indices) >= 2);
+        $index = array_shift($indices);
+        $this->assertInstanceOf(Index::class, $index);
+    }
+
+    /**
+     * Test index check.
      */
     public function testGetIndices(): void
     {
-        $indexCreated = false;
-        if (!$this->checkIndex(self::$appId, self::$index)) {
-            $this->createIndex(self::$appId, self::$index);
-            $indexCreated = true;
-        }
-        $indices = array_values($this->getIndices(self::$appId));
-        /**
-         * @var Index|null
-         */
-        $index = array_shift($indices);
-
-        $this->assertNotNull($index);
-        $this->assertInstanceOf(Index::class, $index);
-        $this->assertNotNull($index->getAppId());
-        $this->assertNotNull($index->getName());
-        if ($indexCreated) {
-            $this->deleteIndex(self::$appId, self::$index);
-        }
+        $indices = array_values($this->getIndices(''));
+        $this->assertTrue(count($indices) >= 2);
     }
 }

@@ -17,6 +17,8 @@ namespace Apisearch\Server\Controller;
 
 use Apisearch\Exception\InvalidFormatException;
 use Apisearch\Http\Http;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\QueryLogs;
@@ -49,8 +51,8 @@ class LogsController extends ControllerWithBus
             ->commandBus
             ->handle(new QueryLogs(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD, ''),
-                    $query->get(Http::INDEX_FIELD, '')
+                    AppUUID::createById($query->get(Http::APP_ID_FIELD, '')),
+                    IndexUUID::createById($query->get(Http::INDEX_FIELD, ''))
                 ),
                 $query->get(Http::TOKEN_FIELD, ''),
                 Query::createFromArray($queryAsArray),

@@ -16,8 +16,9 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Token;
 
 use Apisearch\Http\Endpoints;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 
 /**
  * Class StaticTokenLocator.
@@ -73,31 +74,31 @@ class StaticTokenLocator implements TokenLocator
     }
 
     /**
-     * Get token by reference.
+     * Get token by uuid.
      *
-     * @param string $appId
-     * @param string $tokenReference
+     * @param AppUUID   $appUUID
+     * @param TokenUUID $tokenUUID
      *
      * @return null|Token
      */
-    public function getTokenByReference(
-        string $appId,
-        string $tokenReference
+    public function getTokenByUUID(
+        AppUUID $appUUID,
+        TokenUUID $tokenUUID
     ): ? Token {
-        if ($tokenReference === $this->godToken) {
-            return $this->createGodToken($appId);
+        if ($tokenUUID->composeUUID() === $this->godToken) {
+            return $this->createGodToken($appUUID);
         }
 
         if (
             !empty($this->readonlyToken) &&
-            $tokenReference === $this->readonlyToken
+            $tokenUUID->composeUUID() === $this->readonlyToken
         ) {
-            return $this->createReadOnlyToken($appId);
+            return $this->createReadOnlyToken($appUUID);
         }
 
         if (
             !empty($this->pingToken) &&
-            $tokenReference === $this->pingToken
+            $tokenUUID->composeUUID() === $this->pingToken
         ) {
             return $this->createPingToken();
         }
@@ -108,15 +109,15 @@ class StaticTokenLocator implements TokenLocator
     /**
      * Create god token instance.
      *
-     * @param string $appId
+     * @param AppUUID $appUUID
      *
      * @return Token
      */
-    private function createGodToken(string $appId): Token
+    private function createGodToken(AppUUID $appUUID): Token
     {
         return new Token(
             TokenUUID::createById($this->godToken),
-            $appId,
+            $appUUID,
             [],
             [],
             [],
@@ -130,15 +131,15 @@ class StaticTokenLocator implements TokenLocator
     /**
      * Create read only token instance.
      *
-     * @param string $appId
+     * @param AppUUID $appUUID
      *
      * @return Token
      */
-    private function createReadOnlyToken(string $appId): Token
+    private function createReadOnlyToken(AppUUID $appUUID): Token
     {
         return new Token(
             TokenUUID::createById($this->readonlyToken),
-            $appId,
+            $appUUID,
             [],
             [],
             Endpoints::compose(Endpoints::queryOnly()),
@@ -158,7 +159,7 @@ class StaticTokenLocator implements TokenLocator
     {
         return new Token(
             TokenUUID::createById($this->pingToken),
-            '',
+            AppUUID::createById(''),
             [],
             [],
             [

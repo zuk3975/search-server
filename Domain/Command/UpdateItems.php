@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Model\Changes;
+use Apisearch\Model\Token;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
@@ -24,7 +25,6 @@ use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class UpdateItems.
@@ -96,17 +96,18 @@ class UpdateItems extends CommandWithRepositoryReferenceAndToken implements With
     public function toArray(): array
     {
         return [
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
+                ->toArray(),
             'query' => $this
                 ->query
                 ->toArray(),
             'changes' => $this
                 ->changes
                 ->toArray(),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
         ];
     }
 
@@ -115,15 +116,12 @@ class UpdateItems extends CommandWithRepositoryReferenceAndToken implements With
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token']),
             Query::createFromArray($data['query']),
             Changes::createFromArray($data['changes'])

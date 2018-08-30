@@ -16,10 +16,11 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Http\Endpoints;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\AddToken;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,13 +65,13 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
-        $appId = $input->getArgument('app-id');
-        $godToken = $this->createGodToken($appId);
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $godToken = $this->createGodToken($appUUID);
 
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "App ID: <strong>$appId</strong>"
+            "App ID: <strong>{$appUUID->composeUUID()}</strong>"
         );
 
         foreach ([
@@ -80,7 +81,7 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
             'interaction' => Endpoints::interactionOnly(),
                  ] as $tokenName => $endpoints) {
             $this->generateReadOnlyToken(
-                $appId,
+                $appUUID,
                 $endpoints,
                 $tokenName,
                 $godToken,
@@ -107,14 +108,14 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
     /**
      * Generate readonly token.
      *
-     * @param string          $appId
+     * @param AppUUID         $appUUID
      * @param string[]        $endpoints
      * @param string          $name
      * @param Token           $godToken
      * @param OutputInterface $output
      */
     protected function generateReadOnlyToken(
-        string $appId,
+        AppUUID $appUUID,
         array $endpoints,
         string $name,
         Token $godToken,
@@ -125,14 +126,11 @@ class GenerateBasicTokensCommand extends CommandWithBusAndGodToken
         $this
             ->commandBus
             ->handle(new AddToken(
-                RepositoryReference::create(
-                    $appId,
-                    '~~~'
-                ),
+                RepositoryReference::create($appUUID),
                 $godToken,
                 new Token(
                     TokenUUID::createById($tokenId),
-                    $appId,
+                    $appUUID,
                     [],
                     [],
                     Endpoints::compose($endpoints)

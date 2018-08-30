@@ -17,7 +17,7 @@ namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Plugin\Elastica\Domain\ElasticaLanguages;
-use Apisearch\Plugin\Elastica\Domain\Repository\ItemElasticaWrapper;
+use Apisearch\Plugin\Elastica\Domain\ItemElasticaWrapper;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\ConfigureEnvironment;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
@@ -126,7 +126,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
         $type = $this
             ->itemElasticaWrapper
             ->getType(
-                RepositoryReference::create('~~~', '~~~'),
+                RepositoryReference::create(),
                 $this->itemElasticaWrapper->getItemType()
             );
 
@@ -140,7 +140,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
 
         return [
             'index_patterns' => [
-                "apisearch_item_*_*_plugin_language_$language",
+                "apisearch_item_*_*-plugin-language-$language",
             ],
             'settings' => $configuration,
             'mappings' => $mapping->toArray(),

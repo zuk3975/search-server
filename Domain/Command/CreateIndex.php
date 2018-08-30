@@ -16,19 +16,27 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Config\ImmutableConfig;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class CreateIndex.
  */
 class CreateIndex extends CommandWithRepositoryReferenceAndToken implements WriteCommand, LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
 {
+    /**
+     * @var IndexUUID
+     *
+     * Index uuid
+     */
+    private $indexUUID;
+
     /**
      * @var ImmutableConfig
      *
@@ -41,11 +49,13 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
      *
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
+     * @param IndexUUID           $indexUUID
      * @param ImmutableConfig     $config
      */
     public function __construct(
         RepositoryReference $repositoryReference,
         Token $token,
+        IndexUUID $indexUUID,
         ImmutableConfig $config
     ) {
         parent::__construct(
@@ -53,7 +63,18 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
             $token
         );
 
+        $this->indexUUID = $indexUUID;
         $this->config = $config;
+    }
+
+    /**
+     * Get IndexUUID.
+     *
+     * @return IndexUUID
+     */
+    public function getIndexUUID(): IndexUUID
+    {
+        return $this->indexUUID;
     }
 
     /**
@@ -74,14 +95,18 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
     public function toArray(): array
     {
         return [
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token_uuid' => $this
+                ->getToken()
+                ->toArray(),
             'configuration' => $this
                 ->config
                 ->toArray(),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
+            'index_uuid' => $this
+                ->indexUUID
+                ->toArray(),
         ];
     }
 
@@ -90,16 +115,14 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
-            Token::createFromArray($data['token']),
+            RepositoryReference::createFromComposed($data['repository_reference']),
+            Token::createFromArray($data['token_uuid']),
+            IndexUUID::createFromArray($data['index_uuid']),
             ImmutableConfig::createFromArray($data['configuration'])
         );
     }

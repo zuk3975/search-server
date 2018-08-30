@@ -67,13 +67,26 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
     /**
      * Get config path.
      *
+     * @param RepositoryReference $repositoryReference
+     *
      * @return string
      */
-    protected function getConfigPath(): string
+    protected function getConfigPath(RepositoryReference $repositoryReference): string
     {
         return rtrim(str_replace(
             ['{app_id}', '{index_id}'],
-            [$this->getAppId(), $this->getIndex()],
+            [
+                $repositoryReference->getAppUUID()
+                    ? $repositoryReference
+                        ->getAppUUID()
+                        ->composeUUID()
+                    : '',
+                $repositoryReference->getIndexUUID()
+                    ? $repositoryReference
+                        ->getIndexUUID()
+                        ->composeUUID()
+                    : '',
+            ],
             $this->repositoryConfig['config_path']
         ), '/');
     }
@@ -87,10 +100,21 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
      */
     protected function normalizeRepositoryReferenceCrossIndices(RepositoryReference $repositoryReference)
     {
-        $indices = $repositoryReference->getIndex();
+        if (is_null($repositoryReference->getIndexUUID())) {
+            return $repositoryReference;
+        }
+
+        $indices = $repositoryReference
+            ->getIndexUUID()
+            ->composeUUID();
+
+        $appUUIDComposed = $repositoryReference
+            ->getAppUUID()
+            ->composeUUID();
+
         if ('*' === $indices) {
             return RepositoryReference::create(
-                $repositoryReference->getAppId(),
+                $appUUIDComposed,
                 'all'
             );
         }
@@ -100,7 +124,7 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
             sort($splittedIndices);
 
             return RepositoryReference::create(
-                $repositoryReference->getAppId(),
+                $appUUIDComposed,
                 implode('_', $splittedIndices)
             );
         }

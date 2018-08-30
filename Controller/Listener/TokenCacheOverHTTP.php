@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller\Listener;
 
 use Apisearch\Http\Http;
-use Apisearch\Token\Token;
+use Apisearch\Model\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 

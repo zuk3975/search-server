@@ -32,7 +32,7 @@ interface AsynchronousableCommand
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand;
+    public static function fromArray(array $data);
 }

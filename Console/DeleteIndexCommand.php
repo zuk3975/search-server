@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteIndex;
 use Symfony\Component\Console\Input\InputArgument;
@@ -66,15 +68,18 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $indexUUID = IndexUUID::createById($input->getArgument('index'));
         try {
             $this
                 ->commandBus
                 ->handle(new DeleteIndex(
                     RepositoryReference::create(
-                        $input->getArgument('app-id'),
-                        $input->getArgument('index')
+                        $appUUID,
+                        $indexUUID
                     ),
-                    $this->createGodToken($input->getArgument('app-id'))
+                    $this->createGodToken($appUUID),
+                    $indexUUID
                 ));
         } catch (ResourceNotAvailableException $exception) {
             $output->writeln('Index not found. Skipping.');

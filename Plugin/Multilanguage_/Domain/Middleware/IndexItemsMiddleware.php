@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
-use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\IndexItems;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 use League\Tactician\CommandBus;
@@ -58,7 +58,7 @@ class IndexItemsMiddleware implements PluginMiddleware
         /*
          * We should check if this is a language specific command
          */
-        if (1 === preg_match('~\w*_plugin_language_\w{2}~', $command->getIndex())) {
+        if (1 === preg_match('~\w*\-plugin\-language\-\w{2}~', $command->getIndexUUID()->composeUUID())) {
             return $next($command);
         }
 
@@ -110,10 +110,12 @@ class IndexItemsMiddleware implements PluginMiddleware
             ->commandBus
             ->handle(
                 new IndexItems(
-                    RepositoryReference::create(
-                        $command->getAppId(),
-                        $command->getIndex().'_plugin_language_'.$language
-                    ),
+                    $command
+                        ->getRepositoryReference()
+                        ->changeIndex(IndexUUID::createById($command
+                                ->getIndexUUID()
+                                ->composeUUID().'-plugin-language-'.$language
+                        )),
                     $command->getToken(),
                     $items
                 )

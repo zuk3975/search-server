@@ -15,9 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Functional\Http;
 
+use Apisearch\Http\Http;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -27,28 +27,34 @@ class CreateIndexTest extends HttpFunctionalTest
 {
     /**
      * Test check health with different tokens.
+     *
+     * @group lala
      */
     public function testCreateIndex(): void
     {
-        self::loadEnv();
-        $token = $_ENV['APISEARCH_GOD_TOKEN'];
-
         $this->deleteIndex(
             self::$appId,
-            self::$index,
-            new Token(TokenUUID::createById($token), self::$appId)
+            self::$index
         );
 
         $client = $this->createClient();
         $testRoute = $this->get('router')->generate('search_server_api_create_index', [
-            'token' => $token,
+            'token' => self::$godToken,
             'app_id' => self::$appId,
             'index' => self::$index,
         ]);
 
         $client->request(
             'post',
-            $testRoute
+            $testRoute,
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode([
+                Http::INDEX_FIELD => IndexUUID::createById(self::$index)->toArray(),
+            ])
         );
 
         $response = $client->getResponse();
@@ -60,7 +66,15 @@ class CreateIndexTest extends HttpFunctionalTest
         $anotherClient = $this->createClient();
         $anotherClient->request(
             'post',
-            $testRoute
+            $testRoute,
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode([
+                Http::INDEX_FIELD => IndexUUID::createById(self::$index)->toArray(),
+            ])
         );
 
         $anotherResponse = $anotherClient->getResponse();

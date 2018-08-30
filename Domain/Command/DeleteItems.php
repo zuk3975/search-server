@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\AsynchronousableCommand;
@@ -23,7 +24,6 @@ use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class DeleteItems.
@@ -75,14 +75,15 @@ class DeleteItems extends CommandWithRepositoryReferenceAndToken implements With
     public function toArray(): array
     {
         return [
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
+                ->toArray(),
             'items_uuid' => array_map(function (ItemUUID $itemUUID) {
                 return $itemUUID->toArray();
             }, $this->itemsUUID),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
         ];
     }
 
@@ -91,15 +92,12 @@ class DeleteItems extends CommandWithRepositoryReferenceAndToken implements With
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token']),
             array_map(function (array $itemUUID) {
                 return ItemUUID::createFromArray($itemUUID);

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteTokens;
 use Symfony\Component\Console\Input\InputArgument;
@@ -60,14 +61,14 @@ class DeleteTokensCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $godToken = $this->createGodToken($appUUID);
+
         $this
             ->commandBus
             ->handle(new DeleteTokens(
-                RepositoryReference::create(
-                    $input->getArgument('app-id'),
-                    '~~~'
-                ),
-                $this->createGodToken($input->getArgument('app-id'))
+                RepositoryReference::create($appUUID),
+                $godToken
             ));
     }
 

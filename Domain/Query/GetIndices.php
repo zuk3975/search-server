@@ -15,20 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Query;
 
+use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
+
 /**
  * Class GetIndices.
  */
-class GetIndices
+class GetIndices extends CommandWithRepositoryReferenceAndToken
 {
-    private $appId;
-
-    public function __construct(string $appId = null)
-    {
-        $this->appId = $appId;
-    }
-
-    public function getAppId(): ?string
-    {
-        return $this->appId;
-    }
 }

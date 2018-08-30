@@ -15,9 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\GetTokens;
-use Apisearch\Token\Token;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,14 +56,14 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $godToken = $this->createGodToken($appUUID);
+
         $tokens = $this
             ->commandBus
             ->handle(new GetTokens(
-                RepositoryReference::create(
-                    $input->getArgument('app-id'),
-                    '~~~'
-                ),
-                $this->createGodToken($input->getArgument('app-id'))
+                RepositoryReference::create($appUUID),
+                $godToken
             ));
 
         /**
@@ -72,7 +74,9 @@ class PrintTokensCommand extends CommandWithBusAndGodToken
         foreach ($tokens as $token) {
             $table->addRow([
                 $token->getTokenUUID()->composeUUID(),
-                implode(', ', $token->getIndices()),
+                implode(', ', array_map(function (IndexUUID $indexUUID) {
+                    return $indexUUID->composeUUID();
+                }, $token->getIndices())),
                 $token->getSecondsValid(),
                 $token->getMaxHitsPerQuery(),
                 implode(', ', $token->getHttpReferrers()),

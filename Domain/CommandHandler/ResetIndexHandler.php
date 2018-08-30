@@ -18,12 +18,12 @@ namespace Apisearch\Server\Domain\CommandHandler;
 use Apisearch\Server\Domain\Command\ResetIndex;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\IndexWasReset;
-use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
+use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
 /**
  * Class ResetIndexHandler.
  */
-class ResetIndexHandler extends WithRepositoryAndEventPublisher
+class ResetIndexHandler extends WithAppRepositoryAndEventPublisher
 {
     /**
      * Reset the index.
@@ -33,20 +33,21 @@ class ResetIndexHandler extends WithRepositoryAndEventPublisher
     public function handle(ResetIndex $resetIndex)
     {
         $repositoryReference = $resetIndex->getRepositoryReference();
+        $indexUUID = $resetIndex->getIndexUUID();
 
         $this
-            ->repository
+            ->appRepository
             ->setRepositoryReference($repositoryReference);
 
         $this
-            ->repository
-            ->resetIndex();
+            ->appRepository
+            ->resetIndex($indexUUID);
 
         $this
             ->eventPublisher
             ->publish(new DomainEventWithRepositoryReference(
                 $repositoryReference,
-                new IndexWasReset()
+                new IndexWasReset($indexUUID)
             ));
     }
 }

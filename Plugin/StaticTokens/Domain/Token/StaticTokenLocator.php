@@ -15,8 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\StaticTokens\Domain\Token;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Server\Domain\Token\TokenLocator;
-use Apisearch\Token\Token;
 
 /**
  * Class TokenRedisRepository.
@@ -38,8 +41,13 @@ class StaticTokenLocator implements TokenLocator
     public function __construct(array $tokensAsArray)
     {
         $tokens = [];
-        array_walk($tokensAsArray, function (array $tokenAsArray, string $key) use (&$tokens) {
-            $tokenAsArray['uuid'] = ['id' => $key];
+        array_walk($tokensAsArray, function (array $tokenAsArray, string $tokenId) use (&$tokens) {
+            $tokenAsArray['uuid'] = TokenUUID::createById($tokenId)->toArray();
+            $tokenAsArray['app_uuid'] = AppUUID::createById($tokenAsArray['app_id'])->toArray();
+            $tokenAsArray['indices'] = array_map(function (string $indexId) {
+                return IndexUUID::createById($indexId)->toArray();
+            }, $tokenAsArray['indices']);
+            unset($tokenAsArray['app_id']);
             $tokenAsArray['created_at'] = null;
             $tokenAsArray['updated_at'] = null;
             $tokens[] = Token::createFromArray($tokenAsArray);
@@ -59,24 +67,24 @@ class StaticTokenLocator implements TokenLocator
     }
 
     /**
-     * Get token by reference.
+     * Get token by uuid.
      *
-     * @param string $appId
-     * @param string $tokenReference
+     * @param AppUUID   $appUUID
+     * @param TokenUUID $tokenUUID
      *
      * @return null|Token
      */
-    public function getTokenByReference(
-        string $appId,
-        string $tokenReference
+    public function getTokenByUUID(
+        AppUUID $appUUID,
+        TokenUUID $tokenUUID
     ): ? Token {
         $tokens = array_values(
             array_filter(
                 $this->tokens,
-                function (Token $token) use ($appId, $tokenReference) {
+                function (Token $token) use ($appUUID, $tokenUUID) {
                     return
-                        $token->getAppId() === $appId &&
-                        $token->getTokenUUID()->getId() === $tokenReference;
+                        $token->getAppUUID()->composeUUID() === $appUUID->composeUUID() &&
+                        $token->getTokenUUID()->composeUUID() === $tokenUUID->composeUUID();
                 }
             )
         );

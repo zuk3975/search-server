@@ -19,18 +19,19 @@ use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ConnectionException;
 use Apisearch\Http\Endpoints;
+use Apisearch\Http\Http;
 use Apisearch\Http\HttpResponsesToException;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class CurlFunctionalTest.
@@ -166,16 +167,19 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
 
     /**
      * @param string|null $appId
+     * @param Token       $token
      *
-     * @return array|Index[]
+     * @return Index[]
      */
-    public function getIndices(string $appId = null): array
-    {
+    public function getIndices(
+        string $appId = null,
+        Token $token = null
+    ): array {
         $result = self::makeCurl(
             'v1-indices-get',
             $appId,
             null,
-            null,
+            $token,
             []
         );
 
@@ -202,14 +206,20 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
         Token $token = null,
         ImmutableConfig $config = null
     ) {
+        $indexUUIDAsArray = TokenUUID::createById($index ?? self::$index)->toArray();
         self::makeCurl(
             'v1-index-create',
             $appId,
             $index,
             $token,
             is_null($config)
-                ? []
-                : ['config' => $config->toArray()]
+                ? [
+                    Http::INDEX_FIELD => $indexUUIDAsArray,
+                ]
+                : [
+                    Http::INDEX_FIELD => $indexUUIDAsArray,
+                    'config' => $config->toArray(),
+                ]
         );
     }
 

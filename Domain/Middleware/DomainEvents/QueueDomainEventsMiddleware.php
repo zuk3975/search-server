@@ -61,8 +61,12 @@ class QueueDomainEventsMiddleware extends DomainEventsMiddleware implements Midd
             ->produce(
                 'apisearch:server:domain-events',
                 [
-                    'app_id' => $repositoryReference->getAppId(),
-                    'index_id' => $repositoryReference->getIndex(),
+                    'app_uuid' => $repositoryReference
+                        ->getAppUUID()
+                        ->toArray(),
+                    'index_uuid' => $repositoryReference
+                        ->getIndexUUID()
+                        ->toArray(),
                     'event' => $domainEvent->toArray(),
                 ]
             );

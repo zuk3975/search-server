@@ -1,0 +1,149 @@
+<?php
+
+/*
+ * This file is part of the Apisearch Server
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
+ */
+
+declare(strict_types=1);
+
+namespace Apisearch\Plugin\Elastica\Domain\AppRepository;
+
+use Apisearch\Config\ImmutableConfig;
+use Apisearch\Exception\ResourceExistsException;
+use Apisearch\Model\Index;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Plugin\Elastica\Domain\ElasticaWrapperWithRepositoryReference;
+use Apisearch\Server\Domain\Repository\AppRepository\IndexRepository as IndexRepositoryInterface;
+use Elastica\Index\Stats;
+
+/**
+ * Class IndexRepository.
+ */
+class IndexRepository extends ElasticaWrapperWithRepositoryReference implements IndexRepositoryInterface
+{
+    /**
+     * Get indices.
+     *
+     * @return Index[]
+     */
+    public function getIndices(): array
+    {
+        return $this
+            ->elasticaWrapper
+            ->getIndices($this->getRepositoryReference());
+    }
+
+    /**
+     * Create an index.
+     *
+     * @param IndexUUID       $indexUUID
+     * @param ImmutableConfig $config
+     *
+     * @throws ResourceExistsException
+     */
+    public function createIndex(
+        IndexUUID $indexUUID,
+        ImmutableConfig $config
+    ) {
+        $configPath = $this->getConfigPath($this->getRepositoryReference());
+        is_dir($configPath)
+            ? chmod($configPath, 0755)
+            : @mkdir($configPath, 0755, true);
+
+        $this
+            ->elasticaWrapper
+            ->createIndex(
+                $this
+                    ->getRepositoryReference()
+                    ->changeIndex($indexUUID),
+                $config,
+                $this->repositoryConfig['shards'],
+                $this->repositoryConfig['replicas']
+            );
+
+        $this
+            ->elasticaWrapper
+            ->createIndexMapping(
+                $this->getRepositoryReference(),
+                $config
+            );
+
+        $this->refresh();
+    }
+
+    /**
+     * Delete the index.
+     *
+     * @param IndexUUID $indexUUID
+     */
+    public function deleteIndex(IndexUUID $indexUUID)
+    {
+        $this
+            ->elasticaWrapper
+            ->deleteIndex($this
+                ->getRepositoryReference()
+                ->changeIndex($indexUUID)
+            );
+
+        $configPath = $this->getConfigPath($this->getRepositoryReference());
+        $this->deleteConfigFolder();
+        if (is_dir($configPath)) {
+            @rmdir($configPath);
+        }
+    }
+
+    /**
+     * Reset the index.
+     *
+     * @param IndexUUID $indexUUID
+     */
+    public function resetIndex(IndexUUID $indexUUID)
+    {
+        $this
+            ->elasticaWrapper
+            ->resetIndex($this
+                ->getRepositoryReference()
+                ->changeIndex($indexUUID)
+            );
+
+        $this->refresh();
+    }
+
+    /**
+     * Get the index stats.
+     *
+     * @param IndexUUID $indexUUID
+     *
+     * @return Stats
+     */
+    public function getIndexStats(IndexUUID $indexUUID): Stats
+    {
+        return $this
+            ->elasticaWrapper
+            ->getIndexStats($this
+                ->getRepositoryReference()
+                ->changeIndex($indexUUID)
+            );
+    }
+
+    /**
+     * Delete all config folder.
+     */
+    private function deleteConfigFolder()
+    {
+        $configPath = $this->getConfigPath($this->getRepositoryReference());
+        $files = glob($configPath.'/*');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+    }
+}

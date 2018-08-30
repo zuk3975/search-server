@@ -15,16 +15,28 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Event;
 
+use Apisearch\Model\IndexUUID;
+
 /**
  * Class IndexWasReset.
  */
 class IndexWasReset extends DomainEvent
 {
     /**
-     * ItemsWasIndexed constructor.
+     * @var IndexUUID
+     *
+     * Index UUID
      */
-    public function __construct()
+    private $indexUUID;
+
+    /**
+     * IndexWasConfigured constructor.
+     *
+     * @param IndexUUID $indexUUID
+     */
+    public function __construct(IndexUUID $indexUUID)
     {
+        $this->indexUUID = $indexUUID;
         $this->setNow();
     }
 
@@ -35,7 +47,11 @@ class IndexWasReset extends DomainEvent
      */
     public function readableOnlyToArray(): array
     {
-        return [];
+        return [
+            'index_uuid' => $this
+                ->indexUUID
+                ->toArray(),
+        ];
     }
 
     /**
@@ -57,6 +73,8 @@ class IndexWasReset extends DomainEvent
      */
     public static function stringToPayload(string $data): array
     {
-        return [];
+        return [
+            IndexUUID::createFromArray($data['index_uuid']),
+        ];
     }
 }

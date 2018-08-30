@@ -16,10 +16,11 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional\Console;
 
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Query\Query;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Exception;
 
 /**
@@ -145,7 +146,10 @@ abstract class CommandTest extends HttpFunctionalTest
             $this->checkIndex(
                 null,
                 null,
-                new Token(TokenUUID::createById($token ?? $this->token), self::$appId)
+                new Token(
+                    TokenUUID::createById($token ?? $this->token),
+                    AppUUID::createById(self::$appId)
+                )
             )
         );
     }

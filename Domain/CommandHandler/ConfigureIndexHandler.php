@@ -18,12 +18,12 @@ namespace Apisearch\Server\Domain\CommandHandler;
 use Apisearch\Server\Domain\Command\ConfigureIndex;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\IndexWasConfigured;
-use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
+use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
 /**
  * Class ConfigIndexHandler.
  */
-class ConfigureIndexHandler extends WithRepositoryAndEventPublisher
+class ConfigureIndexHandler extends WithAppRepositoryAndEventPublisher
 {
     /**
      * Configure the index.
@@ -33,21 +33,28 @@ class ConfigureIndexHandler extends WithRepositoryAndEventPublisher
     public function handle(ConfigureIndex $configureIndex)
     {
         $repositoryReference = $configureIndex->getRepositoryReference();
+        $indexUUID = $configureIndex->getIndexUUID();
         $config = $configureIndex->getConfig();
 
         $this
-            ->repository
+            ->appRepository
             ->setRepositoryReference($repositoryReference);
 
         $this
-            ->repository
-            ->configureIndex($config);
+            ->appRepository
+            ->configureIndex(
+                $indexUUID,
+                $config
+            );
 
         $this
             ->eventPublisher
             ->publish(new DomainEventWithRepositoryReference(
                 $repositoryReference,
-                new IndexWasConfigured($config)
+                new IndexWasConfigured(
+                    $indexUUID,
+                    $config
+                )
             ));
     }
 }

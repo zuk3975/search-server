@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller;
 
 use Apisearch\Http\Http;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteAllInteractions;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,8 +43,8 @@ class DeleteAllInteractionsController extends ControllerWithBus
             ->commandBus
             ->handle(new DeleteAllInteractions(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD, ''),
-                    $query->get(Http::INDEX_FIELD, '')
+                    AppUUID::createById($query->get(Http::APP_ID_FIELD, '')),
+                    IndexUUID::createById($query->get(Http::INDEX_FIELD, ''))
                 ),
                 $query->get(Http::TOKEN_FIELD, '')
             ));

@@ -17,9 +17,10 @@ namespace Apisearch\Server\Controller;
 
 use Apisearch\Exception\InvalidFormatException;
 use Apisearch\Http\Http;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteToken;
-use Apisearch\Token\TokenUUID;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,8 +49,7 @@ class DeleteTokenController extends ControllerWithBus
             ->commandBus
             ->handle(new DeleteToken(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD, ''),
-                    ''
+                    AppUUID::createById($query->get(Http::APP_ID_FIELD, ''))
                 ),
                 $query->get(Http::TOKEN_FIELD, ''),
                 TokenUUID::createFromArray($tokenUUIDAsArray)

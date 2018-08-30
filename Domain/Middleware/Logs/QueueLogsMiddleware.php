@@ -58,8 +58,12 @@ class QueueLogsMiddleware extends LogsMiddleware implements Middleware
             ->produce(
                 'apisearch:server:logs',
                 [
-                    'app_id' => $repositoryReference->getAppId(),
-                    'index_id' => $repositoryReference->getIndex(),
+                    'app_uuid' => $repositoryReference
+                        ->getAppUUID()
+                        ->toArray(),
+                    'index_uuid' => $repositoryReference
+                        ->getIndexUUID()
+                        ->toArray(),
                     'log' => $log->toArray(),
                 ]
             );

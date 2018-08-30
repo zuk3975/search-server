@@ -16,12 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\QueryHandler;
 
 use Apisearch\Server\Domain\Query\CheckIndex;
-use Apisearch\Server\Domain\WithRepository;
+use Apisearch\Server\Domain\WithAppRepository;
 
 /**
  * Class CheckIndexHandler.
  */
-class CheckIndexHandler extends WithRepository
+class CheckIndexHandler extends WithAppRepository
 {
     /**
      * Check the index.
@@ -33,13 +33,14 @@ class CheckIndexHandler extends WithRepository
     public function handle(CheckIndex $checkIndex): bool
     {
         $repositoryReference = $checkIndex->getRepositoryReference();
+        $indexUUID = $checkIndex->getIndexUUID();
 
         $this
-            ->repository
+            ->appRepository
             ->setRepositoryReference($repositoryReference);
 
         return $this
-            ->repository
-            ->checkIndex();
+            ->appRepository
+            ->checkIndex($indexUUID);
     }
 }

@@ -17,10 +17,14 @@ namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Index;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Repository\RepositoryReference;
@@ -49,8 +53,6 @@ use Apisearch\Server\Domain\Query\Ping;
 use Apisearch\Server\Domain\Query\Query;
 use Apisearch\Server\Domain\Query\QueryEvents;
 use Apisearch\Server\Domain\Query\QueryLogs;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Apisearch\User\Interaction;
 
 /**
@@ -84,16 +86,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Result {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new Query(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $query
             ));
@@ -113,16 +117,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteItems(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $itemsUUID
             ));
@@ -142,16 +148,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         ?string $index = null,
         ?Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new IndexItems(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $items
             ));
@@ -173,16 +181,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new UpdateItems(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $query,
                 $changes
@@ -201,17 +211,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+        $indexUUID = IndexUUID::createById($index ?? self::$index);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new ResetIndex(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    $indexUUID
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
+                        $appUUID
+                    ),
+                $indexUUID
             ));
     }
 
@@ -219,11 +233,27 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string|null $appId
      *
      * @return array|Index[]
+     *
+     * @param Token $token
      */
-    public function getIndices(string $appId = null): array
-    {
+    public function getIndices(
+        string $appId = null,
+        Token $token = null
+    ): array {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.query_bus')
-            ->handle(new GetIndices($appId));
+            ->handle(new GetIndices(
+                RepositoryReference::create(
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
+                ),
+                $token ??
+                    new Token(
+                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
+                        $appUUID
+                    )
+            ));
     }
 
     /**
@@ -240,17 +270,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         Token $token = null,
         ImmutableConfig $config = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+        $indexUUID = IndexUUID::createById($index ?? self::$index);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new CreateIndex(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    $indexUUID
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
+                $indexUUID,
                 $config ?? ImmutableConfig::createFromArray([])
             ));
     }
@@ -269,17 +303,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+        $indexUUID = IndexUUID::createById($index ?? self::$index);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new ConfigureIndex(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    $indexUUID
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
+                $indexUUID,
                 $config
             ));
     }
@@ -298,17 +336,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): bool {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+        $indexUUID = IndexUUID::createById($index ?? self::$index);
+
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new CheckIndex(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    $indexUUID
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
+                        $appUUID
+                    ),
+                $indexUUID
             ));
     }
 
@@ -324,17 +366,21 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+        $indexUUID = IndexUUID::createById($index ?? self::$index);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteIndex(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    $indexUUID
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
-                    )
+                        $appUUID
+                    ),
+                $indexUUID
             ));
     }
 
@@ -350,16 +396,15 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new AddToken(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
+                RepositoryReference::create($appUUID),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $newToken
             ));
@@ -377,16 +422,15 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteToken(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
+                RepositoryReference::create($appUUID),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $tokenUUID
             ));
@@ -404,16 +448,15 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new GetTokens(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
+                RepositoryReference::create($appUUID),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     )
             ));
     }
@@ -428,16 +471,15 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId = null,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteTokens(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
+                RepositoryReference::create($appUUID),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     )
             ));
     }
@@ -462,16 +504,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Events {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryEvents(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $query,
                 $from,
@@ -499,16 +543,18 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): Logs {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         return self::getStatic('apisearch_server.query_bus')
             ->handle(new QueryLogs(
                 RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    $index ?? self::$index
+                    $appUUID,
+                    IndexUUID::createById($index ?? self::$index)
                 ),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     ),
                 $query,
                 $from,
@@ -532,13 +578,16 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new AddInteraction(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
-                $token,
+                RepositoryReference::create($appUUID),
+                $token ??
+                    new Token(
+                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
+                        $appUUID
+                    ),
                 new Interaction(
                     new User($userId),
                     ItemUUID::createByComposedUUID($itemUUIDComposed),
@@ -557,16 +606,15 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $appId,
         Token $token = null
     ) {
+        $appUUID = AppUUID::createById($appId ?? self::$appId);
+
         self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteAllInteractions(
-                RepositoryReference::create(
-                    $appId ?? self::$appId,
-                    ''
-                ),
+                RepositoryReference::create($appUUID),
                 $token ??
                     new Token(
                         TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appId ?? self::$appId
+                        $appUUID
                     )
             ));
     }

@@ -15,12 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
-use Apisearch\Token\Token;
 use Apisearch\User\Interaction;
 
 /**
@@ -74,14 +74,15 @@ class AddInteraction extends CommandWithRepositoryReferenceAndToken implements L
     public function toArray(): array
     {
         return [
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
+                ->toArray(),
             'interaction' => $this
                 ->interaction
                 ->toArray(),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
         ];
     }
 
@@ -90,15 +91,12 @@ class AddInteraction extends CommandWithRepositoryReferenceAndToken implements L
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token']),
             Interaction::createFromArray($data['interaction'])
         );

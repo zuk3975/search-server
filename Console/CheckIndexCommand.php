@@ -15,6 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\CheckIndex;
 use Symfony\Component\Console\Input\InputArgument;
@@ -72,21 +75,23 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
-        $tokenUUID = $input->hasOption('token') && !empty($input->getOption('token'))
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $indexUUID = IndexUUID::createById($input->getArgument('index'));
+        $token = $input->hasOption('token') && !empty($input->getOption('token'))
             ? $input->getOption('token')
             : $this->godToken;
+
+        $tokenUUID = TokenUUID::createById($token, $appUUID);
 
         return $this
             ->commandBus
             ->handle(new CheckIndex(
                 RepositoryReference::create(
-                    $input->getArgument('app-id'),
-                    $input->getArgument('index')
+                    $appUUID,
+                    $indexUUID
                 ),
-                $this->createToken(
-                    $tokenUUID,
-                    $input->getArgument('app-id')
-                )
+                $tokenUUID,
+                $indexUUID
             ));
     }
 

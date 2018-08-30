@@ -15,12 +15,13 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Callbacks\Tests\Functional\Middleware\Query;
 
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Plugin\Callbacks\Tests\Functional\EndpointsFunctionalTest;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class MixedCallbacksMiddlewareTest.
@@ -68,7 +69,7 @@ class MixedCallbacksMiddlewareTest extends EndpointsFunctionalTest
             Item::create(ItemUUID::createByComposedUUID('test~1')),
             Item::create(ItemUUID::createByComposedUUID('test~2')),
         ]);
-        $this->addToken(new Token(TokenUUID::createById('lalaland'), self::$appId));
+        $this->addToken(new Token(TokenUUID::createById('lalaland'), AppUUID::createById(self::$appId)));
         $result = $this->query(Query::createMatchAll());
         $this->assertCount(7,
             $result->getItems()

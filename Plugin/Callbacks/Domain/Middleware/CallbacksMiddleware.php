@@ -17,6 +17,8 @@ namespace Apisearch\Plugin\Callbacks\Domain\Middleware;
 
 use Apisearch\Http\Http;
 use Apisearch\Http\HttpClient;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Plugin\Callbacks\Domain\Adapter\HttpCommandAdapters;
 use Apisearch\Plugin\Callbacks\Domain\Callbacks;
 use Apisearch\Server\Domain\AsynchronousableCommand;
@@ -104,14 +106,22 @@ class CallbacksMiddleware implements PluginMiddleware
                     ->get(
                         $callback['endpoint'],
                         $callback['method'],
-                        [
-                            Http::APP_ID_FIELD => $command->getAppId(),
-                            Http::INDEX_FIELD => $command->getIndex(),
+                        array_filter([
+                            Http::APP_ID_FIELD => $command->getAppUUID() instanceof AppUUID
+                                ? $command
+                                    ->getAppUUID()
+                                    ->composeUUID()
+                                : false,
+                            Http::INDEX_FIELD => $command->getIndexUUID() instanceof IndexUUID
+                                ? $command
+                                    ->getIndexUUID()
+                                    ->composeUUID()
+                                : false,
                             Http::TOKEN_FIELD => $command
                                 ->getToken()
                                 ->getTokenUUID()
                                 ->composeUUID(),
-                        ],
+                        ]),
                         $httpCommandAdapter->buildBodyByCommand(
                             $callback,
                             $command
@@ -146,14 +156,22 @@ class CallbacksMiddleware implements PluginMiddleware
                     ->get(
                         $callback['endpoint'],
                         $callback['method'],
-                        [
-                            Http::APP_ID_FIELD => $command->getAppId(),
-                            Http::INDEX_FIELD => $command->getIndex(),
+                        array_filter([
+                            Http::APP_ID_FIELD => $command->getAppUUID() instanceof AppUUID
+                                ? $command
+                                    ->getAppUUID()
+                                    ->composeUUID()
+                                : false,
+                            Http::INDEX_FIELD => $command->getIndexUUID() instanceof IndexUUID
+                                ? $command
+                                    ->getIndexUUID()
+                                    ->composeUUID()
+                                : false,
                             Http::TOKEN_FIELD => $command
                                 ->getToken()
                                 ->getTokenUUID()
                                 ->composeUUID(),
-                        ],
+                        ]),
                         $httpCommandAdapter->buildBodyByCommandAndResponse(
                             $callback,
                             $command,

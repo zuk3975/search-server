@@ -16,9 +16,10 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional\Console;
 
 use Apisearch\Exception\InvalidTokenException;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class GenerateBasicTokensCommandTest.
@@ -41,6 +42,7 @@ class GenerateBasicTokensCommandTest extends CommandTest
             'app-id' => static::$appId,
         ]);
 
+        $appUUID = AppUUID::createById(self::$appId);
         preg_match('~UUID\s*(.*?)\s*generated for admin~', $output, $matches);
         $uuidAdmin = $matches[1];
         preg_match('~UUID\s*(.*?)\s*generated for query~', $output, $matches);
@@ -50,9 +52,9 @@ class GenerateBasicTokensCommandTest extends CommandTest
         preg_match('~UUID\s*(.*?)\s*generated for interaction~', $output, $matches);
         $uuidInteractions = $matches[1];
 
-        $adminToken = new Token(TokenUUID::createById($uuidAdmin), self::$appId);
-        $queryToken = new Token(TokenUUID::createById($uuidQuery), self::$appId);
-        $eventsToken = new Token(TokenUUID::createById($uuidEvents), self::$appId);
+        $adminToken = new Token(TokenUUID::createById($uuidAdmin), $appUUID);
+        $queryToken = new Token(TokenUUID::createById($uuidQuery), $appUUID);
+        $eventsToken = new Token(TokenUUID::createById($uuidEvents), $appUUID);
         // $interactionsToken = new Token(TokenUUID::createById($uuidInteractions), self::$appId);
 
         $this->query(Query::createMatchAll(), null, null, $adminToken);

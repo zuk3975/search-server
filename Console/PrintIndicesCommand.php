@@ -15,8 +15,10 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\GetIndices;
-use Apisearch\Token\Token;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -53,23 +55,25 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
-        $appId = $input->getOption('app-id');
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $godToken = $this->createGodToken($appUUID);
 
         $indices = $this
             ->commandBus
             ->handle(new GetIndices(
-                $appId
+                RepositoryReference::create($appUUID),
+                $godToken
             ));
 
         /**
          * @var Token
          */
         $table = new Table($output);
-        $table->setHeaders(['AppId', 'Name', 'Doc Count']);
+        $table->setHeaders(['UUID', 'App ID', 'Doc Count']);
         foreach ($indices as $index) {
             $table->addRow([
-                $index->getAppId(),
-                $index->getName(),
+                $index->getUUID()->composeUUID(),
+                $index->getAppUUID()->composeUUID(),
                 $index->getDocCount(),
             ]);
         }

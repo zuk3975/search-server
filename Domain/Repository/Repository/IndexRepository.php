@@ -15,8 +15,6 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Repository\Repository;
 
-use Apisearch\Config\ImmutableConfig;
-use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 
 /**
@@ -24,30 +22,6 @@ use Apisearch\Model\Item;
  */
 interface IndexRepository
 {
-    /**
-     * @param string|null $appId
-     *
-     * @return array|Index[]
-     */
-    public function getIndices(string $appId = null): array;
-
-    /**
-     * Create the index.
-     *
-     * @param ImmutableConfig $config
-     */
-    public function createIndex(ImmutableConfig $config);
-
-    /**
-     * Delete the index.
-     */
-    public function deleteIndex();
-
-    /**
-     * Reset the index.
-     */
-    public function resetIndex();
-
     /**
      * Generate items documents.
      *

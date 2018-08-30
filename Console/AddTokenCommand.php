@@ -15,10 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\AddToken;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -110,34 +112,33 @@ class AddTokenCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
-        $appId = $input->getArgument('app-id');
-        $uuid = $input->getArgument('uuid');
+        $tokenUUID = TokenUUID::createById($input->getArgument('uuid'));
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
 
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "App ID: <strong>$appId</strong>"
+            "App ID: <strong>{$appUUID->composeUUID()}</strong>"
         );
 
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "Token UUID: <strong>$uuid</strong>"
+            "Token UUID: <strong>{$tokenUUID->composeUUID()}</strong>"
         );
 
         $endpoints = $this->getEndpoints($input, $output);
         $this
             ->commandBus
             ->handle(new AddToken(
-                RepositoryReference::create(
-                    $input->getArgument('app-id'),
-                    '~~~'
-                ),
-                $this->createGodToken($appId),
+                RepositoryReference::create($appUUID),
+                $this->createGodToken($appUUID),
                 new Token(
-                    TokenUUID::createById($uuid),
-                    (string) $appId,
-                    $input->getOption('index'),
+                    $tokenUUID,
+                    $appUUID,
+                    array_map(function (string $index) {
+                        return IndexUUID::createById(trim($index));
+                    }, $input->getOption('index')),
                     $input->getOption('http-referrer'),
                     $endpoints,
                     $input->getOption('plugin'),

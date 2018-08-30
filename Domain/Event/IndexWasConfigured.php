@@ -16,12 +16,20 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Event;
 
 use Apisearch\Config\Config;
+use Apisearch\Model\IndexUUID;
 
 /**
  * Class IndexWasConfigured.
  */
 class IndexWasConfigured extends DomainEvent
 {
+    /**
+     * @var IndexUUID
+     *
+     * Index UUID
+     */
+    private $indexUUID;
+
     /**
      * @var Config
      *
@@ -32,11 +40,15 @@ class IndexWasConfigured extends DomainEvent
     /**
      * IndexWasConfigured constructor.
      *
-     * @param Config $config
+     * @param IndexUUID $indexUUID
+     * @param Config    $config
      */
-    public function __construct(Config $config)
-    {
+    public function __construct(
+        IndexUUID $indexUUID,
+        Config $config
+    ) {
         $this->config = $config;
+        $this->indexUUID = $indexUUID;
         $this->setNow();
     }
 
@@ -48,6 +60,9 @@ class IndexWasConfigured extends DomainEvent
     public function readableOnlyToArray(): array
     {
         return [
+            'index_uuid' => $this
+                ->indexUUID
+                ->toArray(),
             'config' => $this
                 ->config
                 ->toArray(),
@@ -74,6 +89,7 @@ class IndexWasConfigured extends DomainEvent
     public static function stringToPayload(string $data): array
     {
         return [
+            IndexUUID::createFromArray($data['index_uuid']),
             Config::createFromArray($data['config']),
         ];
     }

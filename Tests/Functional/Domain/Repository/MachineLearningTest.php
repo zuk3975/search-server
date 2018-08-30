@@ -15,11 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Functional\Domain\Repository;
 
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query;
 use Apisearch\Server\Domain\Plugins;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class MachineLearningTest.

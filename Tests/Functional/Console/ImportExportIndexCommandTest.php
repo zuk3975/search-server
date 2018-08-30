@@ -69,7 +69,7 @@ class ImportExportIndexCommandTest extends CommandTest
         static::runCommand([
             'command' => 'apisearch-server:delete-index',
             'app-id' => self::$appId,
-            'index' => 'another-index-for-export',
+            'index' => 'anotherindexforexport',
         ]);
 
         unlink($fileName);

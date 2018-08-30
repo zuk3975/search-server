@@ -38,10 +38,10 @@ class QueryRepository extends Neo4jRepository implements BaseQueryRepository
         int $n
     ): array {
         $userId = $user->getId();
-        $appId = $this->getAppId();
+        $appUUIDComposed = $this->getAppUUID()->composeUUID();
         $query = "
                 MATCH (us:User)-[rel:interacts]->(it:Item)
-                WHERE us.id = '{$userId}' AND us.app = '{$appId}' AND it.app = '{$appId}'
+                WHERE us.id = '{$userId}' AND us.app = '{$appUUIDComposed}' AND it.app = '{$appUUIDComposed}'
                 RETURN it
                 ORDER BY rel.w DESC
             ";

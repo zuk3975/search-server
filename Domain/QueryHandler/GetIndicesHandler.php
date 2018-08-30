@@ -16,24 +16,14 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\QueryHandler;
 
 use Apisearch\Model\Index;
-use Apisearch\Repository\Repository;
 use Apisearch\Server\Domain\Query\GetIndices;
+use Apisearch\Server\Domain\WithAppRepository;
 
 /**
  * Class GetIndicesHandler.
  */
-class GetIndicesHandler
+class GetIndicesHandler extends WithAppRepository
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
-
-    public function __construct(Repository $repository)
-    {
-        $this->repository = $repository;
-    }
-
     /**
      * Get indices handler method.
      *
@@ -43,8 +33,13 @@ class GetIndicesHandler
      */
     public function handle(GetIndices $getIndices): array
     {
+        $repositoryReference = $getIndices->getRepositoryReference();
+        $this
+            ->appRepository
+            ->setRepositoryReference($repositoryReference);
+
         return $this
-            ->repository
-            ->getIndices($getIndices->getAppId());
+            ->appRepository
+            ->getIndices();
     }
 }

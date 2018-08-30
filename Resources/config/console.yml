@@ -119,6 +119,7 @@ services:
             - "@rs_queue.publisher"
         tags:
             -  { name: console.command, command: apisearch-worker:domain-events-consumer }
+            -  { name: console.command, command: apisearch-worker:domain-events-consumer }
 
     apisearch_server.logs_consumer:
         class: Apisearch\Server\Console\LogsConsumer

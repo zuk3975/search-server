@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Repository\AppRepository;
 
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 
 /**
  * Interface TokenRepository.

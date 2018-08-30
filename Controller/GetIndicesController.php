@@ -16,7 +16,9 @@ declare(strict_types=1);
 namespace Apisearch\Server\Controller;
 
 use Apisearch\Http\Http;
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Index;
+use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\GetIndices;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +42,10 @@ class GetIndicesController extends ControllerWithBus
         $indices = $this
             ->commandBus
             ->handle(new GetIndices(
-                $query->get(Http::APP_ID_FIELD, null)
+                RepositoryReference::create(
+                    AppUUID::createById($query->get(Http::APP_ID_FIELD, ''))
+                ),
+                $query->get(Http::TOKEN_FIELD, '')
             ));
 
         return new JsonResponse(

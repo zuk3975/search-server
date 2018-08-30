@@ -15,102 +15,18 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Elastica\Domain\Repository;
 
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Model\Coordinate;
-use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Plugin\Elastica\Domain\ElasticaWrapperWithRepositoryReference;
 use Apisearch\Server\Domain\Repository\Repository\IndexRepository as IndexRepositoryInterface;
 use Elastica\Document;
 use Elastica\Document as ElasticaDocument;
-use Elastica\Index\Stats;
 
 /**
  * Class IndexRepository.
  */
 class IndexRepository extends ElasticaWrapperWithRepositoryReference implements IndexRepositoryInterface
 {
-    /**
-     * @param string|null $appId
-     *
-     * @return Index[]
-     */
-    public function getIndices(string $appId = null): array
-    {
-        return $this
-            ->elasticaWrapper
-            ->getIndices($appId);
-    }
-
-    /**
-     * Create the index.
-     *
-     * @param ImmutableConfig $config
-     */
-    public function createIndex(ImmutableConfig $config)
-    {
-        is_dir($this->getConfigPath())
-            ? chmod($this->getConfigPath(), 0755)
-            : @mkdir($this->getConfigPath(), 0755, true);
-
-        $this
-            ->elasticaWrapper
-            ->createIndex(
-                $this->getRepositoryReference(),
-                $config,
-                $this->repositoryConfig['shards'],
-                $this->repositoryConfig['replicas']
-            );
-
-        $this
-            ->elasticaWrapper
-            ->createIndexMapping(
-                $this->getRepositoryReference(),
-                $config
-            );
-
-        $this->refresh();
-    }
-
-    /**
-     * Delete the index.
-     */
-    public function deleteIndex()
-    {
-        $this
-            ->elasticaWrapper
-            ->deleteIndex($this->getRepositoryReference());
-
-        $this->deleteConfigFolder();
-        if (is_dir($this->getConfigPath())) {
-            @rmdir($this->getConfigPath());
-        }
-    }
-
-    /**
-     * Reset the index.
-     */
-    public function resetIndex()
-    {
-        $this
-            ->elasticaWrapper
-            ->resetIndex($this->getRepositoryReference());
-
-        $this->refresh();
-    }
-
-    /**
-     * Get the index stats.
-     *
-     * @return Stats
-     */
-    public function getIndexStats(): Stats
-    {
-        return $this
-            ->elasticaWrapper
-            ->getIndexStats($this->getRepositoryReference());
-    }
-
     /**
      * Generate items documents.
      *
@@ -257,18 +173,5 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
             (is_string($element) && empty($element)) ||
             (is_array($element) && empty($element))
         );
-    }
-
-    /**
-     * Delete all config folder.
-     */
-    private function deleteConfigFolder()
-    {
-        $files = glob($this->getConfigPath().'/*');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
     }
 }
