@@ -18,9 +18,13 @@ namespace Apisearch\Server\Tests\Functional;
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Changes;
+use Apisearch\Model\Index;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
 use Apisearch\Plugin\Redis\RedisPluginBundle;
@@ -30,8 +34,6 @@ use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Exception\ErrorException;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Mmoreram\BaseBundle\BaseBundle;
 use Mmoreram\BaseBundle\Kernel\BaseKernel;
 use Mmoreram\BaseBundle\Tests\BaseFunctionalTest;
@@ -386,7 +388,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      *
      * App id
      */
-    public static $appId = 'test';
+    public static $appId = '26178621test';
 
     /**
      * @var string
@@ -400,21 +402,21 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      *
      * App id
      */
-    public static $anotherAppId = 'another_test';
+    public static $anotherAppId = '26178621testanother';
 
     /**
      * @var string
      *
      * App id
      */
-    public static $anotherInexistentAppId = 'another_test_not_exists';
+    public static $anotherInexistentAppId = '26178621testnotexists';
 
     /**
      * @var string
      *
      * App id
      */
-    public static $anotherIndex = 'another_index';
+    public static $anotherIndex = 'anotherindex';
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -633,10 +635,14 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
 
     /**
      * @param string|null $appId
+     * @param Token       $token
      *
-     * @return array|Index[]
+     * @return Index[]
      */
-    abstract public function getIndices(string $appId = null): array;
+    abstract public function getIndices(
+        string $appId = null,
+        Token $token = null
+    ): array;
 
     /**
      * Check index.
@@ -826,5 +832,23 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         return ($token instanceof Token)
                 ? $token->getTokenUUID()->composeUUID()
                 : self::getParameterStatic('apisearch_server.god_token');
+    }
+
+    /**
+     * Create token by id and app_id.
+     *
+     * @param string $tokenId
+     * @param string $appId
+     *
+     * @return Token
+     */
+    protected function createTokenByIdAndAppId(
+        string $tokenId,
+        string $appId
+    ): Token {
+        return new Token(
+            TokenUUID::createById($tokenId),
+            AppUUID::createById($appId)
+        );
     }
 }

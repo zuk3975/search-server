@@ -13,10 +13,11 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Server\Domain\Repository\Repository;
+namespace Apisearch\Server\Domain\Repository\AppRepository;
 
 use Apisearch\Config\Config;
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\IndexUUID;
 
 /**
  * Interface ConfigRepository.
@@ -26,9 +27,13 @@ interface ConfigRepository
     /**
      * Config the index.
      *
-     * @param Config $config
+     * @param IndexUUID $indexUUID
+     * @param Config    $config
      *
      * @throws ResourceNotAvailableException
      */
-    public function configureIndex(Config $config);
+    public function configureIndex(
+        IndexUUID $indexUUID,
+        Config $config
+    );
 }

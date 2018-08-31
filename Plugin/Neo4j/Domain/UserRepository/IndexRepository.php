@@ -34,10 +34,10 @@ class IndexRepository extends Neo4jRepository implements BaseIndexRepository
         $userId = $user->getId();
         $itemUUID = $interaction->getItemUUID();
         $weight = $interaction->getWeight();
-        $appId = $this->getAppId();
+        $appUUIDComposed = $this->getAppUUID()->composeUUID();
 
         $query = "
-            MERGE (:User { id: '$userId', app: '$appId' })-[rel:interacts]->(:Item {id: '{$itemUUID->composeUUID()}', app: '$appId'})
+            MERGE (:User { id: '$userId', app: '$appUUIDComposed' })-[rel:interacts]->(:Item {id: '{$itemUUID->composeUUID()}', app: '$appUUIDComposed'})
             ON CREATE SET rel.w = $weight
             ON MATCH SET rel.w = rel.w + $weight
             ";
@@ -50,10 +50,10 @@ class IndexRepository extends Neo4jRepository implements BaseIndexRepository
      */
     public function deleteAllInteractions()
     {
-        $appId = $this->getAppId();
+        $appUUIDComposed = $this->getAppUUID()->composeUUID();
         $query = "
             MATCH (n)
-            WHERE n.app = '{$appId}'
+            WHERE n.app = '{$appUUIDComposed}'
             DETACH DELETE n
             ";
 

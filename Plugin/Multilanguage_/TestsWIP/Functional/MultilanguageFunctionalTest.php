@@ -16,12 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Multilanguage\Tests\Functional;
 
 use Apisearch\Plugin\Multilanguage\MultilanguagePluginBundle;
-use Apisearch\Server\Tests\Functional\ServiceFunctionalTest;
+use Apisearch\Server\Tests\Functional\AsynchronousFunctionalTest;
 
 /**
  * Class MultilanguageFunctionalTest.
  */
-abstract class MultilanguageFunctionalTest extends ServiceFunctionalTest
+abstract class MultilanguageFunctionalTest extends AsynchronousFunctionalTest
 {
     /**
      * Decorate bundles.

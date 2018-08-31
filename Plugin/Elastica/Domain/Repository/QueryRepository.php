@@ -293,7 +293,7 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
         Query $query,
         ElasticaQuery\BoolQuery $elasticaQuery
     ) {
-        $file = $this->getConfigPath().'/campaigns.json';
+        $file = $this->getConfigPath($this->getRepositoryReference()).'/campaigns.json';
         if (!is_file($file)) {
             return;
         }

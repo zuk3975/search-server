@@ -17,6 +17,8 @@ namespace Apisearch\Server\Console;
 
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\CreateIndex;
 use Symfony\Component\Console\Input\InputArgument;
@@ -87,19 +89,19 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      */
     protected function dispatchDomainEvent(InputInterface $input, OutputInterface $output)
     {
-        $appId = $input->getArgument('app-id');
-        $index = $input->getArgument('index');
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $indexUUID = IndexUUID::createById($input->getArgument('index'));
 
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "App ID: <strong>$appId</strong>"
+            "App ID: <strong>{$appUUID->composeUUID()}</strong>"
         );
 
         $this->printInfoMessage(
             $output,
             $this->getHeader(),
-            "Index ID: <strong>$index</strong>"
+            "Index ID: <strong>{$indexUUID->composeUUID()}</strong>"
         );
 
         try {
@@ -107,10 +109,11 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                 ->commandBus
                 ->handle(new CreateIndex(
                     RepositoryReference::create(
-                        $appId,
-                        $index
+                        $appUUID,
+                        $indexUUID
                     ),
-                    $this->createGodToken($input->getArgument('app-id')),
+                    $this->createGodToken($appUUID),
+                    $indexUUID,
                     ImmutableConfig::createFromArray([
                         'language' => $input->getOption('language'),
                         'store_searchable_metadata' => !$input->getOption('no-store-searchable-metadata'),

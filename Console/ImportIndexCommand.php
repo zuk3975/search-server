@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\IndexItems;
@@ -63,8 +65,8 @@ class ImportIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
-        $appId = $input->getArgument('app-id');
-        $index = $input->getArgument('index');
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $indexUUID = IndexUUID::createById($input->getArgument('index'));
         $file = $input->getArgument('file');
         $itemsBuffer = [];
         $itemsNb = 0;
@@ -93,8 +95,8 @@ class ImportIndexCommand extends CommandWithBusAndGodToken
 
                 if (count($itemsBuffer) >= 500) {
                     $this->saveItems(
-                        $appId,
-                        $index,
+                        $appUUID,
+                        $indexUUID,
                         $itemsBuffer,
                         $output
                     );
@@ -104,8 +106,8 @@ class ImportIndexCommand extends CommandWithBusAndGodToken
             }
 
             $this->saveItems(
-                $appId,
-                $index,
+                $appUUID,
+                $indexUUID,
                 $itemsBuffer,
                 $output
             );
@@ -142,14 +144,14 @@ class ImportIndexCommand extends CommandWithBusAndGodToken
     /**
      * Save array of items.
      *
-     * @param string          $appId
-     * @param string          $index
+     * @param AppUUID         $appUUID
+     * @param IndexUUID       $indexUUID
      * @param Item[]          $items
      * @param OutputInterface $output
      */
     private function saveItems(
-        string $appId,
-        string $index,
+        AppUUID $appUUID,
+        IndexUUID $indexUUID,
         array $items,
         OutputInterface $output
     ) {
@@ -161,10 +163,10 @@ class ImportIndexCommand extends CommandWithBusAndGodToken
             ->commandBus
             ->handle(new IndexItems(
                 RepositoryReference::create(
-                    $appId,
-                    $index
+                    $appUUID,
+                    $indexUUID
                 ),
-                $this->createGodToken($appId),
+                $this->createGodToken($appUUID),
                 $items
             ));
 

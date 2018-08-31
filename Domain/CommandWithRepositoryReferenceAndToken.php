@@ -15,11 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain;
 
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 use Apisearch\Repository\WithTokenTrait;
-use Apisearch\Token\Token;
 
 /**
  * Class CommandWithRepositoryReferenceAndToken.

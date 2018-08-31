@@ -16,9 +16,10 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Multilanguage\Tests\Functional;
 
 use Apisearch\Exception\InvalidTokenException;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class SimpleTokensWorkflowTest.
@@ -30,7 +31,7 @@ class SimpleTokensWorkflowTest extends RedisFunctionalTest
      */
     public function testSimpleWorkflow()
     {
-        $newToken = new Token(TokenUUID::createById('new_token'), self::$appId);
+        $newToken = new Token(TokenUUID::createById('new_token'), AppUUID::createById(self::$appId));
         $this->addToken($newToken);
 
         $this->assertCount(
@@ -48,7 +49,7 @@ class SimpleTokensWorkflowTest extends RedisFunctionalTest
                 Query::createMatchAll(),
                 null,
                 null,
-                new Token(TokenUUID::createById('non-really-existing'), self::$appId)
+                new Token(TokenUUID::createById('non-really-existing'), AppUUID::createById(self::$appId))
             );
 
             $this->fail('Non invalid token should throw exception');

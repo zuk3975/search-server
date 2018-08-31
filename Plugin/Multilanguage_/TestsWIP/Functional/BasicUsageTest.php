@@ -30,19 +30,19 @@ class BasicUsageTest extends MultilanguageFunctionalTest
     {
         usleep(500000);
         $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_es')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-es')
         );
 
         $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_ca')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-ca')
         );
 
         $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_en')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-en')
         );
 
         $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_xx')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-xx')
         );
 
         $this->assertCount(3, $this->query(Query::createMatchAll())->getItems());

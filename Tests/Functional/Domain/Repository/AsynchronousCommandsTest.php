@@ -31,7 +31,7 @@ class AsynchronousCommandsTest extends AsynchronousFunctionalTest
      */
     public function testSimpleQuery()
     {
-        sleep(2);
+        sleep(1);
         $this->assertCount(
             5,
             $this

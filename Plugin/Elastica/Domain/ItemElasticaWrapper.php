@@ -13,18 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Apisearch\Plugin\Elastica\Domain\Repository;
+namespace Apisearch\Plugin\Elastica\Domain;
 
 use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Config\Synonym;
-use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
-use Apisearch\Plugin\Elastica\Domain\ElasticaLanguages;
-use Apisearch\Plugin\Elastica\Domain\ElasticaWrapper;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Exception\ParsedResourceNotAvailableException;
-use Elastica\Exception\ResponseException;
 use Elastica\Type\Mapping;
 
 /**

@@ -15,7 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Coordinate;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Repository\RepositoryReference;
@@ -65,8 +67,8 @@ class ExportIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         OutputInterface $output
     ) {
-        $appId = $input->getArgument('app-id');
-        $index = $input->getArgument('index');
+        $appUUID = AppUUID::createById($input->getArgument('app-id'));
+        $indexUUID = IndexUUID::createById($input->getArgument('index'));
         $file = $input->getArgument('file');
         $resource = fopen($file, 'w');
 
@@ -77,10 +79,10 @@ class ExportIndexCommand extends CommandWithBusAndGodToken
                 ->commandBus
                 ->handle(new Query(
                     RepositoryReference::create(
-                        $appId,
-                        $index
+                        $appUUID,
+                        $indexUUID
                     ),
-                    $this->createGodToken($appId),
+                    $this->createGodToken($appUUID),
                     QueryModel::create('', $i, 100)
                 ))
                 ->getItems();

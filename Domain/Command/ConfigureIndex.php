@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Command;
 
 use Apisearch\Config\Config;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\AsynchronousableCommand;
@@ -23,7 +25,6 @@ use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
 use Apisearch\Server\Domain\WriteCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class ConfigureIndex.
@@ -31,22 +32,31 @@ use Apisearch\Token\Token;
 class ConfigureIndex extends CommandWithRepositoryReferenceAndToken implements WithRepositoryReference, WriteCommand, LoggableCommand, AsynchronousableCommand, IndexRequiredCommand
 {
     /**
+     * @var IndexUUID
+     *
+     * Index uuid
+     */
+    private $indexUUID;
+
+    /**
      * @var Config
      *
-     * Query
+     * Config
      */
     private $config;
 
     /**
-     * DeleteCommand constructor.
+     * ResetCommand constructor.
      *
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
+     * @param IndexUUID           $indexUUID
      * @param Config              $config
      */
     public function __construct(
         RepositoryReference $repositoryReference,
-        Token              $token,
+        Token $token,
+        IndexUUID $indexUUID,
         Config $config
     ) {
         parent::__construct(
@@ -54,11 +64,22 @@ class ConfigureIndex extends CommandWithRepositoryReferenceAndToken implements W
             $token
         );
 
+        $this->indexUUID = $indexUUID;
         $this->config = $config;
     }
 
     /**
-     * Get Query.
+     * Get IndexUUID.
+     *
+     * @return IndexUUID
+     */
+    public function getIndexUUID(): IndexUUID
+    {
+        return $this->indexUUID;
+    }
+
+    /**
+     * Get config.
      *
      * @return Config
      */
@@ -75,14 +96,18 @@ class ConfigureIndex extends CommandWithRepositoryReferenceAndToken implements W
     public function toArray(): array
     {
         return [
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
+                ->toArray(),
             'configuration' => $this
                 ->config
                 ->toArray(),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
+            'index_uuid' => $this
+                ->indexUUID
+                ->toArray(),
         ];
     }
 
@@ -91,16 +116,14 @@ class ConfigureIndex extends CommandWithRepositoryReferenceAndToken implements W
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token']),
+            IndexUUID::createFromArray($data['index_uuid']),
             Config::createFromArray($data['configuration'])
         );
     }

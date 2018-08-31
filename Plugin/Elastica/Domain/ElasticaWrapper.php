@@ -18,7 +18,9 @@ namespace Apisearch\Plugin\Elastica\Domain;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Index as ApisearchIndex;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Exception\ParsedCreatingIndexException;
 use Elastica\Client;
@@ -126,15 +128,20 @@ abstract class ElasticaWrapper
     }
 
     /**
-     * @param string|null $appId
+     * Get indices.
      *
-     * @return array
+     * @param RepositoryReference $repositoryReference
+     *
+     * @return ApisearchIndex[]
      */
-    public function getIndices(string $appId = null): array
+    public function getIndices(RepositoryReference $repositoryReference): array
     {
+        $appUUIDComposed = $repositoryReference->getAppUUID()->composeUUID();
+
         $indexSearchKeyword = $this->getIndexPrefix().
-            (!empty($appId) ? '_'.$appId : '').
+            (!empty($appUUIDComposed) ? '_'.$appUUIDComposed : '').
             '*';
+
         $elasticaResponse = $this->client->requestEndpoint((new Indices())->setIndex($indexSearchKeyword));
 
         if (empty($elasticaResponse->getData())) {
@@ -144,7 +151,7 @@ abstract class ElasticaWrapper
         $regexToParse = '/^'.
             '(?P<color>[^\ ]+)\s+'.
             '(?P<status>[^\ ]+)\s+'.
-            ''.$this->getIndexPrefix().'\_(?P<app_id>[^\_]+)\_(?P<index_name>[^\ ]+)\s+'.
+            ''.$this->getIndexPrefix().'\_(?P<app_id>[^\_]+)\_(?P<id>[^\ ]+)\s+'.
             '(?P<uuid>[^\ ]+)\s+'.
             '(?P<primary_shards>[^\ ]+)\s+'.
             '(?P<replica_shards>[^\ ]+)\s+'.
@@ -158,11 +165,13 @@ abstract class ElasticaWrapper
         preg_match_all($regexToParse, $elasticaResponse->getData()['message'], $matches, PREG_SET_ORDER, 0);
         if ($matches) {
             foreach ($matches as $metaData) {
-                $indices[] = ApisearchIndex::createFromArray([
-                    'app_id' => $metaData['app_id'],
-                    'name' => $metaData['index_name'],
-                    'doc_count' => (int) $metaData['doc_count'],
-                ]);
+                $indices[] = new ApisearchIndex(
+                    IndexUUID::createById($metaData['id']),
+                    AppUUID::createById($metaData['app_id']),
+                    in_array($metaData['status'], ['green', 'yellow']),
+                    (int) $metaData['doc_count'],
+                    (string) $metaData['index_size']
+                );
             }
         }
 
@@ -422,8 +431,16 @@ abstract class ElasticaWrapper
         RepositoryReference $repositoryReference,
         string $prefix
     ) {
-        $appId = $repositoryReference->getAppId();
-        $indexId = $repositoryReference->getIndex();
+        if (is_null($repositoryReference->getAppUUID())) {
+            return '';
+        }
+
+        $appId = $repositoryReference->getAppUUID()->composeUUID();
+        if (is_null($repositoryReference->getIndexUUID())) {
+            return "{$prefix}_{$appId}";
+        }
+
+        $indexId = $repositoryReference->getIndexUUID()->composeUUID();
         if ('*' === $indexId) {
             return "{$prefix}_{$appId}_*";
         }

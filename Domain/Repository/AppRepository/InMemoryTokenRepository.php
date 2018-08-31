@@ -15,11 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Repository\AppRepository;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Repository\WithRepositoryReferenceTrait;
 use Apisearch\Server\Domain\Token\TokenLocator;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class InMemoryTokenRepository.
@@ -29,7 +30,7 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
     use WithRepositoryReferenceTrait;
 
     /**
-     * @var string[]
+     * @var array[]
      *
      * Tokens
      */
@@ -52,11 +53,15 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
      */
     public function addToken(Token $token)
     {
-        if (!isset($this->tokens[$this->getAppId()])) {
-            $this->tokens[$this->getAppId()] = [];
+        $appUUIDComposed = $this
+            ->getAppUUID()
+            ->composeUUID();
+
+        if (!isset($this->tokens[$appUUIDComposed])) {
+            $this->tokens[$appUUIDComposed] = [];
         }
 
-        $this->tokens[$this->getAppId()][$token->getTokenUUID()->composeUUID()] = $token;
+        $this->tokens[$appUUIDComposed][$token->getTokenUUID()->composeUUID()] = $token;
     }
 
     /**
@@ -66,11 +71,15 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
      */
     public function deleteToken(TokenUUID $tokenUUID)
     {
-        if (!isset($this->tokens[$this->getAppId()])) {
+        $appUUIDComposed = $this
+            ->getAppUUID()
+            ->composeUUID();
+
+        if (!isset($this->tokens[$appUUIDComposed])) {
             return;
         }
 
-        unset($this->tokens[$this->getAppId()][$tokenUUID->composeUUID()]);
+        unset($this->tokens[$appUUIDComposed][$tokenUUID->composeUUID()]);
     }
 
     /**
@@ -80,11 +89,15 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
      */
     public function getTokens(): array
     {
-        if (!isset($this->tokens[$this->getAppId()])) {
+        $appUUIDComposed = $this
+            ->getAppUUID()
+            ->composeUUID();
+
+        if (!isset($this->tokens[$appUUIDComposed])) {
             return [];
         }
 
-        return $this->tokens[$this->getAppId()];
+        return $this->tokens[$appUUIDComposed];
     }
 
     /**
@@ -92,25 +105,31 @@ class InMemoryTokenRepository implements TokenRepository, TokenLocator, WithRepo
      */
     public function deleteTokens()
     {
-        unset($this->tokens[$this->getAppId()]);
+        $appUUIDComposed = $this
+            ->getAppUUID()
+            ->composeUUID();
+
+        unset($this->tokens[$appUUIDComposed]);
     }
 
     /**
-     * Get token by reference.
+     * Get token by uuid.
      *
-     * @param string $appId
-     * @param string $tokenReference
+     * @param AppUUID   $appUUID
+     * @param TokenUUID $tokenUUID
      *
      * @return null|Token
      */
-    public function getTokenByReference(
-        string $appId,
-        string $tokenReference
+    public function getTokenByUUID(
+        AppUUID $appUUID,
+        TokenUUID $tokenUUID
     ): ? Token {
-        if (!isset($this->tokens[$appId])) {
+        $appUUIDComposed = $appUUID->composeUUID();
+
+        if (!isset($this->tokens[$appUUIDComposed])) {
             return null;
         }
 
-        return $this->tokens[$appId][$tokenReference] ?? null;
+        return $this->tokens[$appUUIDComposed][$tokenUUID->composeUUID()] ?? null;
     }
 }

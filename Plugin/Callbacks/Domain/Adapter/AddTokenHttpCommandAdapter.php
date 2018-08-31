@@ -16,9 +16,9 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Callbacks\Domain\Adapter;
 
 use Apisearch\Http\Http;
+use Apisearch\Model\Token;
 use Apisearch\Server\Domain\Command\AddToken;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
-use Apisearch\Token\Token;
 
 /**
  * Class AddTokenHttpCommandAdapter.

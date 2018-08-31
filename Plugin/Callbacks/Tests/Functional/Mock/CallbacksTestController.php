@@ -41,6 +41,13 @@ class CallbacksTestController
         $this->register = $register;
     }
 
+    /**
+     * Empty endpoint.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function emptyEndpoint(Request $request)
     {
         $this->addToRegister($request);
@@ -50,6 +57,10 @@ class CallbacksTestController
 
     /**
      * Manipulate query.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function changeQuerySize(Request $request)
     {
@@ -65,6 +76,10 @@ class CallbacksTestController
 
     /**
      * Change query result with extra data.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function changeQueryResult(Request $request)
     {
@@ -80,6 +95,10 @@ class CallbacksTestController
 
     /**
      * Change token.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function changeToken(Request $request)
     {
@@ -95,6 +114,10 @@ class CallbacksTestController
 
     /**
      * Change items.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function changeItems(Request $request)
     {
@@ -112,6 +135,10 @@ class CallbacksTestController
 
     /**
      * Add to register.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function addToRegister(Request $request)
     {

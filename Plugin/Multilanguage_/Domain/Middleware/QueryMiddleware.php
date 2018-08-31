@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
+use Apisearch\Model\IndexUUID;
 use Apisearch\Query\Filter;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Result\Result;
@@ -51,16 +52,16 @@ class QueryMiddleware implements PluginMiddleware
             $languagesFiltered = $languagesFilter->getValues();
         }
 
-        $index = $command->getIndex();
-        $indices = explode(',', $index);
+        $indexUUID = $command->getIndexUUID();
+        $indices = explode(',', $indexUUID->composeUUID());
         $indices = array_map(function (string $index) use ($languagesFiltered) {
             if (empty($languagesFiltered)) {
-                return $index.'_plugin_language_*';
+                return $index.'-plugin-language-*';
             }
 
             $indicesWithLanguage = [];
             foreach ($languagesFiltered as $language) {
-                $indicesWithLanguage[] = $index.'_plugin_language_'.$language;
+                $indicesWithLanguage[] = $index.'-plugin-language-'.$language;
             }
 
             return implode(',', $indicesWithLanguage);
@@ -69,8 +70,8 @@ class QueryMiddleware implements PluginMiddleware
         $indices = implode(',', $indices);
 
         $command->setRepositoryReference(RepositoryReference::create(
-            $command->getAppId(),
-            $indices
+            $command->getAppUUID(),
+            IndexUUID::createById($indices)
         ));
 
         /*

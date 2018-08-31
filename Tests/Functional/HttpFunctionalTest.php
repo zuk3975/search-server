@@ -20,10 +20,14 @@ use Apisearch\Config\Config;
 use Apisearch\Config\ImmutableConfig;
 use Apisearch\Event\EventRepository;
 use Apisearch\Log\LogRepository;
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Index;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Repository\Repository;
@@ -31,9 +35,6 @@ use Apisearch\Repository\RepositoryReference;
 use Apisearch\Result\Events;
 use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
-use Apisearch\Server\Domain\Repository\Repository\IndexRepository;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Apisearch\User\Interaction;
 use Apisearch\User\UserRepository;
 use Exception;
@@ -137,23 +138,24 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->resetIndex();
+        self::configureAppRepository($appId, $token)
+            ->resetIndex(
+                IndexUUID::createById($index ?? static::$index)
+            );
     }
 
     /**
      * @param string|null $appId
+     * @param Token       $token
      *
-     * @return array|Index[]
+     * @return Index[]
      */
-    public function getIndices(string $appId = null): array
-    {
-        /**
-         * @var IndexRepository
-         */
-        $repository = self::getStatic('apisearch.repository_main.default');
-
-        return $repository->getIndices($appId);
+    public function getIndices(
+        string $appId = null,
+        Token $token = null
+    ): array {
+        return self::configureAppRepository($appId, $token)
+            ->getIndices();
     }
 
     /**
@@ -170,8 +172,9 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         Token $token = null,
         ImmutableConfig $config = null
     ) {
-        self::configureRepository($appId, $index, $token)
+        self::configureAppRepository($appId, $token)
             ->createIndex(
+                IndexUUID::createById($index ?? static::$index),
                 $config ?? ImmutableConfig::createFromArray([])
             );
     }
@@ -190,8 +193,11 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->configureIndex($config);
+        self::configureAppRepository($appId, $token)
+            ->configureIndex(
+                IndexUUID::createById($index ?? static::$index),
+                $config
+            );
     }
 
     /**
@@ -208,8 +214,10 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ): bool {
-        return self::configureRepository($appId, $index, $token)
-            ->checkIndex();
+        return self::configureAppRepository($appId, $token)
+            ->checkIndex(
+                IndexUUID::createById($index ?? static::$index)
+            );
     }
 
     /**
@@ -224,8 +232,10 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        self::configureRepository($appId, $index, $token)
-            ->deleteIndex();
+        self::configureAppRepository($appId, $token)
+            ->deleteIndex(
+                IndexUUID::createById($index ?? static::$index)
+            );
     }
 
     /**
@@ -554,10 +564,12 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
         $repository = self::getStatic($repositoryName);
         $repository->setCredentials(
             RepositoryReference::create(
-                $appId ?? self::$appId,
-                $index ?? self::$index
+                AppUUID::createById($appId ?? self::$appId),
+                IndexUUID::createById($index ?? self::$index)
             ),
-            self::getTokenId($token)
+            $token
+                ? $token->getTokenUUID()
+                : TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token'))
         );
 
         return $repository;

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
+use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\CreateIndex;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
@@ -36,16 +37,16 @@ class CreateIndexMiddleware implements PluginMiddleware
         $command,
         $next
     ) {
-        $index = $command->getIndex();
+        $index = $command->getIndexUUID()->composeUUID();
         $indices = explode(',', $index);
         $indices = array_map(function (string $index) {
-            return $index.'_plugin_language_xx';
+            return $index.'-plugin-language-xx';
         }, $indices);
 
         $indices = implode(',', $indices);
         $command->setRepositoryReference(RepositoryReference::create(
-            $command->getAppId(),
-            $indices
+            $command->getAppUUID(),
+            IndexUUID::createById($indices)
         ));
 
         return $next($command);

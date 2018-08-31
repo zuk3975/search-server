@@ -15,7 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Token;
 
-use Apisearch\Token\Token;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 
 /**
  * Interface TokenLocator.
@@ -30,15 +32,15 @@ interface TokenLocator
     public function isValid(): bool;
 
     /**
-     * Get token by reference.
+     * Get token by uuid.
      *
-     * @param string $appId
-     * @param string $tokenReference
+     * @param AppUUID   $appUUID
+     * @param TokenUUID $tokenUUID
      *
      * @return null|Token
      */
-    public function getTokenByReference(
-        string $appId,
-        string $tokenReference
+    public function getTokenByUUID(
+        AppUUID $appUUID,
+        TokenUUID $tokenUUID
     ): ? Token;
 }

@@ -15,6 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Socket;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Server\Domain\Token\TokenValidator;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -89,9 +92,9 @@ class App implements MessageComponentInterface
         $this
             ->tokenValidator
             ->validateToken(
-                $query['app_id'],
-                $query['index_id'],
-                $query['token'],
+                AppUUID::createById($query['app_id']),
+                IndexUUID::createById($query['index_id']),
+                TokenUUID::createById($query['token']),
                 $request->getHeader('Origin')[0],
                 $this->endpoint,
                 'get'

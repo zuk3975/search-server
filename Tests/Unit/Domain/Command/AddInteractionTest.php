@@ -15,12 +15,14 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Unit\Domain\Command;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\AddInteraction;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use Apisearch\User\Interaction;
 use PHPUnit\Framework\TestCase;
 
@@ -34,8 +36,12 @@ class AddInteractionTest extends TestCase
      */
     public function testAsynchronous()
     {
-        $repositoryReference = RepositoryReference::create('main', 'default');
-        $token = new Token(TokenUUID::createById('9999'), 'main');
+        $appUUID = AppUUID::createById('main');
+        $repositoryReference = RepositoryReference::create(
+            $appUUID,
+            IndexUUID::createById('default')
+        );
+        $token = new Token(TokenUUID::createById('9999'), $appUUID);
         $interaction = new Interaction(
             new User('123'),
             new ItemUUID('456', 'product'),

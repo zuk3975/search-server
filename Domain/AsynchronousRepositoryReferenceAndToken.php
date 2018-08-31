@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain;
 
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Token\Token;
 
 /**
  * Class AsynchronousRepositoryReferenceAndToken.
@@ -31,11 +31,12 @@ trait AsynchronousRepositoryReferenceAndToken
     public function toArray(): array
     {
         return [
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
+                ->toArray(),
         ];
     }
 
@@ -44,15 +45,12 @@ trait AsynchronousRepositoryReferenceAndToken
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data): self
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token'])
         );
     }

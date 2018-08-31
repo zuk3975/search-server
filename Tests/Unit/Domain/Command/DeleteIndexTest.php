@@ -15,10 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Unit\Domain\Command;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteIndex;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,12 +33,18 @@ class DeleteIndexTest extends TestCase
      */
     public function testAsynchronous()
     {
-        $repositoryReference = RepositoryReference::create('main', 'default');
-        $token = new Token(TokenUUID::createById('9999'), 'main');
+        $appUUID = AppUUID::createById('main');
+        $indexUUID = IndexUUID::createById('default');
+        $repositoryReference = RepositoryReference::create(
+            $appUUID,
+            $indexUUID
+        );
+        $token = new Token(TokenUUID::createById('9999'), $appUUID);
 
         $command = new DeleteIndex(
             $repositoryReference,
-            $token
+            $token,
+            $indexUUID
         );
 
         $builtCommand = DeleteIndex::fromArray($command->toArray());

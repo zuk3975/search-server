@@ -15,13 +15,13 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\AppRequiredCommand;
 use Apisearch\Server\Domain\AsynchronousableCommand;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\LoggableCommand;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class DeleteToken.
@@ -31,9 +31,9 @@ class DeleteToken extends CommandWithRepositoryReferenceAndToken implements Logg
     /**
      * @var TokenUUID
      *
-     * Token UUID
+     * TokenUUID to delete
      */
-    private $tokenUUID;
+    private $tokenUUIDToDelete;
 
     /**
      * AddToken constructor.
@@ -41,29 +41,29 @@ class DeleteToken extends CommandWithRepositoryReferenceAndToken implements Logg
      *
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
-     * @param TokenUUID           $tokenUUID
+     * @param TokenUUID           $tokenUUIDToDelete
      */
     public function __construct(
         RepositoryReference $repositoryReference,
         Token              $token,
-        TokenUUID $tokenUUID
+        TokenUUID $tokenUUIDToDelete
     ) {
         parent::__construct(
             $repositoryReference,
             $token
         );
 
-        $this->tokenUUID = $tokenUUID;
+        $this->tokenUUIDToDelete = $tokenUUIDToDelete;
     }
 
     /**
-     * Get Token.
+     * Get Token to delete.
      *
      * @return TokenUUID
      */
-    public function getTokenUUID(): TokenUUID
+    public function getTokenUUIDToDelete(): TokenUUID
     {
-        return $this->tokenUUID;
+        return $this->tokenUUIDToDelete;
     }
 
     /**
@@ -74,14 +74,15 @@ class DeleteToken extends CommandWithRepositoryReferenceAndToken implements Logg
     public function toArray(): array
     {
         return [
-            'token_uuid' => $this
-                ->tokenUUID
+            'repository_reference' => $this
+                ->getRepositoryReference()
+                ->compose(),
+            'token' => $this
+                ->getToken()
                 ->toArray(),
-            'repository_reference' => [
-                'app_id' => $this->getRepositoryReference()->getAppId(),
-                'index' => $this->getRepositoryReference()->getIndex(),
-            ],
-            'token' => $this->getToken()->toArray(),
+            'token_uuid_to_delete' => $this
+                ->getTokenUUIDToDelete()
+                ->toArray(),
         ];
     }
 
@@ -90,17 +91,14 @@ class DeleteToken extends CommandWithRepositoryReferenceAndToken implements Logg
      *
      * @param array $data
      *
-     * @return AsynchronousableCommand
+     * @return self
      */
-    public static function fromArray(array $data): AsynchronousableCommand
+    public static function fromArray(array $data)
     {
         return new self(
-            RepositoryReference::create(
-                $data['repository_reference']['app_id'],
-                $data['repository_reference']['index']
-            ),
+            RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token']),
-            TokenUUID::createFromArray($data['token_uuid'])
+            TokenUUID::createFromArray($data['token_uuid_to_delete'])
         );
     }
 }

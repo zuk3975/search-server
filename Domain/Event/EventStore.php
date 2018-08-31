@@ -64,8 +64,7 @@ class EventStore implements EventSubscriber
         $onlyAppRepositoryReference = RepositoryReference::create(
             $domainEventWithRepositoryReference
                 ->getRepositoryReference()
-                ->getAppId(),
-            ''
+                ->getAppUUID()
         );
 
         $this

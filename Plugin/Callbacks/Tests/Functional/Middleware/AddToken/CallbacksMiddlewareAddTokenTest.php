@@ -15,10 +15,11 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Callbacks\Tests\Functional\Middleware\Query;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Plugin\Callbacks\Tests\Functional\EndpointsFunctionalTest;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class CallbacksMiddlewareAddTokenTest.
@@ -56,8 +57,8 @@ class CallbacksMiddlewareAddTokenTest extends EndpointsFunctionalTest
      */
     public function testSomething()
     {
-        $this->addToken(new Token(TokenUUID::createById('lalaland'), self::$appId));
+        $this->addToken(new Token(TokenUUID::createById('lalaland'), AppUUID::createById(self::$appId)));
         $this->assertCount(1, $this->getRegister());
-        $this->query(Query::createMatchAll(), self::$appId, self::$index, new Token(TokenUUID::createById('lalaland'), self::$appId));
+        $this->query(Query::createMatchAll(), self::$appId, self::$index, new Token(TokenUUID::createById('lalaland'), AppUUID::createById(self::$appId)));
     }
 }

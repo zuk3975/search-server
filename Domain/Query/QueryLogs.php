@@ -15,12 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Query;
 
+use Apisearch\Model\Token;
 use Apisearch\Query\Query;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class QueryLogs.

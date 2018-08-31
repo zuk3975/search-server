@@ -16,12 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\DeleteIndex;
-use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
+use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
 /**
  * Class DeleteIndexHandler.
  */
-class DeleteIndexHandler extends WithRepositoryAndEventPublisher
+class DeleteIndexHandler extends WithAppRepositoryAndEventPublisher
 {
     /**
      * Delete the index.
@@ -31,13 +31,14 @@ class DeleteIndexHandler extends WithRepositoryAndEventPublisher
     public function handle(DeleteIndex $deleteIndex)
     {
         $repositoryReference = $deleteIndex->getRepositoryReference();
+        $indexUUID = $deleteIndex->getIndexUUID();
 
         $this
-            ->repository
+            ->appRepository
             ->setRepositoryReference($repositoryReference);
 
         $this
-            ->repository
-            ->deleteIndex();
+            ->appRepository
+            ->deleteIndex($indexUUID);
     }
 }

@@ -15,10 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Unit\Domain\Command;
 
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\DeleteToken;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,14 +33,19 @@ class DeleteTokenTest extends TestCase
      */
     public function testAsynchronous()
     {
-        $repositoryReference = RepositoryReference::create('main', 'default');
-        $token = new Token(TokenUUID::createById('9999'), 'main');
-        $tokenUUID = TokenUUID::createById('5555');
+        $appUUID = AppUUID::createById('main');
+        $indexUUID = IndexUUID::createById('default');
+        $repositoryReference = RepositoryReference::create(
+            $appUUID,
+            $indexUUID
+        );
+        $token = new Token(TokenUUID::createById('9999'), $appUUID);
+        $tokenUUIDToDelete = TokenUUID::createById('5555');
 
         $command = new DeleteToken(
             $repositoryReference,
             $token,
-            $tokenUUID
+            $tokenUUIDToDelete
         );
 
         $builtCommand = DeleteToken::fromArray($command->toArray());
@@ -48,8 +55,8 @@ class DeleteTokenTest extends TestCase
         );
 
         $this->assertEquals(
-            $tokenUUID,
-            $builtCommand->getTokenUUID()
+            $tokenUUIDToDelete,
+            $builtCommand->getTokenUUIDToDelete()
         );
 
         $this->assertEquals(

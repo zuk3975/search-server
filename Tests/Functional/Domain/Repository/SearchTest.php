@@ -19,8 +19,6 @@ use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class SearchTest.
@@ -60,7 +58,7 @@ trait SearchTest
                     Query::createMatchAll(),
                     null,
                     null,
-                    new Token(TokenUUID::createById(self::$readonlyToken), self::$appId)
+                    $this->createTokenByIdAndAppId(self::$readonlyToken, self::$appId)
                 )
                 ->getItems()
         );

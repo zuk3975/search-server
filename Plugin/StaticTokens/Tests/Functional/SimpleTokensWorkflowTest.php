@@ -15,11 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\StaticTokens\Tests\Functional;
 
+use Apisearch\Model\AppUUID;
 use Apisearch\Model\Item;
 use Apisearch\Model\ItemUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Apisearch\Query\Query;
-use Apisearch\Token\Token;
-use Apisearch\Token\TokenUUID;
 
 /**
  * Class SimpleTokensWorkflowTest.
@@ -31,7 +32,7 @@ class SimpleStaticTokensWorkflowTest extends StaticTokensFunctionalTest
      */
     public function testSimpleWorkflow()
     {
-        $token = new Token(TokenUUID::createById('blablabla'), self::$appId);
+        $token = new Token(TokenUUID::createById('blablabla'), AppUUID::createById(self::$appId));
         $this->query(
             Query::createMatchAll(),
             null,
@@ -58,7 +59,7 @@ class SimpleStaticTokensWorkflowTest extends StaticTokensFunctionalTest
      */
     public function testSpecificIndex()
     {
-        $token = new Token(TokenUUID::createById('onlyindex'), self::$appId);
+        $token = new Token(TokenUUID::createById('onlyindex'), AppUUID::createById(self::$appId));
         $this->query(
             Query::createMatchAll(),
             null,
@@ -85,7 +86,7 @@ class SimpleStaticTokensWorkflowTest extends StaticTokensFunctionalTest
      */
     public function testSpecificEndpoint()
     {
-        $token = new Token(TokenUUID::createById('onlyaddtoken'), self::$appId);
+        $token = new Token(TokenUUID::createById('onlyaddtoken'), AppUUID::createById(self::$appId));
         $this->query(
             Query::createMatchAll(),
             null,

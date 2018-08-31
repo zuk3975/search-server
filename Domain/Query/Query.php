@@ -15,12 +15,12 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Query;
 
+use Apisearch\Model\Token;
 use Apisearch\Query\Query as SearchQuery;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\CommandWithRepositoryReferenceAndToken;
 use Apisearch\Server\Domain\IndexRequiredCommand;
 use Apisearch\Server\Domain\LoggableCommand;
-use Apisearch\Token\Token;
 
 /**
  * Class Query.
@@ -43,7 +43,7 @@ class Query extends CommandWithRepositoryReferenceAndToken implements LoggableCo
      */
     public function __construct(
         RepositoryReference $repositoryReference,
-        Token              $token,
+        Token $token,
         SearchQuery $query
     ) {
         parent::__construct(

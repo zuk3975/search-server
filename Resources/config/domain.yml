@@ -32,7 +32,7 @@ services:
     apisearch_server.comand_handler.create_index:
         class: Apisearch\Server\Domain\CommandHandler\CreateIndexHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
             - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\CreateIndex }
@@ -40,7 +40,7 @@ services:
     apisearch_server.comand_handler.delete_index:
         class: Apisearch\Server\Domain\CommandHandler\DeleteIndexHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
             - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\DeleteIndex }
@@ -48,7 +48,7 @@ services:
     apisearch_server.comand_handler.reset_index:
         class: Apisearch\Server\Domain\CommandHandler\ResetIndexHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
             - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\ResetIndex }
@@ -56,7 +56,7 @@ services:
     apisearch_server.comand_handler.configure_index:
         class: Apisearch\Server\Domain\CommandHandler\ConfigureIndexHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
             - "@apisearch_server.inline_event_publisher"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Command\ConfigureIndex }
@@ -139,7 +139,7 @@ services:
     apisearch_server.query_handler.check_index:
         class: Apisearch\Server\Domain\QueryHandler\CheckIndexHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\CheckIndex }
 
@@ -168,7 +168,7 @@ services:
     apisearch_server.query_handler.get_indices:
         class: Apisearch\Server\Domain\QueryHandler\GetIndicesHandler
         arguments:
-            - "@apisearch.repository_main.default"
+            - "@apisearch.app_repository_main"
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\GetIndices }
 

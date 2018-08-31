@@ -15,9 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\QueryHandler;
 
+use Apisearch\Model\Token;
 use Apisearch\Server\Domain\Query\GetTokens;
 use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
-use Apisearch\Token\Token;
 
 /**
  * Class GetTokensHandler.

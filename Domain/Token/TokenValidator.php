@@ -16,7 +16,10 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Token;
 
 use Apisearch\Exception\InvalidTokenException;
-use Apisearch\Token\Token;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
+use Apisearch\Model\TokenUUID;
 use Carbon\Carbon;
 
 /**
@@ -46,19 +49,19 @@ class TokenValidator
      *
      * If is valid, return valid Token
      *
-     * @param string $appId
-     * @param string $indexId
-     * @param string $tokenReference
-     * @param string $referrer
-     * @param string $path
-     * @param string $verb
+     * @param AppUUID   $appUUID
+     * @param IndexUUID $indexUUID
+     * @param TokenUUID $tokenUUID
+     * @param string    $referrer
+     * @param string    $path
+     * @param string    $verb
      *
      * @return Token $token
      */
     public function validateToken(
-        string $appId,
-        string $indexId,
-        string $tokenReference,
+        AppUUID $appUUID,
+        IndexUUID $indexUUID,
+        TokenUUID $tokenUUID,
         string $referrer,
         string $path,
         string $verb
@@ -69,9 +72,9 @@ class TokenValidator
                 continue;
             }
 
-            $token = $tokenLocator->getTokenByReference(
-                $appId,
-                $tokenReference
+            $token = $tokenLocator->getTokenByUUID(
+                $appUUID,
+                $tokenUUID
             );
 
             if ($token instanceof Token) {
@@ -84,16 +87,18 @@ class TokenValidator
         if (
             (!$token instanceof Token) ||
             (
-                $appId !== $token->getAppId()
+                $appUUID->composeUUID() !== $token->getAppUUID()->composeUUID()
             ) ||
             (
                 !empty($token->getHttpReferrers()) &&
                 !in_array($referrer, $token->getHttpReferrers())
             ) ||
             (
-                !empty($indexId) &&
+                !empty($indexUUID->composeUUID()) &&
                 !empty($token->getIndices()) &&
-                !in_array($indexId, $token->getIndices())
+                !array_reduce($token->getIndices(), function (bool $carry, IndexUUID $iterationIndexUUID) use ($indexUUID) {
+                    return $carry && $iterationIndexUUID->composeUUID() === $indexUUID->composeUUID();
+                }, true)
             ) ||
             (
                 !empty($token->getEndpoints()) &&
@@ -104,7 +109,7 @@ class TokenValidator
                 $token->getUpdatedAt() + $token->getSecondsValid() < Carbon::now('UTC')->timestamp
             )
         ) {
-            throw InvalidTokenException::createInvalidTokenPermissions($tokenReference);
+            throw InvalidTokenException::createInvalidTokenPermissions($tokenUUID->composeUUID());
         }
 
         return $token;

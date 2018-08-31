@@ -33,7 +33,7 @@ class DeleteTokenHandler extends WithAppRepositoryAndEventPublisher
     public function handle(DeleteToken $deleteToken)
     {
         $repositoryReference = $deleteToken->getRepositoryReference();
-        $tokenUUID = $deleteToken->getTokenUUID();
+        $tokenUUID = $deleteToken->getTokenUUIDToDelete();
 
         $this
             ->appRepository

@@ -16,12 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandHandler;
 
 use Apisearch\Server\Domain\Command\CreateIndex;
-use Apisearch\Server\Domain\WithRepositoryAndEventPublisher;
+use Apisearch\Server\Domain\WithAppRepositoryAndEventPublisher;
 
 /**
  * Class CreateIndexHandler.
  */
-class CreateIndexHandler extends WithRepositoryAndEventPublisher
+class CreateIndexHandler extends WithAppRepositoryAndEventPublisher
 {
     /**
      * Create the index.
@@ -31,13 +31,18 @@ class CreateIndexHandler extends WithRepositoryAndEventPublisher
     public function handle(CreateIndex $createIndex)
     {
         $repositoryReference = $createIndex->getRepositoryReference();
+        $indexUUID = $createIndex->getIndexUUID();
+        $config = $createIndex->getConfig();
 
         $this
-            ->repository
+            ->appRepository
             ->setRepositoryReference($repositoryReference);
 
         $this
-            ->repository
-            ->createIndex($createIndex->getConfig());
+            ->appRepository
+            ->createIndex(
+                $indexUUID,
+                $config
+            );
     }
 }

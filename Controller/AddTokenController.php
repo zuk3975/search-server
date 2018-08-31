@@ -17,9 +17,10 @@ namespace Apisearch\Server\Controller;
 
 use Apisearch\Exception\InvalidFormatException;
 use Apisearch\Http\Http;
+use Apisearch\Model\AppUUID;
+use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\AddToken;
-use Apisearch\Token\Token;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,8 +49,7 @@ class AddTokenController extends ControllerWithBus
             ->commandBus
             ->handle(new AddToken(
                 RepositoryReference::create(
-                    $query->get(Http::APP_ID_FIELD, ''),
-                    ''
+                    AppUUID::createById($query->get(Http::APP_ID_FIELD, ''))
                 ),
                 $query->get(Http::TOKEN_FIELD, ''),
                 Token::createFromArray($newTokenAsArray)
