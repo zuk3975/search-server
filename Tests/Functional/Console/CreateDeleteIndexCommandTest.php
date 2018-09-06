@@ -79,6 +79,29 @@ class CreateDeleteIndexCommandTest extends CommandTest
                 'app-id' => self::$appId,
                 'index' => self::$index,
             ]);
-        $this->assertNotExistsIndex();
+    }
+
+    /**
+     * Test create index with synonyms.
+     */
+    public function testCreateIndexCommandWithSynonymsInFile()
+    {
+        static::runCommand([
+            'command' => 'apisearch-server:create-index',
+            'app-id' => self::$appId,
+            'index' => self::$index,
+            '--synonyms-file' => __DIR__ . '/synonyms.csv',
+        ]);
+
+        $this->indexTestingItems(self::$appId, self::$index);
+
+        $result = $this->query(Query::create('building'));
+        $this->assertCount(3, $result->getItems());
+
+        static::runCommand([
+            'command' => 'apisearch-server:delete-index',
+            'app-id' => self::$appId,
+            'index' => self::$index,
+        ]);
     }
 }

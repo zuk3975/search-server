@@ -15,8 +15,9 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Elastica\Domain\AppRepository;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Exception\ResourceExistsException;
+use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\Index;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Plugin\Elastica\Domain\ElasticaWrapperWithRepositoryReference;
@@ -44,13 +45,13 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
      * Create an index.
      *
      * @param IndexUUID       $indexUUID
-     * @param ImmutableConfig $config
+     * @param Config $config
      *
      * @throws ResourceExistsException
      */
     public function createIndex(
         IndexUUID $indexUUID,
-        ImmutableConfig $config
+        Config $config
     ) {
         $configPath = $this->getConfigPath($this->getRepositoryReference());
         is_dir($configPath)
@@ -111,6 +112,32 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
             ->resetIndex($this
                 ->getRepositoryReference()
                 ->changeIndex($indexUUID)
+            );
+
+        $this->refresh();
+    }
+
+    /**
+     * Configure the index.
+     *
+     * @param IndexUUID $indexUUID
+     * @param Config $config
+     *
+     * @throws ResourceNotAvailableException
+     */
+    public function configureIndex(
+        IndexUUID $indexUUID,
+        Config $config
+    ) {
+        $this
+            ->elasticaWrapper
+            ->configureIndex(
+                $this
+                    ->getRepositoryReference()
+                    ->changeIndex($indexUUID),
+                $config,
+                $this->repositoryConfig['shards'],
+                $this->repositoryConfig['replicas']
             );
 
         $this->refresh();

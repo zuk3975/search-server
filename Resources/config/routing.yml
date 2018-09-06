@@ -6,7 +6,7 @@ search_server_api_get_indices:
 
 search_server_api_create_index:
     path: /v1/index
-    methods: ["POST"]
+    methods: ["PUT"]
     defaults:
         _controller: apisearch_server.create_index_controller
 
@@ -23,7 +23,7 @@ search_server_api_reset_index:
         _controller: apisearch_server.reset_index_controller
 
 search_server_api_configure_index:
-    path: /v1/index/config
+    path: /v1/index
     methods: ["POST"]
     defaults:
         _controller: apisearch_server.configure_index_controller

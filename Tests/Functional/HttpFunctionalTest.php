@@ -17,7 +17,6 @@ namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\App\AppRepository;
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Event\EventRepository;
 use Apisearch\Log\LogRepository;
 use Apisearch\Model\AppUUID;
@@ -164,18 +163,18 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string          $appId
      * @param string          $index
      * @param Token           $token
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     public static function createIndex(
         string $appId = null,
         string $index = null,
         Token $token = null,
-        ImmutableConfig $config = null
+        Config $config = null
     ) {
         self::configureAppRepository($appId, $token)
             ->createIndex(
                 IndexUUID::createById($index ?? static::$index),
-                $config ?? ImmutableConfig::createFromArray([])
+                $config ?? Config::createFromArray([])
             );
     }
 

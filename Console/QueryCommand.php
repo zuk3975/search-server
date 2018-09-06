@@ -15,54 +15,23 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Console;
 
-use Apisearch\Config\Config;
-use Apisearch\Config\Synonym;
-use Apisearch\Config\SynonymReader;
-use Apisearch\Exception\ResourceExistsException;
+use Apisearch\Exception\ResourceNotAvailableException;
+use Apisearch\Query\Query as ModelQuery;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Command\CreateIndex;
-use League\Tactician\CommandBus;
+use Apisearch\Result\Result;
+use Apisearch\Server\Domain\Query\Query;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CreateIndexCommand.
+ * Class QueryCommand.
  */
-class CreateIndexCommand extends CommandWithBusAndGodToken
+class QueryCommand extends CommandWithBusAndGodToken
 {
-    /**
-     * @var SynonymReader
-     *
-     * Synonym Reader
-     */
-    private $synonymReader;
-
-    /**
-     * CreateIndexCommand constructor.
-     *
-     *
-     * @param CommandBus $commandBus
-     * @param string     $godToken
-     * @param SynonymReader $synonymReader
-     */
-    public function __construct(
-        CommandBus $commandBus,
-        string     $godToken,
-        SynonymReader $synonymReader
-    )
-    {
-        parent::__construct(
-            $commandBus,
-            $godToken
-        );
-
-        $this->synonymReader = $synonymReader;
-    }
-
     /**
      * Configures the current command.
      */
@@ -80,31 +49,25 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                 InputArgument::REQUIRED,
                 'Index'
             )
-            ->addOption(
-                'language',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Index language',
-                null
-            )
-            ->addOption(
-                'no-store-searchable-metadata',
-                null,
-                InputOption::VALUE_NONE,
-                'Store searchable metadata'
-            )
-            ->addOption(
-                'synonym',
-                null,
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Synonym'
-            )
-            ->addOption(
-                'synonyms-file',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Synonyms file',
+            ->addArgument(
+                'query',
+                InputArgument::OPTIONAL,
+                'Query text',
                 ''
+            )
+            ->addOption(
+                'page',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Page',
+                ModelQuery::DEFAULT_PAGE
+            )
+            ->addOption(
+                'size',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Number of results',
+                ModelQuery::DEFAULT_SIZE
             );
     }
 
@@ -115,7 +78,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      */
     protected function getHeader(): string
     {
-        return 'Create index';
+        return 'Query index';
     }
 
     /**
@@ -130,6 +93,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
     {
         $appUUID = AppUUID::createById($input->getArgument('app-id'));
         $indexUUID = IndexUUID::createById($input->getArgument('index'));
+        $query = $input->getArgument('query');
 
         $this->printInfoMessage(
             $output,
@@ -143,37 +107,40 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
             "Index ID: <strong>{$indexUUID->composeUUID()}</strong>"
         );
 
-        $synonyms = $this
-            ->synonymReader
-            ->readSynonymsFromFile($input->getOption('synonyms-file'));
-
-        $synonyms += $this
-            ->synonymReader
-            ->readSynonymsFromCommaSeparatedArray($input->getOption('synonym'));
+        $this->printInfoMessage(
+            $output,
+            'Query / Page / Size',
+            sprintf('<strong>%s</strong> / %d / %d',
+                $query === ''
+                    ? '*'
+                    : $query,
+                $input->getOption('page'),
+                $input->getOption('size')
+            )
+        );
 
         try {
-            $this
+            $result = $this
                 ->commandBus
-                ->handle(new CreateIndex(
+                ->handle(new Query(
                     RepositoryReference::create(
                         $appUUID,
                         $indexUUID
                     ),
                     $this->createGodToken($appUUID),
-                    $indexUUID,
-                    Config::createFromArray([
-                        'language' => $input->getOption('language'),
-                        'store_searchable_metadata' => !$input->getOption('no-store-searchable-metadata'),
-                        'synonyms' => $synonyms = array_map(function(Synonym $synonym) {
-                            return $synonym->toArray();
-                        }, $synonyms),
-                    ])
+                    ModelQuery::create(
+                        $input->getArgument('query'),
+                        $input->getOption('page'),
+                        $input->getOption('size')
+                    )
                 ));
-        } catch (ResourceExistsException $exception) {
+
+            $this->printResult($output, $result);
+        } catch (ResourceNotAvailableException $exception) {
             $this->printInfoMessage(
                 $output,
                 $this->getHeader(),
-                'Index is already created. Skipping.'
+                $output->writeln('Index not found. Skipping.')
             );
         }
     }
@@ -190,6 +157,51 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return 'Index created properly';
+        return '';
+    }
+
+    /**
+     * Print results
+     *
+     * @param OutputInterface $output
+     * @param Result $result
+     */
+    private function printResult(
+        OutputInterface $output,
+        Result $result
+    )
+    {
+        $this->printInfoMessage(
+            $output,
+            'Number of resources in index',
+            $result->getTotalItems()
+        );
+
+        $this->printInfoMessage(
+            $output,
+            'Number of hits',
+            $result->getTotalHits()
+        );
+
+        $i = 1;
+        foreach ($result->getItems() as $item) {
+            $firstStringPosition = array_reduce($item->getAllMetadata(), function($carry, $element) {
+                return is_string($carry)
+                    ? $carry
+                    : (
+                        is_string($element)
+                            ? $element
+                            : null
+                    );
+            }, null);
+            $this->printInfoMessage(
+                $output,
+                '    #' . $i,
+                sprintf('%s - %s',
+                    $item->getUUID()->composeUUID(),
+                    substr((string) $firstStringPosition, 0, 50)
+                )
+            );
+        }
     }
 }

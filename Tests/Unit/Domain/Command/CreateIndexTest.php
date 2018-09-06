@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Tests\Unit\Domain\Command;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Token;
@@ -41,7 +41,7 @@ class CreateIndexTest extends TestCase
             $indexUUID
         );
         $token = new Token(TokenUUID::createById('9999'), $appUUID);
-        $configuration = new ImmutableConfig(null, false);
+        $configuration = new Config(null, false);
 
         $configureIndex = new CreateIndex(
             $repositoryReference,

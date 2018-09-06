@@ -18,11 +18,11 @@ namespace Apisearch\Server\Console;
 use Apisearch\Config\Config;
 use Apisearch\Config\Synonym;
 use Apisearch\Config\SynonymReader;
-use Apisearch\Exception\ResourceExistsException;
+use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Server\Domain\Command\CreateIndex;
+use Apisearch\Server\Domain\Command\ConfigureIndex;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,9 +30,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CreateIndexCommand.
+ * Class ConfigureIndexCommand.
  */
-class CreateIndexCommand extends CommandWithBusAndGodToken
+class ConfigureIndexCommand extends CommandWithBusAndGodToken
 {
     /**
      * @var SynonymReader
@@ -69,7 +69,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
     protected function configure()
     {
         $this
-            ->setDescription('Create an index')
+            ->setDescription('Configure an index')
             ->addArgument(
                 'app-id',
                 InputArgument::REQUIRED,
@@ -115,7 +115,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      */
     protected function getHeader(): string
     {
-        return 'Create index';
+        return 'Configure index';
     }
 
     /**
@@ -154,7 +154,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
         try {
             $this
                 ->commandBus
-                ->handle(new CreateIndex(
+                ->handle(new ConfigureIndex(
                     RepositoryReference::create(
                         $appUUID,
                         $indexUUID
@@ -169,11 +169,11 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                         }, $synonyms),
                     ])
                 ));
-        } catch (ResourceExistsException $exception) {
+        } catch (ResourceNotAvailableException $exception) {
             $this->printInfoMessage(
                 $output,
                 $this->getHeader(),
-                'Index is already created. Skipping.'
+                'Index not found. Skipping.'
             );
         }
     }
@@ -190,6 +190,6 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return 'Index created properly';
+        return 'Index configured properly';
     }
 }

@@ -82,7 +82,11 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
                     $indexUUID
                 ));
         } catch (ResourceNotAvailableException $exception) {
-            $output->writeln('Index not found. Skipping.');
+            $this->printInfoMessage(
+                $output,
+                $this->getHeader(),
+                'Index not found. Skipping.'
+            );
         }
     }
 
@@ -98,6 +102,6 @@ class DeleteIndexCommand extends CommandWithBusAndGodToken
         InputInterface $input,
         $result
     ): string {
-        return 'Indices deleted properly';
+        return 'Index deleted properly';
     }
 }

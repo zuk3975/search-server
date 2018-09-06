@@ -45,7 +45,7 @@ class CreateIndexTest extends HttpFunctionalTest
         ]);
 
         $client->request(
-            'post',
+            'put',
             $testRoute,
             [],
             [],
@@ -65,7 +65,7 @@ class CreateIndexTest extends HttpFunctionalTest
 
         $anotherClient = $this->createClient();
         $anotherClient->request(
-            'post',
+            'put',
             $testRoute,
             [],
             [],

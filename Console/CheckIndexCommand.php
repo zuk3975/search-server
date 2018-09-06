@@ -17,6 +17,7 @@ namespace Apisearch\Server\Console;
 
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\IndexUUID;
+use Apisearch\Model\Token;
 use Apisearch\Model\TokenUUID;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\CheckIndex;
@@ -81,7 +82,7 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
             ? $input->getOption('token')
             : $this->godToken;
 
-        $tokenUUID = TokenUUID::createById($token, $appUUID);
+        $token = new Token(TokenUUID::createById($token), $appUUID);
 
         return $this
             ->commandBus
@@ -90,7 +91,7 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
                     $appUUID,
                     $indexUUID
                 ),
-                $tokenUUID,
+                $token,
                 $indexUUID
             ));
     }
@@ -109,6 +110,6 @@ class CheckIndexCommand extends CommandWithBusAndGodToken
     ): string {
         return $result
             ? 'Index available'
-            : 'Index not available with given configuration';
+            : 'Index not available';
     }
 }

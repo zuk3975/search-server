@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Elastica\Domain;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Config\Synonym;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Repository\RepositoryReference;
@@ -83,14 +82,14 @@ class ItemElasticaWrapper extends ElasticaWrapper
     /**
      * Get index configuration.
      *
-     * @param ImmutableConfig $config
+     * @param Config $config
      * @param int             $shards
      * @param int             $replicas
      *
      * @return array
      */
-    public function getIndexConfiguration(
-        ImmutableConfig $config,
+    public function getImmutableIndexConfiguration(
+        Config $config,
         int $shards,
         int $replicas
     ): array {
@@ -185,14 +184,118 @@ class ItemElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * Get index configuration.
+     *
+     * @param Config $config
+     * @param int             $shards
+     * @param int             $replicas
+     *
+     * @return array
+     */
+    public function getIndexConfiguration(
+        Config $config,
+        int $shards,
+        int $replicas
+    ): array
+    {
+        $language = $config->getLanguage();
+        $defaultAnalyzerFilter = [
+            5 => 'lowercase',
+            20 => 'asciifolding',
+            50 => 'ngram_filter',
+        ];
+
+        $searchAnalyzerFilter = [
+            5 => 'lowercase',
+            50 => 'asciifolding',
+        ];
+
+        $indexConfiguration = [
+            'number_of_shards' => $shards,
+            'number_of_replicas' => $replicas,
+            'max_result_window' => 50000,
+            'analysis' => [
+                'analyzer' => [
+                    'default' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'standard',
+                        'filter' => [],
+                    ],
+                    'search_analyzer' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'standard',
+                        'filter' => [],
+                    ],
+                ],
+                'filter' => [
+                    'ngram_filter' => [
+                        'type' => 'edge_ngram',
+                        'min_gram' => 1,
+                        'max_gram' => 20,
+                        'token_chars' => [
+                            'letter',
+                        ],
+                    ],
+                ],
+                'normalizer' => [
+                    'exact_matching_normalizer' => [
+                        'type' => 'custom',
+                        'filter' => [
+                            'lowercase',
+                            'asciifolding',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $stopWordsLanguage = ElasticaLanguages::getStopwordsLanguageByIso($language);
+        if (!is_null($stopWordsLanguage)) {
+            $defaultAnalyzerFilter[30] = 'stop_words';
+            $searchAnalyzerFilter[30] = 'stop_words';
+            $indexConfiguration['analysis']['filter']['stop_words'] = [
+                'type' => 'stop',
+                'stopwords' => $stopWordsLanguage,
+            ];
+        }
+
+        $stemmer = ElasticaLanguages::getStemmerLanguageByIso($language);
+        if (!is_null($stemmer)) {
+            $searchAnalyzerFilter[35] = 'stemmer';
+            $indexConfiguration['analysis']['filter']['stemmer'] = [
+                'type' => 'stemmer',
+                'name' => $stemmer,
+            ];
+        }
+
+        $synonyms = $config->getSynonyms();
+        if (!empty($synonyms)) {
+            $defaultAnalyzerFilter[40] = 'synonym';
+            $indexConfiguration['analysis']['filter']['synonym'] = [
+                'type' => 'synonym',
+                'synonyms' => array_map(function (Synonym $synonym) {
+                    return $synonym->expand();
+                }, $synonyms),
+            ];
+        }
+
+        ksort($defaultAnalyzerFilter, SORT_NUMERIC);
+        ksort($searchAnalyzerFilter, SORT_NUMERIC);
+        $indexConfiguration['analysis']['analyzer']['default']['filter'] = array_values($defaultAnalyzerFilter);
+        $indexConfiguration['analysis']['analyzer']['search_analyzer']['filter'] = array_values($searchAnalyzerFilter);
+
+        return $indexConfiguration;
+    }
+
+    /**
      * Build index mapping.
      *
      * @param Mapping         $mapping
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     public function buildIndexMapping(
         Mapping $mapping,
-        ImmutableConfig $config
+        Config $config
     ) {
         $mapping->setParam('dynamic_templates', [
             [
@@ -272,41 +375,5 @@ class ItemElasticaWrapper extends ElasticaWrapper
                 'search_analyzer' => 'search_analyzer',
             ],
         ]);
-    }
-
-    /**
-     * Update index configuration.
-     *
-     * @param RepositoryReference $repositoryReference
-     * @param string              $configPath
-     * @param Config              $config
-     */
-    public function updateIndexSettings(
-        RepositoryReference $repositoryReference,
-        string $configPath,
-        Config $config
-    ) {
-        return;
-
-        /*
-         * Nothing to do ATM
-         *
-         * If Index settings change in this method, you should uncomment next
-         * code in order to update these settings while the index is closed
-         */
-
-        /*
-        $searchIndex = $this->getIndex($repositoryReference);
-
-        try {
-            $searchIndex->close();
-            $searchIndex->setSettings($indexSettings);
-            $searchIndex->open();
-            sleep(1);
-        } catch (ResponseException $exception) {
-
-            throw ResourceExistsException::indexExists();
-        }
-        */
     }
 }

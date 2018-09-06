@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Controller;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Exception\InvalidFormatException;
 use Apisearch\Http\Http;
 use Apisearch\Model\AppUUID;
@@ -64,7 +64,7 @@ class CreateIndexController extends ControllerWithBus
                 ),
                 $query->get(Http::TOKEN_FIELD, ''),
                 IndexUUID::createFromArray($indexAsArray),
-                ImmutableConfig::createFromArray($configAsArray)
+                Config::createFromArray($configAsArray)
             ));
 
         return new JsonResponse('Index created', JsonResponse::HTTP_CREATED);

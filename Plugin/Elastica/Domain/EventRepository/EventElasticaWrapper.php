@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Elastica\Domain\EventRepository;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Plugin\Elastica\Domain\ElasticaWrapper;
 use Apisearch\Repository\RepositoryReference;
@@ -79,16 +79,16 @@ class EventElasticaWrapper extends ElasticaWrapper
     }
 
     /**
-     * Get index configuration.
+     * Get immutable index configuration.
      *
-     * @param ImmutableConfig $config
+     * @param Config $config
      * @param int             $shards
      * @param int             $replicas
      *
      * @return array
      */
-    public function getIndexConfiguration(
-        ImmutableConfig $config,
+    public function getImmutableIndexConfiguration(
+        Config $config,
         int $shards,
         int $replicas
     ): array {
@@ -99,14 +99,32 @@ class EventElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * Get index configuration.
+     *
+     * @param Config $config
+     * @param int             $shards
+     * @param int             $replicas
+     *
+     * @return array
+     */
+    public function getIndexConfiguration(
+        Config $config,
+        int $shards,
+        int $replicas
+    ): array
+    {
+        return [];
+    }
+
+    /**
      * Build index mapping.
      *
      * @param Mapping         $mapping
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     public function buildIndexMapping(
         Mapping $mapping,
-        ImmutableConfig $config
+        Config $config
     ) {
         $mapping->setParam('dynamic_templates', [
             [

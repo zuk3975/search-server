@@ -32,8 +32,18 @@ services:
     apisearch_server.create_index_command:
         class: Apisearch\Server\Console\CreateIndexCommand
         parent: apisearch_server.command_with_command_bus_and_god_token
+        arguments:
+            - "@apisearch.synonym_reader"
         tags:
             -  { name: console.command, command: apisearch-server:create-index }
+
+    apisearch_server.configure_index_command:
+        class: Apisearch\Server\Console\ConfigureIndexCommand
+        parent: apisearch_server.command_with_command_bus_and_god_token
+        arguments:
+            - "@apisearch.synonym_reader"
+        tags:
+            -  { name: console.command, command: apisearch-server:configure-index }
 
     apisearch_server.delete_index_command:
         class: Apisearch\Server\Console\DeleteIndexCommand
@@ -46,6 +56,12 @@ services:
         parent: apisearch_server.command_with_query_bus_and_god_token
         tags:
             -  { name: console.command, command: apisearch-server:check-index }
+
+    apisearch_server.query_command:
+        class: Apisearch\Server\Console\QueryCommand
+        parent: apisearch_server.command_with_query_bus_and_god_token
+        tags:
+            -  { name: console.command, command: apisearch-server:query }
 
     apisearch_server.add_token_command:
         class: Apisearch\Server\Console\AddTokenCommand

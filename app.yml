@@ -81,6 +81,7 @@ config:
                 port: "%env(ELASTICSEARCH_PORT)%"
 
     apisearch:
+        load_commands: false
         repositories:
             main:
                 adapter: service

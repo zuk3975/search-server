@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\Changes;
 use Apisearch\Model\Index;
@@ -119,7 +118,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     ) {
         $appUUID = AppUUID::createById($appId ?? self::$appId);
 
-        return self::getStatic('apisearch_server.command_bus')
+        self::getStatic('apisearch_server.command_bus')
             ->handle(new DeleteItems(
                 RepositoryReference::create(
                     $appUUID,
@@ -132,6 +131,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $itemsUUID
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -163,6 +164,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $items
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -197,6 +200,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                 $query,
                 $changes
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -227,6 +232,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $indexUUID
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -262,13 +269,13 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string          $appId
      * @param string          $index
      * @param Token           $token
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     public static function createIndex(
         string $appId = null,
         string $index = null,
         Token $token = null,
-        ImmutableConfig $config = null
+        Config $config = null
     ) {
         $appUUID = AppUUID::createById($appId ?? self::$appId);
         $indexUUID = IndexUUID::createById($index ?? self::$index);
@@ -285,8 +292,10 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appUUID
                     ),
                 $indexUUID,
-                $config ?? ImmutableConfig::createFromArray([])
+                $config ?? Config::createFromArray([])
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -320,6 +329,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                 $indexUUID,
                 $config
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -382,6 +393,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $indexUUID
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -408,6 +421,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $newToken
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -434,6 +449,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     ),
                 $tokenUUID
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -482,6 +499,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appUUID
                     )
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -594,6 +613,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                     $weight
                 )
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -617,6 +638,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
                         $appUUID
                     )
             ));
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -649,6 +672,8 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     public static function configureEnvironment()
     {
         self::getStatic('apisearch_server.command_bus')->handle(new ConfigureEnvironment());
+
+        static::waitAfterWriteCommand();
     }
 
     /**
@@ -657,5 +682,7 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
     public static function cleanEnvironment()
     {
         self::getStatic('apisearch_server.command_bus')->handle(new CleanEnvironment());
+
+        static::waitAfterWriteCommand();
     }
 }

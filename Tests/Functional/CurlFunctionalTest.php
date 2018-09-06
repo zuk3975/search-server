@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ConnectionException;
 use Apisearch\Http\Endpoints;
 use Apisearch\Http\Http;
@@ -198,13 +197,13 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
      * @param string          $appId
      * @param string          $index
      * @param Token           $token
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     public static function createIndex(
         string $appId = null,
         string $index = null,
         Token $token = null,
-        ImmutableConfig $config = null
+        Config $config = null
     ) {
         $indexUUIDAsArray = TokenUUID::createById($index ?? self::$index)->toArray();
         self::makeCurl(
@@ -218,7 +217,7 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
                 ]
                 : [
                     Http::INDEX_FIELD => $indexUUIDAsArray,
-                    'config' => $config->toArray(),
+                    Http::CONFIG_FIELD => $config->toArray(),
                 ]
         );
     }
@@ -237,7 +236,21 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
         string $index = null,
         Token $token = null
     ) {
-        // TODO: Implement configureIndex() method.
+        $indexUUIDAsArray = TokenUUID::createById($index ?? self::$index)->toArray();
+        self::makeCurl(
+            'v1-index-config',
+            $appId,
+            $index,
+            $token,
+            is_null($config)
+                ? [
+                    Http::INDEX_FIELD => $indexUUIDAsArray,
+                ]
+                : [
+                    Http::INDEX_FIELD => $indexUUIDAsArray,
+                    Http::CONFIG_FIELD => $config->toArray(),
+                ]
+        );
     }
 
     /**

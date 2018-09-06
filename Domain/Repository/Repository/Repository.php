@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Repository\Repository;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Exception\TransportableException;
@@ -108,11 +107,11 @@ class Repository extends BaseRepository
     /**
      * Create an index.
      *
-     * @param ImmutableConfig $config
+     * @param Config $config
      *
      * @throws ResourceExistsException
      */
-    public function createIndex(ImmutableConfig $config)
+    public function createIndex(Config $config)
     {
         $this
             ->getRepository(IndexRepository::class)
