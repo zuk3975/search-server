@@ -52,10 +52,11 @@ class ConfigRepository extends ElasticaWrapperWithRepositoryReference implements
         if ($this->elasticaWrapper instanceof ItemElasticaWrapper) {
             $this
                 ->elasticaWrapper
-                ->updateIndexSettings(
+                ->configureIndex(
                     $newRepositoryReference,
-                    $this->getConfigPath($newRepositoryReference),
-                    $config
+                    $config,
+                    $this->repositoryConfig['shards'],
+                    $this->repositoryConfig['replicas']
                 );
         }
     }

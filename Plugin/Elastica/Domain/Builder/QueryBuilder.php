@@ -286,8 +286,7 @@ class QueryBuilder
             case Filter::TYPE_DATE_RANGE:
                 return $this->createRangeFilter(
                     $filter,
-                    $value,
-                    $checkNested
+                    $value
                 );
                 break;
         }
@@ -649,7 +648,11 @@ class QueryBuilder
             $filterFieldParts = explode('^', $filterField, 2);
             $filterFieldWithoutWeight = $filterFieldParts[0];
             $specificFuzziness = $fuzziness[$filterFieldWithoutWeight] ?? false;
-            $match = new ElasticaQuery\Match($filterFieldWithoutWeight);
+
+            $match = $specificFuzziness
+                ? new ElasticaQuery\Match($filterFieldWithoutWeight)
+                : new ElasticaQuery\MatchPhrase($filterFieldWithoutWeight);
+
             $match->setFieldQuery($filterFieldWithoutWeight, $queryString);
 
             if (isset($filterFieldParts[1])) {

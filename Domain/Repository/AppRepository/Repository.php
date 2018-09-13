@@ -17,7 +17,6 @@ namespace Apisearch\Server\Domain\Repository\AppRepository;
 
 use Apisearch\App\AppRepository as BaseRepository;
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Exception\TransportableException;
@@ -97,13 +96,13 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
      * Create an index.
      *
      * @param IndexUUID       $indexUUID
-     * @param ImmutableConfig $config
+     * @param Config $config
      *
      * @throws ResourceExistsException
      */
     public function createIndex(
         IndexUUID $indexUUID,
-        ImmutableConfig $config
+        Config $config
     ) {
         return $this
             ->getRepository(IndexRepository::class)
@@ -155,8 +154,6 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
                 ->getRepository(IndexRepository::class)
                 ->getIndexStats($indexUUID);
         } catch (TransportableException $exception) {
-            echo $exception->getMessage();
-
             return false;
         }
 
@@ -176,8 +173,8 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
         Config $config
     ) {
         $this
-            ->getRepository(IndexRepository::class)
-            ->createIndex(
+            ->getRepository(ConfigRepository::class)
+            ->configureIndex(
                 $indexUUID,
                 $config
             );

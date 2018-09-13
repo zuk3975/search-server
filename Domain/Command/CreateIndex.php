@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Command;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
@@ -38,7 +38,7 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
     private $indexUUID;
 
     /**
-     * @var ImmutableConfig
+     * @var Config
      *
      * Config
      */
@@ -50,13 +50,13 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
      * @param IndexUUID           $indexUUID
-     * @param ImmutableConfig     $config
+     * @param Config     $config
      */
     public function __construct(
         RepositoryReference $repositoryReference,
         Token $token,
         IndexUUID $indexUUID,
-        ImmutableConfig $config
+        Config $config
     ) {
         parent::__construct(
             $repositoryReference,
@@ -80,9 +80,9 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
     /**
      * Get config.
      *
-     * @return ImmutableConfig
+     * @return Config
      */
-    public function getConfig(): ImmutableConfig
+    public function getConfig(): Config
     {
         return $this->config;
     }
@@ -123,7 +123,7 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
             RepositoryReference::createFromComposed($data['repository_reference']),
             Token::createFromArray($data['token_uuid']),
             IndexUUID::createFromArray($data['index_uuid']),
-            ImmutableConfig::createFromArray($data['configuration'])
+            Config::createFromArray($data['configuration'])
         );
     }
 }

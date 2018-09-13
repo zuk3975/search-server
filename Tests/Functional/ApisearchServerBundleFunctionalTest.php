@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Tests\Functional;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\Changes;
@@ -363,6 +362,14 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     }
 
     /**
+     * Time to wait after write command
+     */
+    protected static function waitAfterWriteCommand()
+    {
+
+    }
+
+    /**
      * @var string
      *
      * God token
@@ -521,7 +528,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             null,
             null,
             null,
-            ImmutableConfig::createFromArray($config)
+            Config::createFromArray($config)
         );
         static::indexTestingItems();
     }
@@ -609,13 +616,13 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      * @param string          $appId
      * @param string          $index
      * @param Token           $token
-     * @param ImmutableConfig $config
+     * @param Config $config
      */
     abstract public static function createIndex(
         string $appId = null,
         string $index = null,
         Token $token = null,
-        ImmutableConfig $config = null
+        Config $config = null
     );
 
     /**

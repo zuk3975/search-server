@@ -23,6 +23,8 @@ use Apisearch\Server\Tests\Functional\AsynchronousFunctionalTest;
  */
 class AsynchronousCommandsTest extends AsynchronousFunctionalTest
 {
+    use AllAsynchronousTests;
+
     /**
      * Test simple query.
      *

@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\Repository\AppRepository;
 
 use Apisearch\Config\Config;
-use Apisearch\Config\ImmutableConfig;
 use Apisearch\Exception\ResourceExistsException;
 use Apisearch\Exception\ResourceNotAvailableException;
 use Apisearch\Model\Index;
@@ -38,13 +37,13 @@ interface IndexRepository
      * Create an index.
      *
      * @param IndexUUID       $indexUUID
-     * @param ImmutableConfig $config
+     * @param Config $config
      *
      * @throws ResourceExistsException
      */
     public function createIndex(
         IndexUUID $indexUUID,
-        ImmutableConfig $config
+        Config $config
     );
 
     /**

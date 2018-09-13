@@ -36,6 +36,7 @@ abstract class CommandWithRepositoryReferenceAndTokenAndIndexUUID extends Comman
      *
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
+     * @param IndexUUID $indexUUID
      */
     public function __construct(
         RepositoryReference $repositoryReference,

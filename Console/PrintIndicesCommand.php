@@ -16,10 +16,12 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Model\AppUUID;
+use Apisearch\Model\Index;
 use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\GetIndices;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,10 +38,10 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
     {
         $this
             ->setDescription('Print all indices of an app-id')
-            ->addOption(
+            ->addArgument(
                 'app-id',
-                'a',
-                InputOption::VALUE_OPTIONAL
+                InputArgument::REQUIRED,
+                'App id'
             );
     }
 
@@ -69,12 +71,20 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
          * @var Token
          */
         $table = new Table($output);
-        $table->setHeaders(['UUID', 'App ID', 'Doc Count']);
+        $table->setHeaders(['UUID', 'App ID', 'Doc Count', 'Size', 'Ok?']);
+
+        /**
+         * @var Index $index
+         */
         foreach ($indices as $index) {
             $table->addRow([
                 $index->getUUID()->composeUUID(),
                 $index->getAppUUID()->composeUUID(),
                 $index->getDocCount(),
+                $index->getSize(),
+                $index->isOK()
+                    ? 'Yes'
+                    : 'No'
             ]);
         }
         $table->render();

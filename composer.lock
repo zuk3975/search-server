@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "58c9ebbd0997fefb1fda0358ef90cfd7e6d0aec2"
+                "reference": "81f8515bdde672765375bed0e98037030feeaeb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/58c9ebbd0997fefb1fda0358ef90cfd7e6d0aec2",
-                "reference": "58c9ebbd0997fefb1fda0358ef90cfd7e6d0aec2",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/81f8515bdde672765375bed0e98037030feeaeb4",
+                "reference": "81f8515bdde672765375bed0e98037030feeaeb4",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-08-31 15:24:47"
+            "time": "2018-09-13 17:20:40"
         },
         {
             "name": "apisearch-io/php-client",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "f6fc257f6fde53adc6529ea0cafa891e690c47ac"
+                "reference": "63ecb8163becd370e81eb5e99d8aca31f62a1eb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/f6fc257f6fde53adc6529ea0cafa891e690c47ac",
-                "reference": "f6fc257f6fde53adc6529ea0cafa891e690c47ac",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/63ecb8163becd370e81eb5e99d8aca31f62a1eb9",
+                "reference": "63ecb8163becd370e81eb5e99d8aca31f62a1eb9",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-08-31 15:10:41"
+            "time": "2018-09-13 16:19:43"
         },
         {
             "name": "cboden/ratchet",
@@ -4340,16 +4340,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.2.1",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373"
+                "reference": "b8e9745fb9b06ea6664d8872c4505fb16df4611c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e37cbd80da64afe314c72de8d2d2fec0e40d9373",
-                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/b8e9745fb9b06ea6664d8872c4505fb16df4611c",
+                "reference": "b8e9745fb9b06ea6664d8872c4505fb16df4611c",
                 "shasum": ""
             },
             "require": {
@@ -4380,7 +4380,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2018-08-23T12:00:19+00:00"
+            "time": "2018-08-31T19:07:57+00:00"
         },
         {
             "name": "doctrine/annotations",

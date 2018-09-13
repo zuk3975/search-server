@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
-use Apisearch\Config\ImmutableConfig;
+use Apisearch\Config\Config;
 use Apisearch\Plugin\Elastica\Domain\ElasticaLanguages;
 use Apisearch\Plugin\Elastica\Domain\ItemElasticaWrapper;
 use Apisearch\Repository\RepositoryReference;
@@ -109,7 +109,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
      */
     private function createBody(string $language): array
     {
-        $immutableConfig = ImmutableConfig::createFromArray([
+        $config = Config::createFromArray([
             'language' => 'xx' != $language
                 ? $language
                 : null,
@@ -117,7 +117,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
         $configuration = $this
             ->itemElasticaWrapper
             ->getIndexConfiguration(
-                $immutableConfig,
+                $config,
                 $this->configuration['shards'],
                 $this->configuration['replicas']
             );
@@ -135,7 +135,7 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
             ->itemElasticaWrapper
             ->buildIndexMapping(
                 $mapping,
-                $immutableConfig
+                $config
             );
 
         return [

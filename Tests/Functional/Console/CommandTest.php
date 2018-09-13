@@ -70,6 +70,20 @@ abstract class CommandTest extends HttpFunctionalTest
     }
 
     /**
+     * Runs a command and returns its output as a string value.
+     *
+     * @param array $command
+     *
+     * @return string
+     */
+    protected static function runCommand(array $command): string
+    {
+        $command['--env'] = 'prod';
+
+        return parent::runCommand($command);
+    }
+
+    /**
      * Assert index exists.
      */
     protected function assertExistsIndex()
