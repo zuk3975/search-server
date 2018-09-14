@@ -362,11 +362,10 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     }
 
     /**
-     * Time to wait after write command
+     * Time to wait after write command.
      */
     protected static function waitAfterWriteCommand()
     {
-
     }
 
     /**
@@ -613,9 +612,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     /**
      * Create index using the bus.
      *
-     * @param string          $appId
-     * @param string          $index
-     * @param Token           $token
+     * @param string $appId
+     * @param string $index
+     * @param Token  $token
      * @param Config $config
      */
     abstract public static function createIndex(

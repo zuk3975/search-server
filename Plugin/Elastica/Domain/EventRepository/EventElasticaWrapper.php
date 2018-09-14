@@ -82,8 +82,8 @@ class EventElasticaWrapper extends ElasticaWrapper
      * Get immutable index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -102,8 +102,8 @@ class EventElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -111,16 +111,15 @@ class EventElasticaWrapper extends ElasticaWrapper
         Config $config,
         int $shards,
         int $replicas
-    ): array
-    {
+    ): array {
         return [];
     }
 
     /**
      * Build index mapping.
      *
-     * @param Mapping         $mapping
-     * @param Config $config
+     * @param Mapping $mapping
+     * @param Config  $config
      */
     public function buildIndexMapping(
         Mapping $mapping,

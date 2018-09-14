@@ -44,8 +44,8 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
     /**
      * Create an index.
      *
-     * @param IndexUUID       $indexUUID
-     * @param Config $config
+     * @param IndexUUID $indexUUID
+     * @param Config    $config
      *
      * @throws ResourceExistsException
      */
@@ -121,7 +121,7 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
      * Configure the index.
      *
      * @param IndexUUID $indexUUID
-     * @param Config $config
+     * @param Config    $config
      *
      * @throws ResourceNotAvailableException
      */

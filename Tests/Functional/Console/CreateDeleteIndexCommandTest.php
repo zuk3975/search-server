@@ -90,7 +90,7 @@ class CreateDeleteIndexCommandTest extends CommandTest
             'command' => 'apisearch-server:create-index',
             'app-id' => self::$appId,
             'index' => self::$index,
-            '--synonyms-file' => __DIR__ . '/synonyms.csv',
+            '--synonyms-file' => __DIR__.'/synonyms.csv',
         ]);
 
         $this->indexTestingItems(self::$appId, self::$index);
