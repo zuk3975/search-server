@@ -45,16 +45,15 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
      * CreateIndexCommand constructor.
      *
      *
-     * @param CommandBus $commandBus
-     * @param string     $godToken
+     * @param CommandBus    $commandBus
+     * @param string        $godToken
      * @param SynonymReader $synonymReader
      */
     public function __construct(
         CommandBus $commandBus,
         string     $godToken,
         SynonymReader $synonymReader
-    )
-    {
+    ) {
         parent::__construct(
             $commandBus,
             $godToken
@@ -164,7 +163,7 @@ class CreateIndexCommand extends CommandWithBusAndGodToken
                     Config::createFromArray([
                         'language' => $input->getOption('language'),
                         'store_searchable_metadata' => !$input->getOption('no-store-searchable-metadata'),
-                        'synonyms' => $synonyms = array_map(function(Synonym $synonym) {
+                        'synonyms' => $synonyms = array_map(function (Synonym $synonym) {
                             return $synonym->toArray();
                         }, $synonyms),
                     ])

@@ -31,7 +31,7 @@ abstract class AsynchronousFunctionalTest extends ServiceFunctionalTest
     }
 
     /**
-     * Time to wait after write command
+     * Time to wait after write command.
      */
     protected static function waitAfterWriteCommand()
     {

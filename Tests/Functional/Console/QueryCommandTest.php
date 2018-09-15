@@ -47,30 +47,30 @@ class QueryCommandTest extends CommandTest
         ]);
 
         $this->assertTrue(
-            strpos($content, '* / 1 / 10') !== false
+            false !== strpos($content, '* / 1 / 10')
         );
 
         $this->assertTrue(
-            strpos($content, ' 28') !== false
+            false !== strpos($content, ' 28')
         );
 
         $this->assertTrue(
-            strpos($content, 'siege_vol_1_1~book') !== false
+            false !== strpos($content, 'siege_vol_1_1~book')
         );
 
         $content2 = static::runCommand([
             'command' => 'apisearch-server:query',
             'app-id' => self::$appId,
             'index' => self::$index,
-            'query' => 'Robert Grayson'
+            'query' => 'Robert Grayson',
         ]);
 
         $this->assertTrue(
-            strpos($content2, 'Robert Grayson / 1 / 10') !== false
+            false !== strpos($content2, 'Robert Grayson / 1 / 10')
         );
 
         $this->assertTrue(
-            strpos($content2, ' 4') !== false
+            false !== strpos($content2, ' 4')
         );
 
         $this->assertfalse(
@@ -78,7 +78,7 @@ class QueryCommandTest extends CommandTest
         );
 
         $this->assertTrue(
-            strpos($content2, 'marvel_boy:_the_uranian_vol_1_3~book') !== false
+            false !== strpos($content2, 'marvel_boy:_the_uranian_vol_1_3~book')
         );
 
         $content3 = static::runCommand([
@@ -87,15 +87,15 @@ class QueryCommandTest extends CommandTest
             'index' => self::$index,
             'query' => 'Robert Grayson',
             '--page' => 1,
-            '--size' => 2
+            '--size' => 2,
         ]);
 
         $this->assertTrue(
-            strpos($content3, 'Robert Grayson / 1 / 2') !== false
+            false !== strpos($content3, 'Robert Grayson / 1 / 2')
         );
 
         $this->assertTrue(
-            strpos($content3, ' 4') !== false
+            false !== strpos($content3, ' 4')
         );
 
         $this->assertfalse(
@@ -103,7 +103,7 @@ class QueryCommandTest extends CommandTest
         );
 
         $this->assertTrue(
-            strpos($content3, 'marvel_boy:_the_uranian_vol_1_1~book') !== false
+            false !== strpos($content3, 'marvel_boy:_the_uranian_vol_1_1~book')
         );
     }
 }

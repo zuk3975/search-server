@@ -16,9 +16,9 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Exception\ResourceNotAvailableException;
-use Apisearch\Query\Query as ModelQuery;
 use Apisearch\Model\AppUUID;
 use Apisearch\Model\IndexUUID;
+use Apisearch\Query\Query as ModelQuery;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Query\Query;
@@ -111,7 +111,7 @@ class QueryCommand extends CommandWithBusAndGodToken
             $output,
             'Query / Page / Size',
             sprintf('<strong>%s</strong> / %d / %d',
-                $query === ''
+                '' === $query
                     ? '*'
                     : $query,
                 $input->getOption('page'),
@@ -161,16 +161,15 @@ class QueryCommand extends CommandWithBusAndGodToken
     }
 
     /**
-     * Print results
+     * Print results.
      *
      * @param OutputInterface $output
-     * @param Result $result
+     * @param Result          $result
      */
     private function printResult(
         OutputInterface $output,
         Result $result
-    )
-    {
+    ) {
         $this->printInfoMessage(
             $output,
             'Number of resources in index',
@@ -185,7 +184,7 @@ class QueryCommand extends CommandWithBusAndGodToken
 
         $i = 1;
         foreach ($result->getItems() as $item) {
-            $firstStringPosition = array_reduce($item->getAllMetadata(), function($carry, $element) {
+            $firstStringPosition = array_reduce($item->getAllMetadata(), function ($carry, $element) {
                 return is_string($carry)
                     ? $carry
                     : (
@@ -196,7 +195,7 @@ class QueryCommand extends CommandWithBusAndGodToken
             }, null);
             $this->printInfoMessage(
                 $output,
-                '    #' . $i,
+                '    #'.$i,
                 sprintf('%s - %s',
                     $item->getUUID()->composeUUID(),
                     substr((string) $firstStringPosition, 0, 50)

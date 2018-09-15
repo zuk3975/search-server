@@ -23,7 +23,6 @@ use Apisearch\Server\Domain\Query\GetIndices;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -74,7 +73,7 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
         $table->setHeaders(['UUID', 'App ID', 'Doc Count', 'Size', 'Ok?']);
 
         /**
-         * @var Index $index
+         * @var Index
          */
         foreach ($indices as $index) {
             $table->addRow([
@@ -84,7 +83,7 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
                 $index->getSize(),
                 $index->isOK()
                     ? 'Yes'
-                    : 'No'
+                    : 'No',
             ]);
         }
         $table->render();

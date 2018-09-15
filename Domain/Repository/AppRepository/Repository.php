@@ -95,8 +95,8 @@ class Repository extends RepositoryWithCredentials implements BaseRepository
     /**
      * Create an index.
      *
-     * @param IndexUUID       $indexUUID
-     * @param Config $config
+     * @param IndexUUID $indexUUID
+     * @param Config    $config
      *
      * @throws ResourceExistsException
      */

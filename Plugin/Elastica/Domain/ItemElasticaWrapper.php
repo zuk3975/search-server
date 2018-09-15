@@ -83,8 +83,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -187,8 +187,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -196,8 +196,7 @@ class ItemElasticaWrapper extends ElasticaWrapper
         Config $config,
         int $shards,
         int $replicas
-    ): array
-    {
+    ): array {
         $language = $config->getLanguage();
         $defaultAnalyzerFilter = [
             5 => 'lowercase',
@@ -290,8 +289,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
     /**
      * Build index mapping.
      *
-     * @param Mapping         $mapping
-     * @param Config $config
+     * @param Mapping $mapping
+     * @param Config  $config
      */
     public function buildIndexMapping(
         Mapping $mapping,

@@ -194,9 +194,9 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
     /**
      * Create index using the bus.
      *
-     * @param string          $appId
-     * @param string          $index
-     * @param Token           $token
+     * @param string $appId
+     * @param string $index
+     * @param Token  $token
      * @param Config $config
      */
     public static function createIndex(

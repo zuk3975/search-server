@@ -91,8 +91,8 @@ abstract class ElasticaWrapper
      * Get immutable index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -106,8 +106,8 @@ abstract class ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int             $shards
-     * @param int             $replicas
+     * @param int    $shards
+     * @param int    $replicas
      *
      * @return array
      */
@@ -120,8 +120,8 @@ abstract class ElasticaWrapper
     /**
      * Build index mapping.
      *
-     * @param Mapping         $mapping
-     * @param Config $config
+     * @param Mapping $mapping
+     * @param Config  $config
      */
     abstract public function buildIndexMapping(
         Mapping $mapping,
@@ -184,7 +184,7 @@ abstract class ElasticaWrapper
                     IndexUUID::createById($metaData['id']),
                     AppUUID::createById($metaData['app_id']),
                     (
-                        $metaData['status'] === 'open' &&
+                        'open' === $metaData['status'] &&
                         in_array($metaData['color'], ['green', 'yellow'])
                     ),
                     (int) $metaData['doc_count'],
@@ -267,7 +267,7 @@ abstract class ElasticaWrapper
      * Create index.
      *
      * @param RepositoryReference $repositoryReference
-     * @param Config     $config
+     * @param Config              $config
      * @param int                 $shards
      * @param int                 $replicas
      *
@@ -296,9 +296,9 @@ abstract class ElasticaWrapper
      * Configure index.
      *
      * @param RepositoryReference $repositoryReference
-     * @param Config     $config
-     * @param int        $shards
-     * @param int        $replicas
+     * @param Config              $config
+     * @param int                 $shards
+     * @param int                 $replicas
      *
      * @throws ResourceExistsException
      */
@@ -394,7 +394,7 @@ abstract class ElasticaWrapper
      * Create mapping.
      *
      * @param RepositoryReference $repositoryReference
-     * @param Config     $config
+     * @param Config              $config
      *
      * @throws ResourceExistsException
      */

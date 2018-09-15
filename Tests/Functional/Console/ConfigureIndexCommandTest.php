@@ -52,8 +52,8 @@ class ConfigureIndexCommandTest extends CommandTest
             'app-id' => self::$appId,
             'index' => self::$index,
             '--synonym' => [
-                'robert, efervescencio'
-            ]
+                'robert, efervescencio',
+            ],
         ]);
 
         sleep(1);
@@ -110,7 +110,7 @@ class ConfigureIndexCommandTest extends CommandTest
             'command' => 'apisearch-server:configure-index',
             'app-id' => self::$appId,
             'index' => self::$index,
-            '--synonyms-file' => __DIR__ . '/synonyms.csv',
+            '--synonyms-file' => __DIR__.'/synonyms.csv',
         ]);
 
         sleep(1);

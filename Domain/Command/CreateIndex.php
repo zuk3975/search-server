@@ -50,7 +50,7 @@ class CreateIndex extends CommandWithRepositoryReferenceAndToken implements Writ
      * @param RepositoryReference $repositoryReference
      * @param Token               $token
      * @param IndexUUID           $indexUUID
-     * @param Config     $config
+     * @param Config              $config
      */
     public function __construct(
         RepositoryReference $repositoryReference,
