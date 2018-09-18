@@ -6,22 +6,36 @@ services:
     apisearch_plugin.multilanguage.index_items:
         class: Apisearch\Plugin\Multilanguage\Domain\Middleware\IndexItemsMiddleware
         arguments:
-            - "@apisearch_server.command_bus.asynchronous"
+            - "@apisearch_server.command_enqueuer"
+            - "%apisearch_plugin_callbacks.language_field%"
         tags:
             - { name: apisearch_plugin.middleware }
 
     apisearch_plugin.multilanguage.query:
         class: Apisearch\Plugin\Multilanguage\Domain\Middleware\QueryMiddleware
+        arguments:
+            - "%apisearch_plugin_callbacks.language_field%"
         tags:
             - { name: apisearch_plugin.middleware }
 
     apisearch_plugin.multilanguage.create_index:
         class: Apisearch\Plugin\Multilanguage\Domain\Middleware\CreateIndexMiddleware
+        arguments:
+            - "@apisearch_server.command_enqueuer"
         tags:
             - { name: apisearch_plugin.middleware }
 
-    apisearch_plugin.multilanguage.transform_index:
-        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\TransformIndexMiddleware
+    apisearch_plugin.multilanguage.delete_index:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\DeleteIndexMiddleware
+        arguments:
+            - "@apisearch_server.command_enqueuer"
+        tags:
+            - { name: apisearch_plugin.middleware }
+
+    apisearch_plugin.multilanguage.delete_items:
+        class: Apisearch\Plugin\Multilanguage\Domain\Middleware\DeleteItemsMiddleware
+        arguments:
+            - "@apisearch_server.command_enqueuer"
         tags:
             - { name: apisearch_plugin.middleware }
 

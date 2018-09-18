@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\CommandBus;
 
 use Apisearch\Server\Domain\AsynchronousableCommand;
+use Apisearch\Server\Domain\CommandEnqueuer\CommandEnqueuer;
 use League\Tactician\CommandBus;
-use RSQueue\Services\Producer;
 
 /**
  * Class AsynchronousCommandBus.
@@ -25,11 +25,11 @@ use RSQueue\Services\Producer;
 class AsynchronousCommandBus extends CommandBus
 {
     /**
-     * @var Producer
+     * @var CommandEnqueuer
      *
-     * Producer
+     * Command enqueuer
      */
-    private $producer;
+    private $commandEnqueuer;
 
     /**
      * @var CommandBus
@@ -41,15 +41,15 @@ class AsynchronousCommandBus extends CommandBus
     /**
      * AsynchronousCommandIngestor constructor.
      *
-     * @param Producer   $producer
-     * @param CommandBus $commandBus
+     * @param CommandEnqueuer $commandEnqueuer
+     * @param CommandBus      $commandBus
      */
     public function __construct(
-        Producer $producer,
+        CommandEnqueuer $commandEnqueuer,
         CommandBus $commandBus
     ) {
         parent::__construct([]);
-        $this->producer = $producer;
+        $this->commandEnqueuer = $commandEnqueuer;
         $this->commandBus = $commandBus;
     }
 
@@ -62,21 +62,16 @@ class AsynchronousCommandBus extends CommandBus
      */
     public function handle($command)
     {
-        if (!$command instanceof AsynchronousableCommand) {
+        if ($command instanceof AsynchronousableCommand) {
             $this
-                ->commandBus
-                ->handle($command);
+                ->commandEnqueuer
+                ->enqueueCommand($command);
 
             return;
         }
 
-        $commandAsArray = $command->toArray();
-        $commandAsArray['class'] = str_replace('Apisearch\Server\Domain\Command\\', '', get_class($command));
         $this
-            ->producer
-            ->produce(
-                'apisearch:server:commands',
-                $commandAsArray
-            );
+            ->commandBus
+            ->handle($command);
     }
 }

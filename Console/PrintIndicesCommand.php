@@ -72,7 +72,7 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
         $table = new Table($output);
         $table->setHeaders(['UUID', 'App ID', 'Doc Count', 'Size', 'Ok?']);
 
-        /**
+        /*
          * @var Index
          */
         foreach ($indices as $index) {

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\MetadataFields\Domain\Middleware;
 
+use Apisearch\Model\IndexUUID;
 use Apisearch\Plugin\MetadataFields\Domain\Repository\MetadataRepository;
 use Apisearch\Server\Domain\Command\DeleteItems;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
@@ -53,13 +54,24 @@ class DeleteItemsMiddleware implements PluginMiddleware
         $command,
         $next
     ) {
-        /*
-         * @var DeleteItems $command
+        /**
+         * @var DeleteItems
+         *
+         * We should strip all possible plugins applied on repository reference
          */
+        $composedIndexUUID = $command
+            ->getIndexUUID()
+            ->composeUUID();
+
+        $composedIndexUUID = preg_replace('~(-plugin.*?(?=-plugin|$))~', '', $composedIndexUUID);
+        $filteredRepository = $command
+            ->getRepositoryReference()
+            ->changeIndex(IndexUUID::createById($composedIndexUUID));
+
         $this
             ->metadataRepository
             ->deleteItemsMetadata(
-                $command->getRepositoryReference(),
+                $filteredRepository,
                 $command->getItemsUUID()
             );
 

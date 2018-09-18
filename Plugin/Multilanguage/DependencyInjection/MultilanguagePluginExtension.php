@@ -71,4 +71,24 @@ class MultilanguagePluginExtension extends BaseExtension
             'middleware',
         ];
     }
+
+    /**
+     * Load Parametrization definition.
+     *
+     * return array(
+     *      'parameter1' => $config['parameter1'],
+     *      'parameter2' => $config['parameter2'],
+     *      ...
+     * );
+     *
+     * @param array $config Bundles config values
+     *
+     * @return array
+     */
+    protected function getParametrizationValues(array $config): array
+    {
+        return [
+            'apisearch_plugin_callbacks.language_field' => $_ENV['MULTILANGUAGE_FIELD'] ?? $config['language_field'],
+        ];
+    }
 }

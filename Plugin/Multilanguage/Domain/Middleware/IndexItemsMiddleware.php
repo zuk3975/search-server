@@ -18,8 +18,8 @@ namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 use Apisearch\Model\IndexUUID;
 use Apisearch\Model\Item;
 use Apisearch\Server\Domain\Command\IndexItems;
+use Apisearch\Server\Domain\CommandEnqueuer\CommandEnqueuer;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
-use League\Tactician\CommandBus;
 
 /**
  * Class IndexItemsMiddleware.
@@ -27,20 +27,31 @@ use League\Tactician\CommandBus;
 class IndexItemsMiddleware implements PluginMiddleware
 {
     /**
-     * @var CommandBus
+     * @var CommandEnqueuer
      *
-     * Command bus
+     * Command enqueuer
      */
-    private $commandBus;
+    private $commandEnqueuer;
+
+    /**
+     * @var string
+     *
+     * Language field
+     */
+    private $languageField;
 
     /**
      * IndexItemsMiddleware constructor.
      *
-     * @param CommandBus $commandBus
+     * @param CommandEnqueuer $commandEnqueuer
+     * @param string          $languageField
      */
-    public function __construct(CommandBus $commandBus)
-    {
-        $this->commandBus = $commandBus;
+    public function __construct(
+        CommandEnqueuer $commandEnqueuer,
+        string $languageField
+    ) {
+        $this->commandEnqueuer = $commandEnqueuer;
+        $this->languageField = $languageField;
     }
 
     /**
@@ -70,19 +81,11 @@ class IndexItemsMiddleware implements PluginMiddleware
         ];
 
         foreach ($command->getItems() as $item) {
-            $language = $item->get('language') ?? 'xx';
+            $language = $item->get($this->languageField) ?? 'xx';
             if (!isset($itemsSplittedByLanguage[$language])) {
                 $itemsSplittedByLanguage[$language] = [];
             }
             $itemsSplittedByLanguage[$language][] = $item;
-        }
-
-        /*
-         * If we have not found any item with language, just follow the normal
-         * workflow
-         */
-        if (empty($itemsSplittedByLanguage)) {
-            return $next($command);
         }
 
         foreach ($itemsSplittedByLanguage as $language => $items) {
@@ -107,8 +110,8 @@ class IndexItemsMiddleware implements PluginMiddleware
         string $language
     ) {
         $this
-            ->commandBus
-            ->handle(
+            ->commandEnqueuer
+            ->enqueueCommand(
                 new IndexItems(
                     $command
                         ->getRepositoryReference()

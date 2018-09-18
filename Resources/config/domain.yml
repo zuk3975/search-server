@@ -196,8 +196,16 @@ services:
     apisearch_server.command_bus.asynchronous:
         class: Apisearch\Server\Domain\CommandBus\AsynchronousCommandBus
         arguments:
-            - "@rs_queue.producer"
+            - "@apisearch_server.command_enqueuer"
             - "@tactician.commandbus.command"
+
+    #
+    # Command enqueuer
+    #
+    apisearch_server.command_enqueuer:
+        class: Apisearch\Server\Domain\CommandEnqueuer\CommandEnqueuer
+        arguments:
+            - "@rs_queue.producer"
 
     #
     # Middlewares Domain Events

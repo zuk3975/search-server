@@ -130,8 +130,8 @@ class QueryCommand extends CommandWithBusAndGodToken
                     $this->createGodToken($appUUID),
                     ModelQuery::create(
                         $input->getArgument('query'),
-                        $input->getOption('page'),
-                        $input->getOption('size')
+                        (int) $input->getOption('page'),
+                        (int) $input->getOption('size')
                     )
                 ));
 
