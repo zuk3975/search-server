@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace Apisearch\Plugin\Multilanguage\Domain\Middleware;
 
 use Apisearch\Model\IndexUUID;
-use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Command\CreateIndex;
+use Apisearch\Server\Domain\CommandEnqueuer\CommandEnqueuer;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 
 /**
@@ -26,10 +26,27 @@ use Apisearch\Server\Domain\Plugin\PluginMiddleware;
 class CreateIndexMiddleware implements PluginMiddleware
 {
     /**
+     * @var CommandEnqueuer
+     *
+     * Command enqueuer
+     */
+    private $commandEnqueuer;
+
+    /**
+     * TransformIndexMiddleware constructor.
+     *
+     * @param CommandEnqueuer $commandEnqueuer
+     */
+    public function __construct(CommandEnqueuer $commandEnqueuer)
+    {
+        $this->commandEnqueuer = $commandEnqueuer;
+    }
+
+    /**
      * Execute middleware.
      *
-     * @param mixed    $command
-     * @param callable $next
+     * @param CreateIndex $command
+     * @param callable    $next
      *
      * @return mixed
      */
@@ -38,18 +55,29 @@ class CreateIndexMiddleware implements PluginMiddleware
         $next
     ) {
         $index = $command->getIndexUUID()->composeUUID();
+
+        if (false !== strpos($index, '-plugin-language-xx')) {
+            return $next($command);
+        }
+
         $indices = explode(',', $index);
         $indices = array_map(function (string $index) {
             return $index.'-plugin-language-xx';
         }, $indices);
 
         $indices = implode(',', $indices);
-        $command->setRepositoryReference(RepositoryReference::create(
-            $command->getAppUUID(),
-            IndexUUID::createById($indices)
-        ));
+        $indexUUID = IndexUUID::createById($indices);
 
-        return $next($command);
+        $this
+            ->commandEnqueuer
+            ->enqueueCommand(new CreateIndex(
+                $command
+                    ->getRepositoryReference()
+                    ->changeIndex($indexUUID),
+                $command->getToken(),
+                $indexUUID,
+                $command->getConfig()
+            ));
     }
 
     /**

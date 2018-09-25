@@ -113,7 +113,9 @@ class ConfigureEnvironmentMiddleware implements PluginMiddleware
             'language' => 'xx' != $language
                 ? $language
                 : null,
+            'store_searchable_metadata' => false,
         ]);
+
         $configuration = $this
             ->itemElasticaWrapper
             ->getIndexConfiguration(

@@ -18,35 +18,34 @@ namespace Apisearch\Plugin\Multilanguage\Tests\Functional;
 use Apisearch\Query\Query;
 
 /**
- * Class SomeLanguageTest.
+ * Class NoLanguageTest.
  */
-class SomeLanguageTest extends MultilanguageFunctionalTest
+class NoLanguageTest extends MultilanguageFunctionalTest
 {
     /**
      * Basic usage.
      */
     public function testBasicUsage()
     {
-        usleep(500000);
-        $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_es')
-        );
-
-        $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_ca')
+        $this->assertFalse(
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-es')
         );
 
         $this->assertFalse(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_en')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-ca')
+        );
+
+        $this->assertFalse(
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-en')
         );
 
         $this->assertTrue(
-            $this->checkIndex(self::$appId, self::$index.'_plugin_language_xx')
+            $this->checkIndex(self::$appId, self::$index.'-plugin-language-xx')
         );
 
-        $this->assertCount(4, $this->query(Query::createMatchAll())->getItems());
+        $this->assertCount(3, $this->query(Query::createMatchAll())->getItems());
         $this->assertCount(
-            0,
+            1,
             $this->query(Query::create('per'))->getItems()
         );
     }
@@ -58,6 +57,6 @@ class SomeLanguageTest extends MultilanguageFunctionalTest
      */
     public static function getItemsFilePath(): string
     {
-        return __DIR__.'/items_some_language.yml';
+        return __DIR__.'/items_no_language.yml';
     }
 }

@@ -28,6 +28,23 @@ use Apisearch\Server\Domain\Query\Query;
 class QueryMiddleware implements PluginMiddleware
 {
     /**
+     * @var string
+     *
+     * Language field
+     */
+    private $languageField;
+
+    /**
+     * QueryMiddleware constructor.
+     *
+     * @param string $languageField
+     */
+    public function __construct(string $languageField)
+    {
+        $this->languageField = $languageField;
+    }
+
+    /**
      * Execute middleware.
      *
      * @param mixed    $command
@@ -46,7 +63,7 @@ class QueryMiddleware implements PluginMiddleware
         $languagesFiltered = [];
         $languagesFilter = $command
             ->getQuery()
-            ->getFilterByField('language');
+            ->getFilterByField($this->languageField);
 
         if ($languagesFilter instanceof Filter) {
             $languagesFiltered = $languagesFilter->getValues();

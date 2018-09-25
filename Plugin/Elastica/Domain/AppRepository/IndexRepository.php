@@ -58,12 +58,14 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
             ? chmod($configPath, 0755)
             : @mkdir($configPath, 0755, true);
 
+        $newRepositoryReference = $this
+            ->getRepositoryReference()
+            ->changeIndex($indexUUID);
+
         $this
             ->elasticaWrapper
             ->createIndex(
-                $this
-                    ->getRepositoryReference()
-                    ->changeIndex($indexUUID),
+                $newRepositoryReference,
                 $config,
                 $this->repositoryConfig['shards'],
                 $this->repositoryConfig['replicas']
@@ -72,7 +74,7 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
         $this
             ->elasticaWrapper
             ->createIndexMapping(
-                $this->getRepositoryReference(),
+                $newRepositoryReference,
                 $config
             );
 

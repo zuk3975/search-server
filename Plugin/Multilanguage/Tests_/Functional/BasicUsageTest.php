@@ -28,7 +28,6 @@ class BasicUsageTest extends MultilanguageFunctionalTest
      */
     public function testBasicUsage()
     {
-        usleep(500000);
         $this->assertTrue(
             $this->checkIndex(self::$appId, self::$index.'-plugin-language-es')
         );

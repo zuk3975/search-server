@@ -92,7 +92,7 @@ class MostRelevantWordsPluginExtension extends BaseExtension
         return [
             'apisearch_plugin.most_relevant_words.fields' => isset($_ENV['MOST_RELEVANT_WORDS_FIELDS'])
                 ? array_map(function (string $field) {
-                    list($field, $maximumWords, $minimumFrequency, $minimumLength) = explode(':', $field, 4);
+                    list($field, $maximumWords, $minimumFrequency, $minimumLength) = explode(';', $field, 4);
 
                     return [
                         'field' => trim($field),

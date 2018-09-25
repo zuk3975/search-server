@@ -18,6 +18,7 @@ namespace Apisearch\Server;
 use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
 use Apisearch\Plugin\MetadataFields\MetadataFieldsPluginBundle;
+use Apisearch\Plugin\MostRelevantWords\MostRelevantWordsPluginBundle;
 use Apisearch\Plugin\Multilanguage\MultilanguagePluginBundle;
 use Apisearch\Plugin\Neo4j\Neo4jPluginBundle;
 use Apisearch\Plugin\NewRelic\NewRelicPluginBundle;
@@ -77,8 +78,9 @@ class ApisearchPluginsBundle extends BaseBundle
     private static function resolveAliases(array $bundles): array
     {
         $aliases = [
-            'metadatafields' => MetadataFieldsPluginBundle::class,
+            'metadata_fields' => MetadataFieldsPluginBundle::class,
             'multilanguage' => MultilanguagePluginBundle::class,
+            'most_relevant_words' => MostRelevantWordsPluginBundle::class,
             'newrelic' => NewRelicPluginBundle::class,
             'neo4j' => Neo4jPluginBundle::class,
         ];

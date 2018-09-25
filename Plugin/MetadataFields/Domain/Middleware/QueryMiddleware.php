@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Plugin\MetadataFields\Domain\Middleware;
 
+use Apisearch\Model\IndexUUID;
 use Apisearch\Plugin\MetadataFields\Domain\Repository\MetadataRepository;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Plugin\PluginMiddleware;
@@ -54,16 +55,27 @@ class QueryMiddleware implements PluginMiddleware
         $command,
         $next
     ) {
+        $result = $next($command);
+
         /**
          * @var Result
          * @var Query  $command
+         *
+         * We should strip all possible plugins applied on repository reference
          */
-        $result = $next($command);
+        $composedIndexUUID = $command
+            ->getIndexUUID()
+            ->composeUUID();
+
+        $composedIndexUUID = preg_replace('~(-plugin.*?(?=-plugin|$))~', '', $composedIndexUUID);
+        $filteredRepository = $command
+            ->getRepositoryReference()
+            ->changeIndex(IndexUUID::createById($composedIndexUUID));
 
         $this
             ->metadataRepository
             ->loadItemsMetadata(
-                $command->getRepositoryReference(),
+                $filteredRepository,
                 $result->getItems()
             );
 
