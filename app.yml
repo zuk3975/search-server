@@ -1,5 +1,8 @@
 bundles:
     - Apisearch\Server\ApisearchServerBundle
+    - Apisearch\Plugin\Elastica\ElasticaPluginBundle
+    - Apisearch\Plugin\RedisStorage\RedisStoragePluginBundle
+    - Apisearch\Plugin\RSQueue\RSQueuePluginBundle
     - Apisearch\Server\ApisearchPluginsBundle
 routes:
     - "@ApisearchServerBundle/Resources/config/routing.yml"
@@ -32,31 +35,6 @@ config:
                 path: '%kernel.logs_dir%/%kernel.environment%.log'
                 level: debug
 
-    rs_queue:
-        collector:
-            enable: false
-        server:
-            redis:
-                host: "%env(REDIS_HOST)%"
-                port: "%env(REDIS_PORT)%"
-
-    #
-    # Enable for Redis Cluster
-    #
-    # rs_queue:
-    #     server:
-    #         redis:
-    #             cluster: true
-    #             port: 6379
-    #
-
-    apisearch_server:
-        god_token: "%env(APISEARCH_GOD_TOKEN)%"
-        readonly_token: "%env(APISEARCH_READONLY_TOKEN)%"
-        ping_token: "%env(APISEARCH_PING_TOKEN)%"
-        middleware_domain_events_service: "apisearch_server.middleware.ignore_events"
-        middleware_logs_service: "apisearch_server.middleware.ignore_logs"
-
     #
     # Elastica plugin for Apisearch
     #
@@ -81,10 +59,6 @@ config:
                     repository_service: "apisearch_server.app_repository"
                 user:
                     repository_service: "apisearch_server.user_repository"
-                event:
-                    repository_service: "apisearch_server.events_repository"
-                log:
-                    repository_service: "apisearch_server.logs_repository"
                 indexes:
                     default: default
 

@@ -27,7 +27,6 @@ trait AllAsynchronousTests
     use ScoreStrategyTest;
     use SearchTest;
     use SearchNestedTest;
-    // use MachineLearningTest;
     use IndexStatusTest;
     use ErrorRecoveryTest;
     use CampaignBoostingTest;

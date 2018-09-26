@@ -15,14 +15,16 @@ declare(strict_types=1);
 
 namespace Apisearch\Server;
 
-use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
+use Apisearch\Plugin\Callbacks\Domain\Callbacks;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
-use Apisearch\Plugin\MetadataFields\MetadataFieldsPluginBundle;
+use Apisearch\Plugin\ELK\ELKPluginBundle;
 use Apisearch\Plugin\MostRelevantWords\MostRelevantWordsPluginBundle;
 use Apisearch\Plugin\Multilanguage\MultilanguagePluginBundle;
-use Apisearch\Plugin\Neo4j\Neo4jPluginBundle;
 use Apisearch\Plugin\NewRelic\NewRelicPluginBundle;
-use Apisearch\Plugin\Redis\RedisPluginBundle;
+use Apisearch\Plugin\RedisMetadataFields\RedisMetadataFieldsPluginBundle;
+use Apisearch\Plugin\RedisStorage\RedisStoragePluginBundle;
+use Apisearch\Plugin\RSQueue\RSQueuePluginBundle;
+use Apisearch\Plugin\StaticTokens\StaticTokensPluginBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
 use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -41,12 +43,6 @@ class ApisearchPluginsBundle extends BaseBundle
      */
     public static function getBundleDependencies(KernelInterface $kernel): array
     {
-        $plugins = [
-            CallbacksPluginBundle::class,
-            ElasticaPluginBundle::class,
-            RedisPluginBundle::class,
-        ];
-
         $pluginsAsString = $_ENV['APISEARCH_ENABLED_PLUGINS'] ?? '';
         $pluginsAsArray = explode(',', $pluginsAsString);
         $pluginsAsArray = array_map('trim', $pluginsAsArray);
@@ -65,7 +61,7 @@ class ApisearchPluginsBundle extends BaseBundle
             return $reflectionClass->implementsInterface(Plugin::class);
         });
 
-        return array_merge($plugins, $pluginsAsArray);
+        return $pluginsAsArray;
     }
 
     /**
@@ -78,11 +74,16 @@ class ApisearchPluginsBundle extends BaseBundle
     private static function resolveAliases(array $bundles): array
     {
         $aliases = [
-            'metadata_fields' => MetadataFieldsPluginBundle::class,
-            'multilanguage' => MultilanguagePluginBundle::class,
+            'callbacks' => Callbacks::class,
+            'elastica' => ElasticaPluginBundle::class,
+            'elk' => ELKPluginBundle::class,
             'most_relevant_words' => MostRelevantWordsPluginBundle::class,
+            'multilanguage' => MultilanguagePluginBundle::class,
             'newrelic' => NewRelicPluginBundle::class,
-            'neo4j' => Neo4jPluginBundle::class,
+            'redis_metadata_fields' => RedisMetadataFieldsPluginBundle::class,
+            'redis_storage' => RedisStoragePluginBundle::class,
+            'rsqueue' => RSQueuePluginBundle::class,
+            'static_tokens' => StaticTokensPluginBundle::class,
         ];
 
         $combined = array_combine(

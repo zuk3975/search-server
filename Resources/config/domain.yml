@@ -3,13 +3,6 @@ services:
     #
     # Events
     #
-    apisearch_server.event_store:
-        class: Apisearch\Server\Domain\Event\EventStore
-        arguments:
-            - "@apisearch_server.events_repository"
-        tags:
-            - { name: apisearch_server.domain_event_subscriber }
-
     apisearch_server.event_publisher:
         class: Apisearch\Server\Domain\Event\EventPublisher
         public: true
@@ -144,20 +137,6 @@ services:
         tags:
             - { name: tactician.handler, command: Apisearch\Server\Domain\Query\CheckIndex }
 
-    apisearch_server.query_handler.query_events:
-        class: Apisearch\Server\Domain\QueryHandler\QueryEventsHandler
-        arguments:
-            - "@apisearch.event_repository_main.default"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Query\QueryEvents }
-
-    apisearch_server.query_handler.query_logs:
-        class: Apisearch\Server\Domain\QueryHandler\QueryLogsHandler
-        arguments:
-            - "@apisearch.log_repository_main.default"
-        tags:
-            - { name: tactician.handler, command: Apisearch\Server\Domain\Query\QueryLogs }
-
     apisearch_server.query_handler.get_tokens:
         class: Apisearch\Server\Domain\QueryHandler\GetTokensHandler
         arguments:
@@ -207,9 +186,13 @@ services:
     # Command enqueuer
     #
     apisearch_server.command_enqueuer:
-        class: Apisearch\Server\Domain\CommandEnqueuer\CommandEnqueuer
-        arguments:
-            - "@rs_queue.producer"
+        class: Apisearch\Server\Domain\CommandEnqueuer\EmptyCommandEnqueuer
+
+    #
+    # Event enqueuer
+    #
+    apisearch_server.event_enqueuer:
+        class: Apisearch\Server\Domain\EventEnqueuer\EmptyEventEnqueuer
 
     #
     # Middlewares Domain Events
@@ -218,7 +201,7 @@ services:
         class: Apisearch\Server\Domain\Middleware\DomainEvents\IgnoreDomainEventsMiddleware
         arguments:
             - "@apisearch_server.inline_event_publisher"
-        public: false
+        public: falseIn
 
     apisearch_server.middleware.inline_events:
         class: Apisearch\Server\Domain\Middleware\DomainEvents\InlineDomainEventsMiddleware
@@ -227,30 +210,11 @@ services:
             - "@apisearch_server.event_publisher"
         public: false
 
-    apisearch_server.middleware.queue_events:
-        class: Apisearch\Server\Domain\Middleware\DomainEvents\QueueDomainEventsMiddleware
+    apisearch_server.middleware.enqueue_events:
+        class: Apisearch\Server\Domain\Middleware\DomainEvents\EnqueueDomainEventsMiddleware
         arguments:
             - "@apisearch_server.inline_event_publisher"
-            - "@rs_queue.producer"
-        public: false
-
-    #
-    # Middlewares Logs
-    #
-    apisearch_server.middleware.ignore_logs:
-        class: Apisearch\Server\Domain\Middleware\Logs\IgnoreLogsMiddleware
-        public: false
-
-    apisearch_server.middleware.inline_logs:
-        class: Apisearch\Server\Domain\Middleware\Logs\InlineLogsMiddleware
-        arguments:
-            - "@apisearch.log_repository_main.default"
-        public: false
-
-    apisearch_server.middleware.queue_logs:
-        class: Apisearch\Server\Domain\Middleware\Logs\QueueLogsMiddleware
-        arguments:
-            - "@rs_queue.producer"
+            - "@apisearch_server.event_enqueuer"
         public: false
 
     #
@@ -276,21 +240,23 @@ services:
             - "%apisearch_server.enabled_plugins%"
         tags:
             - { name: apisearch_plugin.middleware }
+        public: false
 
     apisearch_server.middleware.plugins:
         class: Apisearch\Server\Domain\Plugin\PluginMiddlewareCollector
+        public: false
+
+    apisearch_server.middleware.exceptions:
+        class: Apisearch\Server\Domain\Middleware\ExceptionsMiddleware
+        arguments:
+            - "@apisearch_server.inline_event_publisher"
+        public: false
 
     #
     # Repositories
     #
     apisearch_server.items_repository:
         class: Apisearch\Server\Domain\Repository\Repository\Repository
-
-    apisearch_server.events_repository:
-        class: Apisearch\Server\Domain\Repository\EventRepository\Repository
-
-    apisearch_server.logs_repository:
-        class: Apisearch\Server\Domain\Repository\LogRepository\Repository
 
     apisearch_server.app_repository:
         class: Apisearch\Server\Domain\Repository\AppRepository\Repository
@@ -312,3 +278,22 @@ services:
 
     apisearch_server.token_validator:
         class: Apisearch\Server\Domain\Token\TokenValidator
+
+    #
+    # Formatter
+    #
+    apisearch_server.time_format_builder:
+        class: Apisearch\Server\Domain\Formatter\TimeFormatBuilder
+
+    #
+    # Consumers
+    #
+    apisearch_server.command_consumer:
+        class: Apisearch\Server\Domain\CommandConsumer\CommandConsumer
+        arguments:
+            - "@apisearch_server.command_bus.inline"
+
+    apisearch_server.event_consumer:
+        class: Apisearch\Server\Domain\EventConsumer\EventConsumer
+        arguments:
+            - "@apisearch_server.event_publisher"

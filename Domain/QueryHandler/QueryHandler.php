@@ -39,6 +39,7 @@ class QueryHandler extends WithRepositoryAndEventPublisher
     {
         $repositoryReference = $query->getRepositoryReference();
         $searchQuery = $query->getQuery();
+        $from = microtime(true);
 
         $this
             ->repository
@@ -61,7 +62,8 @@ class QueryHandler extends WithRepositoryAndEventPublisher
                         return $item->composeUUID();
                     }, $result->getItems()),
                     $searchQuery->getUser()
-                )
+                ),
+                (int) ((microtime(true) - $from) * 1000)
             ));
 
         return $result;

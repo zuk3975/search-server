@@ -3,13 +3,6 @@ services:
     #
     # Middlewares
     #
-    apisearch_plugin.elastica.middleware.log_all_domain_events_to_elastica:
-        class: Apisearch\Plugin\Elastica\Domain\Middleware\LogAllDomainEventsToElasticaMiddleware
-        arguments:
-            - "@apisearch_plugin.elastica.elastica_client"
-            - "@apisearch_server.event_publisher"
-        public: false
-
     apisearch_plugin.elastica.middleware.transaction:
         class: Apisearch\Plugin\Elastica\Domain\Middleware\TransactionElasticaMiddleware
         arguments:

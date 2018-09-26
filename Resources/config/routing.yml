@@ -88,18 +88,6 @@ search_server_api_delete:
     defaults:
         _controller: apisearch_server.delete_items_controller
 
-search_server_api_events:
-    path: /v1/events
-    methods: ["GET"]
-    defaults:
-        _controller: apisearch_server.events_controller
-
-search_server_api_logs:
-    path: /v1/logs
-    methods: ["GET"]
-    defaults:
-        _controller: apisearch_server.logs_controller
-
 #
 # Check
 #

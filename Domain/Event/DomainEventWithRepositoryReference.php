@@ -37,17 +37,27 @@ class DomainEventWithRepositoryReference
     private $domainEvent;
 
     /**
+     * @var int
+     *
+     * Time cost
+     */
+    private $timeCost;
+
+    /**
      * EventWithRepositoryReference constructor.
      *
      * @param RepositoryReference $repositoryReference
      * @param DomainEvent         $domainEvent
+     * @param int                 $timeCost
      */
     public function __construct(
         RepositoryReference $repositoryReference,
-        DomainEvent $domainEvent
+        DomainEvent $domainEvent,
+        int $timeCost = -1
     ) {
         $this->repositoryReference = $repositoryReference;
         $this->domainEvent = $domainEvent;
+        $this->timeCost = $timeCost;
     }
 
     /**
@@ -68,5 +78,15 @@ class DomainEventWithRepositoryReference
     public function getDomainEvent(): DomainEvent
     {
         return $this->domainEvent;
+    }
+
+    /**
+     * Get TimeCost.
+     *
+     * @return int
+     */
+    public function getTimeCost(): int
+    {
+        return $this->timeCost;
     }
 }

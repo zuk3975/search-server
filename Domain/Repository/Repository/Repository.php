@@ -154,8 +154,6 @@ class Repository extends BaseRepository
                 ->getRepository(IndexRepository::class)
                 ->getIndexStats();
         } catch (TransportableException $exception) {
-            echo $exception->getMessage();
-
             return false;
         }
 

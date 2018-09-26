@@ -1,0 +1,18 @@
+services:
+
+    apisearch_plugin.elk.redis_config:
+        class: Apisearch\Plugin\Redis\Domain\RedisConfig
+        arguments:
+            - "%apisearch_plugin.elk.host%"
+            - "%apisearch_plugin.elk.port%"
+            - "%apisearch_plugin.elk.is_cluster%"
+            - "%apisearch_plugin.elk.database%"
+
+    apisearch_plugin.elk.redis_wrapper:
+        class: Apisearch\Plugin\Redis\Domain\RedisWrapper
+        public: true
+        factory:
+            - "@apisearch_plugin.redis.redis_wrapper_factory"
+            - "create"
+        arguments:
+            - "@apisearch_plugin.elk.redis_config"

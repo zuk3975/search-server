@@ -27,8 +27,6 @@ use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Repository\RepositoryReference;
-use Apisearch\Result\Events;
-use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Command\AddInteraction;
 use Apisearch\Server\Domain\Command\AddToken;
@@ -50,8 +48,6 @@ use Apisearch\Server\Domain\Query\GetIndices;
 use Apisearch\Server\Domain\Query\GetTokens;
 use Apisearch\Server\Domain\Query\Ping;
 use Apisearch\Server\Domain\Query\Query;
-use Apisearch\Server\Domain\Query\QueryEvents;
-use Apisearch\Server\Domain\Query\QueryLogs;
 use Apisearch\User\Interaction;
 
 /**
@@ -501,84 +497,6 @@ abstract class ServiceFunctionalTest extends ApisearchServerBundleFunctionalTest
             ));
 
         static::waitAfterWriteCommand();
-    }
-
-    /**
-     * Query events.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Events
-     */
-    public function queryEvents(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Events {
-        $appUUID = AppUUID::createById($appId ?? self::$appId);
-
-        return self::getStatic('apisearch_server.query_bus')
-            ->handle(new QueryEvents(
-                RepositoryReference::create(
-                    $appUUID,
-                    IndexUUID::createById($index ?? self::$index)
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appUUID
-                    ),
-                $query,
-                $from,
-                $to
-            ));
-    }
-
-    /**
-     * Query logs.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Logs
-     */
-    public function queryLogs(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Logs {
-        $appUUID = AppUUID::createById($appId ?? self::$appId);
-
-        return self::getStatic('apisearch_server.query_bus')
-            ->handle(new QueryLogs(
-                RepositoryReference::create(
-                    $appUUID,
-                    IndexUUID::createById($index ?? self::$index)
-                ),
-                $token ??
-                    new Token(
-                        TokenUUID::createById(self::getParameterStatic('apisearch_server.god_token')),
-                        $appUUID
-                    ),
-                $query,
-                $from,
-                $to
-            ));
     }
 
     /**

@@ -73,8 +73,10 @@ class IndexWasReset extends DomainEvent
      */
     public static function stringToPayload(string $data): array
     {
+        $payload = json_decode($data, true);
+
         return [
-            IndexUUID::createFromArray($data['index_uuid']),
+            IndexUUID::createFromArray($payload['index_uuid']),
         ];
     }
 }

@@ -2750,16 +2750,16 @@
         },
         {
             "name": "rsqueue/rsqueue",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RSQueue/RSQueue.git",
-                "reference": "48e7668920c5e1b94d503b8fa52ac3340b284f67"
+                "reference": "1a8d72a2b025ed65684644febf9493d4f6ac9333"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RSQueue/RSQueue/zipball/48e7668920c5e1b94d503b8fa52ac3340b284f67",
-                "reference": "48e7668920c5e1b94d503b8fa52ac3340b284f67",
+                "url": "https://api.github.com/repos/RSQueue/RSQueue/zipball/1a8d72a2b025ed65684644febf9493d4f6ac9333",
+                "reference": "1a8d72a2b025ed65684644febf9493d4f6ac9333",
                 "shasum": ""
             },
             "require": {
@@ -2800,7 +2800,7 @@
                 "redis",
                 "rsqueue"
             ],
-            "time": "2018-06-27T18:54:01+00:00"
+            "time": "2018-10-18T02:38:12+00:00"
         },
         {
             "name": "rsqueue/rsqueue-bundle",

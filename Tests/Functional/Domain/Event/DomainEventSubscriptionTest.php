@@ -43,7 +43,7 @@ class DomainEventSubscriptionTest extends ServiceFunctionalTest
      */
     public function testBasicBehaviorWithTaggedService()
     {
-        $this->assertCount(4, $this
+        $this->assertCount(6, $this
             ->get('apisearch_server.test.in_memory_domain_event_collector')
             ->getEvents()
         );

@@ -44,7 +44,7 @@ services:
         arguments:
             - "@apisearch_plugin.elastica.elastica_client"
             - "@apisearch_plugin.elastica.item_elastica_wrapper"
-            - "%elastica_plugin.config.repository%"
+            - "%apisearch_plugin.elastica.config.repository%"
         tags:
             - { name: apisearch_plugin.middleware }
 

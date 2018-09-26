@@ -23,7 +23,7 @@ jobs:
                 command: |
                     docker run -d \
                         -p 9200:9200 \
-                        --name="apisearch_elasticsearch" \
+                        --name="apisearch.elasticsearch" \
                         -e "cluster.name=apisearch" \
                         -e "http.host=0.0.0.0" \
                         -e "transport.host=0.0.0.0" \
@@ -37,7 +37,7 @@ jobs:
                 name: Run Redis
                 command: |
                     docker run -d \
-                        --name="apisearch_redis" \
+                        --name="apisearch.redis" \
                         redis:4-alpine \
                         redis-server
 
@@ -51,26 +51,37 @@ jobs:
                 name: Run Apisearch in server mode
                 command: |
                     docker run -d \
-                        --name "apisearch_server" \
-                        --link "apisearch_redis" \
-                        --link "apisearch_elasticsearch" \
+                        --name "apisearch.server" \
+                        --link "apisearch.redis" \
+                        --link "apisearch.elasticsearch" \
                         --entrypoint "/server-entrypoint.sh" \
                         apisearch/server
 
             - run:
-                name: Run Apisearch in worker mode
+                name: Run Apisearch in commands consumer mode
                 command: |
                     docker run -d \
-                        --name "apisearch_command_worker" \
-                        --link "apisearch_redis" \
-                        --link "apisearch_elasticsearch" \
-                        --entrypoint "/command-worker-entrypoint.sh" \
+                        --name "apisearch.commands_consumer" \
+                        --link "apisearch.redis" \
+                        --link "apisearch.elasticsearch" \
+                        --entrypoint "/commands-consumer-entrypoint.sh" \
+                        apisearch/server
+
+            - run:
+                name: Run Apisearch in domain events consumer mode
+                command: |
+                    docker run -d \
+                        --name "apisearch.domain_events_worker" \
+                        --link "apisearch.redis" \
+                        --link "apisearch.elasticsearch" \
+                        --entrypoint "/domain-events-consumer-entrypoint.sh" \
                         apisearch/server
 
             - run:
                 name: Run tests
                 command: |
-                    docker logs apisearch_server
-                    docker logs apisearch_command_worker
-                    docker exec -it apisearch_server /var/www/apisearch/scripts/run-tests
+                    docker logs apisearch.server
+                    docker logs apisearch.commands_consumer
+                    docker logs apisearch.domain_events_worker
+                    docker exec -it apisearch.server /var/www/apisearch/scripts/run-tests
 

@@ -28,8 +28,6 @@ use Apisearch\Model\Token;
 use Apisearch\Model\TokenUUID;
 use Apisearch\Model\User;
 use Apisearch\Query\Query as QueryModel;
-use Apisearch\Result\Events;
-use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 
 /**
@@ -384,76 +382,6 @@ abstract class CurlFunctionalTest extends ApisearchServerBundleFunctionalTest
             null,
             $token
         );
-    }
-
-    /**
-     * Query events.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Events
-     */
-    public function queryEvents(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Events {
-        $result = self::makeCurl(
-            'v1-events',
-            $appId,
-            $index,
-            $token,
-            [
-                'query' => $query->toArray(),
-                'from' => $from,
-                'to' => $to,
-            ]
-        );
-
-        return Events::createFromArray($result['body']);
-    }
-
-    /**
-     * Query logs.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Logs
-     */
-    public function queryLogs(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Logs {
-        $result = self::makeCurl(
-            'v1-logs',
-            $appId,
-            $index,
-            $token,
-            [
-                'query' => $query->toArray(),
-                'from' => $from,
-                'to' => $to,
-            ]
-        );
-
-        return Logs::createFromArray($result['body']);
     }
 
     /**
