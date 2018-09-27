@@ -66,6 +66,11 @@ class QueryBuilder
         );
 
         $mainQuery->setQuery($boolQuery);
+        $minScore = $query->getMinScore();
+        if ($minScore > 0) {
+            $mainQuery->setMinScore($minScore);
+        }
+
         $mainQuery = $this->setSortBy(
             $query,
             $mainQuery,
