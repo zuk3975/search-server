@@ -166,11 +166,12 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
             );
         }
 
-        /*
+        /**
          * @var ElasticaResult
          */
         foreach ($elasticaResults['results'] as $elasticaResult) {
             $source = $elasticaResult->getSource();
+
             if (
                 isset($elasticaResult->getParam('sort')[0]) &&
                 is_float($elasticaResult->getParam('sort')[0])
@@ -179,6 +180,11 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
             }
 
             $item = Item::createFromArray($source);
+            $score = $elasticaResult->getScore();
+            $item->setScore(is_float($score)
+                ? $score
+                : 1
+            );
 
             if ($query->areHighlightEnabled()) {
                 $formedHighlights = [];
