@@ -384,4 +384,17 @@ trait SearchTest
             $this->query(Query::create('a')->setMinScore(2.0))->getItems()
         );
     }
+
+    /**
+     * Search by strange character.
+     *
+     * @group engonga
+     */
+    public function testSearchByStrangeCharacter()
+    {
+        $this->assertCount(
+            1,
+            $this->query(Query::create('煮'))->getItems()
+        );
+    }
 }

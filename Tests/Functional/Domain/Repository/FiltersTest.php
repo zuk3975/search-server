@@ -297,4 +297,17 @@ trait FiltersTest
     {
         return $this->query(Query::createMatchAll()->filterUniverseByDateRange('created_at', [$filter], Filter::AT_LEAST_ONE));
     }
+
+    /**
+     * Filter by strange character.
+     *
+     * @group engonga
+     */
+    public function testFilterByStrangeCharacter()
+    {
+        $this->assertCount(
+            1,
+            $this->query(Query::createMatchAll()->filterBy('char', 'strange_field', ['煮']))->getItems()
+        );
+    }
 }
