@@ -127,6 +127,7 @@ class NewRelicPluginExtension extends BaseExtension
             'application_name' => $container->getParameter('apisearch_plugin.newrelic.application_name'),
             'api_key' => $container->getParameter('apisearch_plugin.newrelic.api_key'),
             'license_key' => $container->getParameter('apisearch_plugin.newrelic.license_key'),
+            'deprecations' => false,
             'http' => [
                 'using_symfony_cache' => true,
             ],
