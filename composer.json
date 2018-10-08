@@ -27,7 +27,7 @@
         "ekino/newrelic-bundle": "^2.0.0@beta",
 
         "rsqueue/rsqueue": "^0.1.0",
-        "rsqueue/rsqueue-bundle": "^0.1.0",
+        "rsqueue/rsqueue-bundle": "^0.1.1",
         "mmoreram/base-bundle": "^1.0.8",
         "mmoreram/symfony-bundle-dependencies": "^2.0.0",
         "one-bundle-app/one-bundle-app": "^1.0.15",
