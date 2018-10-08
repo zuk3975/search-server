@@ -91,31 +91,19 @@ abstract class ElasticaWrapper
      * Get immutable index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    abstract public function getImmutableIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array;
+    abstract public function getImmutableIndexConfiguration(Config $config): array;
 
     /**
      * Get index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    abstract public function getIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array;
+    abstract public function getIndexConfiguration(Config $config): array;
 
     /**
      * Build index mapping.
@@ -188,7 +176,13 @@ abstract class ElasticaWrapper
                         in_array($metaData['color'], ['green', 'yellow'])
                     ),
                     (int) $metaData['doc_count'],
-                    (string) $metaData['index_size']
+                    (string) $metaData['index_size'],
+                    (int) $metaData['primary_shards'],
+                    (int) $metaData['replica_shards'],
+                    [
+                        'allocated' => ('green' === $metaData['color']),
+                        'doc_deleted' => (int) $metaData['doc_deleted'],
+                    ]
                 );
             }
         }
@@ -268,25 +262,19 @@ abstract class ElasticaWrapper
      *
      * @param RepositoryReference $repositoryReference
      * @param Config              $config
-     * @param int                 $shards
-     * @param int                 $replicas
      *
      * @throws ResourceExistsException
      */
     public function createIndex(
         RepositoryReference $repositoryReference,
-        Config $config,
-        int $shards,
-        int $replicas
+        Config $config
     ) {
         $searchIndex = $this->getIndex($repositoryReference);
 
         try {
-            $searchIndex->create($this->getImmutableIndexConfiguration(
-                $config,
-                $shards,
-                $replicas
-            ));
+            $searchIndex->create(
+                $this->getImmutableIndexConfiguration($config)
+            );
         } catch (ResponseException $exception) {
             throw ParsedCreatingIndexException::parse($exception->getMessage());
         }
@@ -297,23 +285,15 @@ abstract class ElasticaWrapper
      *
      * @param RepositoryReference $repositoryReference
      * @param Config              $config
-     * @param int                 $shards
-     * @param int                 $replicas
      *
      * @throws ResourceExistsException
      */
     public function configureIndex(
         RepositoryReference $repositoryReference,
-        Config $config,
-        int $shards,
-        int $replicas
+        Config $config
     ) {
         $searchIndex = $this->getIndex($repositoryReference);
-        $indexConfigAsArray = $this->getIndexConfiguration(
-            $config,
-            $shards,
-            $replicas
-        );
+        $indexConfigAsArray = $this->getIndexConfiguration($config);
         unset($indexConfigAsArray['number_of_shards']);
         unset($indexConfigAsArray['number_of_replicas']);
         $searchIndex->close();

@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Console;
 
 use Apisearch\Model\AppUUID;
-use Apisearch\Model\Index;
 use Apisearch\Model\Token;
 use Apisearch\Repository\RepositoryReference;
 use Apisearch\Server\Domain\Query\GetIndices;
@@ -70,7 +69,7 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
          * @var Token
          */
         $table = new Table($output);
-        $table->setHeaders(['UUID', 'App ID', 'Doc Count', 'Size', 'Ok?']);
+        $table->setHeaders(['UUID', 'App ID', 'Doc Count', 'Size', 'Ok?', 'shards', 'replicas']);
 
         /*
          * @var Index
@@ -84,6 +83,8 @@ class PrintIndicesCommand extends CommandWithBusAndGodToken
                 $index->isOK()
                     ? 'Yes'
                     : 'No',
+                $index->getShards(),
+                $index->getReplicas(),
             ]);
         }
         $table->render();

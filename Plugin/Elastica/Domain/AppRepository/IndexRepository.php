@@ -66,9 +66,7 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
             ->elasticaWrapper
             ->createIndex(
                 $newRepositoryReference,
-                $config,
-                $this->repositoryConfig['shards'],
-                $this->repositoryConfig['replicas']
+                $config
             );
 
         $this

@@ -44,6 +44,8 @@ class EventElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * Get index prefix.
+     *
      * @return string
      */
     public function getIndexPrefix(): string
@@ -79,22 +81,17 @@ class EventElasticaWrapper extends ElasticaWrapper
     }
 
     /**
-     * Get immutable index configuration.
+     * Get index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    public function getImmutableIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array {
+    public function getImmutableIndexConfiguration(Config $config): array
+    {
         return [
-            'number_of_shards' => $shards,
-            'number_of_replicas' => $replicas,
+            'number_of_shards' => $config->getShards(),
+            'number_of_replicas' => $config->getReplicas(),
         ];
     }
 
@@ -102,16 +99,11 @@ class EventElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    public function getIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array {
+    public function getIndexConfiguration(Config $config): array
+    {
         return [];
     }
 

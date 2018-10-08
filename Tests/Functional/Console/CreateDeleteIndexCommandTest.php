@@ -104,4 +104,34 @@ class CreateDeleteIndexCommandTest extends CommandTest
             'index' => self::$index,
         ]);
     }
+
+    /**
+     * Create index with different shards and replicas.
+     */
+    public function testCreateIndexShardsReplicas()
+    {
+        static::runCommand([
+            'command' => 'apisearch-server:create-index',
+            'app-id' => self::$appId,
+            'index' => self::$index,
+            '--shards' => 10,
+            '--replicas' => 2,
+        ]);
+
+        $this->indexTestingItems(self::$appId, self::$index);
+
+        $data = static::runCommand([
+            'command' => 'apisearch-server:print-indices',
+            'app-id' => self::$appId,
+        ]);
+
+        $this->assertTrue(strpos($data, '| 10 ') > 0);
+        $this->assertTrue(strpos($data, '| 2 ') > 0);
+
+        static::runCommand([
+            'command' => 'apisearch-server:delete-index',
+            'app-id' => self::$appId,
+            'index' => self::$index,
+        ]);
+    }
 }

@@ -63,18 +63,7 @@ config:
     # created
     #
     elastica_plugin:
-        config:
-            repository:
-                config_path: '/tmp/config_{app_id}_{index_id}'
-                shards: 1
-                replicas: 0
-            event_repository:
-                shards: 1
-                replicas: 0
-            log_repository:
-                shards: 1
-                replicas: 0
-
+        repository_config_path: '/tmp/config_{app_id}_{index_id}'
         cluster:
             docker_elasticsearch_service:
                 host: "%env(ELASTICSEARCH_HOST)%"
