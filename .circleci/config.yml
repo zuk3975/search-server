@@ -48,17 +48,14 @@ jobs:
                     docker build -t apisearch/server .
 
             - run:
-                name: Run Apisearch in server mode, listening to port 8100
+                name: Run Apisearch in server mode
                 command: |
                     docker run -d \
                         --name "apisearch_server" \
-                        -p 8100:8200 \
                         --link "apisearch_redis" \
                         --link "apisearch_elasticsearch" \
                         --entrypoint "/server-entrypoint.sh" \
-                        -e "APISEARCH_ENABLED_PLUGINS=metadatafields, Apisearch\Plugin\NewRelic\NewRelicPluginBundle" \
                         apisearch/server
-                    docker logs $(docker ps -qf "name=apisearch_server")
 
             - run:
                 name: Run Apisearch in worker mode
@@ -68,11 +65,12 @@ jobs:
                         --link "apisearch_redis" \
                         --link "apisearch_elasticsearch" \
                         --entrypoint "/command-worker-entrypoint.sh" \
-                        -e "APISEARCH_ENABLED_PLUGINS=multilanguage" \
                         apisearch/server
-                    docker logs $(docker ps -qf "name=apisearch_command_worker")
 
             - run:
                 name: Run tests
                 command: |
-                    docker exec -i -t $(docker ps -qf "name=apisearch_server") /var/www/apisearch/scripts/run-tests
+                    docker logs apisearch_server
+                    docker logs apisearch_command_worker
+                    docker exec -it apisearch_server /var/www/apisearch/scripts/run-tests
+

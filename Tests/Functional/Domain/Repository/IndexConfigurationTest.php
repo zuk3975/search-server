@@ -26,8 +26,6 @@ trait IndexConfigurationTest
 {
     /**
      * Test index check.
-     *
-     * @group config
      */
     public function testConfigureIndexWithSynonyms()
     {

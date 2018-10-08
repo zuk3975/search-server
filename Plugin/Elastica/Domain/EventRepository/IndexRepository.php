@@ -39,17 +39,17 @@ class IndexRepository extends ElasticaWrapperWithRepositoryReference implements 
      * ElasticaSearchRepository constructor.
      *
      * @param ElasticaWrapper   $elasticaWrapper
-     * @param array             $repositoryConfig
+     * @param string            $repositoryConfigPath
      * @param TimeFormatBuilder $timeFormatBuilder
      */
     public function __construct(
         ElasticaWrapper $elasticaWrapper,
-        array $repositoryConfig,
+        string $repositoryConfigPath,
         TimeFormatBuilder $timeFormatBuilder
     ) {
         parent::__construct(
             $elasticaWrapper,
-            $repositoryConfig
+            $repositoryConfigPath
         );
 
         $this->timeFormatBuilder = $timeFormatBuilder;

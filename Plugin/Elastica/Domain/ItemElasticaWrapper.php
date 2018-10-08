@@ -45,6 +45,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
     }
 
     /**
+     * Get index prefix.
+     *
      * @return string
      */
     public function getIndexPrefix(): string
@@ -83,16 +85,11 @@ class ItemElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    public function getImmutableIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array {
+    public function getImmutableIndexConfiguration(Config $config): array
+    {
         $language = $config->getLanguage();
 
         $defaultAnalyzerFilter = [
@@ -107,8 +104,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
         ];
 
         $indexConfiguration = [
-            'number_of_shards' => $shards,
-            'number_of_replicas' => $replicas,
+            'number_of_shards' => $config->getShards(),
+            'number_of_replicas' => $config->getReplicas(),
             'max_result_window' => 50000,
             'analysis' => [
                 'analyzer' => [
@@ -187,16 +184,11 @@ class ItemElasticaWrapper extends ElasticaWrapper
      * Get index configuration.
      *
      * @param Config $config
-     * @param int    $shards
-     * @param int    $replicas
      *
      * @return array
      */
-    public function getIndexConfiguration(
-        Config $config,
-        int $shards,
-        int $replicas
-    ): array {
+    public function getIndexConfiguration(Config $config): array
+    {
         $language = $config->getLanguage();
         $defaultAnalyzerFilter = [
             5 => 'lowercase',
@@ -210,8 +202,8 @@ class ItemElasticaWrapper extends ElasticaWrapper
         ];
 
         $indexConfiguration = [
-            'number_of_shards' => $shards,
-            'number_of_replicas' => $replicas,
+            'number_of_shards' => $config->getShards(),
+            'number_of_replicas' => $config->getReplicas(),
             'max_result_window' => 50000,
             'analysis' => [
                 'analyzer' => [

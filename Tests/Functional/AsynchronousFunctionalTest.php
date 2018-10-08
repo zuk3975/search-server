@@ -35,6 +35,6 @@ abstract class AsynchronousFunctionalTest extends ServiceFunctionalTest
      */
     protected static function waitAfterWriteCommand()
     {
-        usleep(500000);
+        usleep(800000);
     }
 }

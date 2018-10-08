@@ -54,9 +54,7 @@ class ConfigRepository extends ElasticaWrapperWithRepositoryReference implements
                 ->elasticaWrapper
                 ->configureIndex(
                     $newRepositoryReference,
-                    $config,
-                    $this->repositoryConfig['shards'],
-                    $this->repositoryConfig['replicas']
+                    $config
                 );
         }
     }

@@ -300,8 +300,6 @@ trait FiltersTest
 
     /**
      * Filter by strange character.
-     *
-     * @group engonga
      */
     public function testFilterByStrangeCharacter()
     {

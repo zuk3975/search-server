@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/apisearch-bundle.git",
-                "reference": "520d51125c08cf735f140cc14935600e96c0058b"
+                "reference": "87fd8633de3864b6caf7d27369fb3c04765efb65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/520d51125c08cf735f140cc14935600e96c0058b",
-                "reference": "520d51125c08cf735f140cc14935600e96c0058b",
+                "url": "https://api.github.com/repos/apisearch-io/apisearch-bundle/zipball/87fd8633de3864b6caf7d27369fb3c04765efb65",
+                "reference": "87fd8633de3864b6caf7d27369fb3c04765efb65",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "email": "hello@puntmig.com"
                 }
             ],
-            "time": "2018-09-17 08:19:05"
+            "time": "2018-10-08T01:00:46+00:00"
         },
         {
             "name": "apisearch-io/php-client",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/apisearch-io/php-client.git",
-                "reference": "cda6f5c3b32710e1ce54ff47f6a5dc494e3fbafe"
+                "reference": "ed4dc0a1c44ab94353faca7ee44948608125546e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/cda6f5c3b32710e1ce54ff47f6a5dc494e3fbafe",
-                "reference": "cda6f5c3b32710e1ce54ff47f6a5dc494e3fbafe",
+                "url": "https://api.github.com/repos/apisearch-io/php-client/zipball/ed4dc0a1c44ab94353faca7ee44948608125546e",
+                "reference": "ed4dc0a1c44ab94353faca7ee44948608125546e",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
                     "email": "yuhu@mmoreram.com"
                 }
             ],
-            "time": "2018-09-27 10:30:29"
+            "time": "2018-10-08T00:54:29+00:00"
         },
         {
             "name": "cboden/ratchet",

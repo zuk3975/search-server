@@ -90,9 +90,7 @@ class ElasticaPluginExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         return [
-            'elastica_plugin.config.repository' => $config['config']['repository'],
-            'elastica_plugin.config.event_repository' => $config['config']['event_repository'],
-            'elastica_plugin.config.log_repository' => $config['config']['log_repository'],
+            'elastica_plugin.repository_config_path' => $config['repository_config_path'],
             'elastica_plugin.cluster' => ['servers' => $config['cluster']],
         ];
     }

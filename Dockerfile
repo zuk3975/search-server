@@ -38,12 +38,10 @@ RUN mkdir /var/www/apisearch
 COPY . /var/www/apisearch
 RUN cd /var/www/apisearch && \
     composer install -n --prefer-dist && \
-    composer dump-autoload && \
-    rm -Rf /var/www/apisearch/var/cache && \
-    php /var/www/apisearch/bin/console cache:warmup --env=prod
+    composer dump-autoload
 
 COPY docker/* /
 
 EXPOSE 8200
-HEALTHCHECK --interval=5s --timeout=3s CMD php /var/www/apisearch/bin/console apisearch-server:check-health --env=prod > /dev/null 2>&1
+HEALTHCHECK --interval=5s --timeout=3s CMD php /var/www/apisearch/bin/console apisearch-server:check-health --env=prod --no-debug --no-interaction > /dev/null 2>&1
 ENTRYPOINT ["/server-entrypoint.sh"]

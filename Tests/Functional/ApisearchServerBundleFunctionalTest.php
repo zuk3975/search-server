@@ -172,21 +172,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                         'port' => $_ENV['ELASTICSEARCH_PORT'],
                     ],
                 ],
-                'config' => [
-                    'repository' => [
-                        'config_path' => '/tmp/config_{app_id}_{index_id}',
-                        'shards' => 1,
-                        'replicas' => 0,
-                    ],
-                    'event_repository' => [
-                        'shards' => 1,
-                        'replicas' => 0,
-                    ],
-                    'log_repository' => [
-                        'shards' => 1,
-                        'replicas' => 0,
-                    ],
-                ],
+                'repository_config_path' => '/tmp/config_{app_id}_{index_id}',
             ],
             'apisearch' => [
                 'repositories' => [

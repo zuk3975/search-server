@@ -27,8 +27,6 @@ class CreateIndexTest extends HttpFunctionalTest
 {
     /**
      * Test check health with different tokens.
-     *
-     * @group lala
      */
     public function testCreateIndex(): void
     {

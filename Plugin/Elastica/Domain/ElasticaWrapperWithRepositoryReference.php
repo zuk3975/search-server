@@ -34,24 +34,24 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
     protected $elasticaWrapper;
 
     /**
-     * @var array
+     * @var string
      *
-     * Repository config
+     * Repository config path
      */
-    protected $repositoryConfig;
+    protected $repositoryConfigPath;
 
     /**
      * ElasticaSearchRepository constructor.
      *
      * @param ElasticaWrapper $elasticaWrapper
-     * @param array           $repositoryConfig
+     * @param string          $repositoryConfigPath
      */
     public function __construct(
         ElasticaWrapper $elasticaWrapper,
-        array $repositoryConfig
+        string $repositoryConfigPath
     ) {
         $this->elasticaWrapper = $elasticaWrapper;
-        $this->repositoryConfig = $repositoryConfig;
+        $this->repositoryConfigPath = $repositoryConfigPath;
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class ElasticaWrapperWithRepositoryReference implements WithRepositoryR
                         ->composeUUID()
                     : '',
             ],
-            $this->repositoryConfig['config_path']
+            $this->repositoryConfigPath
         ), '/');
     }
 

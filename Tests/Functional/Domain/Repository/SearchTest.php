@@ -387,8 +387,6 @@ trait SearchTest
 
     /**
      * Search by strange character.
-     *
-     * @group engonga
      */
     public function testSearchByStrangeCharacter()
     {
