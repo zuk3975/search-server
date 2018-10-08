@@ -34,6 +34,8 @@ config:
                 level: debug
 
     rs_queue:
+        collector:
+            enable: false
         server:
             redis:
                 host: "%env(REDIS_HOST)%"

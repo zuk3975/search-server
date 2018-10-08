@@ -158,6 +158,9 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                 'readonly_token' => self::$readonlyToken,
             ],
             'rs_queue' => [
+                'collector' => [
+                    'enable' => false,
+                ],
                 'server' => [
                     'redis' => [
                         'host' => $_ENV['REDIS_HOST'],

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "443270d567109b72729a17fd319a74fc",
+    "content-hash": "3e56b64ea9282d0591328bc6270ccd50",
     "packages": [
         {
             "name": "apisearch-io/apisearch-bundle",
@@ -2804,16 +2804,16 @@
         },
         {
             "name": "rsqueue/rsqueue-bundle",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RSQueue/RSQueueBundle.git",
-                "reference": "866915d55fa34d447774d9e1fda12d0a06c88d6a"
+                "reference": "e89a70baf8e289a7469f24b3f5c9df1480ae98fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RSQueue/RSQueueBundle/zipball/866915d55fa34d447774d9e1fda12d0a06c88d6a",
-                "reference": "866915d55fa34d447774d9e1fda12d0a06c88d6a",
+                "url": "https://api.github.com/repos/RSQueue/RSQueueBundle/zipball/e89a70baf8e289a7469f24b3f5c9df1480ae98fd",
+                "reference": "e89a70baf8e289a7469f24b3f5c9df1480ae98fd",
                 "shasum": ""
             },
             "require": {
@@ -2855,7 +2855,7 @@
                 "rsqueue",
                 "symfony"
             ],
-            "time": "2018-01-31T17:58:07+00:00"
+            "time": "2018-10-08T02:05:58+00:00"
         },
         {
             "name": "ruflin/elastica",
