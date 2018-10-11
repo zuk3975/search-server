@@ -12,6 +12,7 @@ services:
 
     apisearch_server.event_publisher:
         class: Apisearch\Server\Domain\Event\EventPublisher
+        public: true
 
     apisearch_server.inline_event_publisher:
         class: Apisearch\Server\Domain\Event\EventPublisher
@@ -187,14 +188,17 @@ services:
     #
     apisearch_server.query_bus:
         alias: "tactician.commandbus.query"
+        public: true
 
     apisearch_server.command_bus.inline:
         class: Apisearch\Server\Domain\CommandBus\InlineCommandBus
+        public: true
         arguments:
             - "@tactician.commandbus.command"
 
     apisearch_server.command_bus.asynchronous:
         class: Apisearch\Server\Domain\CommandBus\AsynchronousCommandBus
+        public: true
         arguments:
             - "@apisearch_server.command_enqueuer"
             - "@tactician.commandbus.command"

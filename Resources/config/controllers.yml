@@ -1,5 +1,4 @@
 services:
-
     #
     # Controllers with command bus
     #
@@ -12,46 +11,68 @@ services:
     apisearch_server.create_index_controller:
         class: Apisearch\Server\Controller\CreateIndexController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.delete_index_controller:
         class: Apisearch\Server\Controller\DeleteIndexController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.reset_index_controller:
         class: Apisearch\Server\Controller\ResetIndexController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.add_token_controller:
         class: Apisearch\Server\Controller\AddTokenController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.delete_token_controller:
         class: Apisearch\Server\Controller\DeleteTokenController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.delete_tokens_controller:
         class: Apisearch\Server\Controller\DeleteTokensController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.add_interaction_controller:
         class: Apisearch\Server\Controller\AddInteractionController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.delete_all_interactions_controller:
         class: Apisearch\Server\Controller\DeleteAllInteractionsController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.index_items_controller:
         class: Apisearch\Server\Controller\IndexItemsController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.update_items_controller:
         class: Apisearch\Server\Controller\UpdateItemsController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.delete_items_controller:
         class: Apisearch\Server\Controller\DeleteItemsController
         parent: apisearch_server.controller_with_command_bus
+        tags:
+            - 'controller.service_arguments'
 
     #
     # Controllers with query bus
@@ -65,39 +86,56 @@ services:
     apisearch_server.query_controller:
         class: Apisearch\Server\Controller\QueryController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.events_controller:
         class: Apisearch\Server\Controller\EventsController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.logs_controller:
         class: Apisearch\Server\Controller\LogsController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.configure_index_controller:
         class: Apisearch\Server\Controller\ConfigureIndexController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.check_health_controller:
         class: Apisearch\Server\Controller\CheckHealthController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.ping_controller:
         class: Apisearch\Server\Controller\PingController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.check_index_controller:
         class: Apisearch\Server\Controller\CheckIndexController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.get_tokens_controller:
         class: Apisearch\Server\Controller\GetTokensController
         parent: apisearch_server.controller_with_query_bus
-
+        tags:
+            - 'controller.service_arguments'
 
     apisearch_server.get_indices_controller:
         class: Apisearch\Server\Controller\GetIndicesController
         parent: apisearch_server.controller_with_query_bus
+        tags:
+            - 'controller.service_arguments'
 
 
     #

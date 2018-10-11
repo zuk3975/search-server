@@ -1,5 +1,6 @@
 {
     "name": "apisearch-io/search-server",
+    "description": "Search over millions of documents, and give to your users unique, amazing and unforgettable experiences.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -14,7 +15,7 @@
         "symfony/http-kernel": "^3.4|^4.0",
         "symfony/console": "^3.4|^4.0",
         "symfony/monolog-bundle" : "^3.2",
-        "symfony/dependency-injection" : "^3.4",
+        "symfony/dependency-injection" : "^3.4|^4.0",
         "ruflin/elastica": "^6.0",
         "league/tactician-bundle": "^1.1",
         "nesbot/carbon": "^1.22",
