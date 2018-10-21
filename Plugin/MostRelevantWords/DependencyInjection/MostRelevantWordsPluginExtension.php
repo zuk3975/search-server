@@ -90,18 +90,7 @@ class MostRelevantWordsPluginExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         return [
-            'apisearch_plugin.most_relevant_words.fields' => isset($_ENV['MOST_RELEVANT_WORDS_FIELDS'])
-                ? array_map(function (string $field) {
-                    list($field, $maximumWords, $minimumFrequency, $minimumLength) = explode(';', $field, 4);
-
-                    return [
-                        'field' => trim($field),
-                        'maximum_words' => (int) trim($maximumWords),
-                        'minimum_frequency' => (int) trim($minimumFrequency),
-                        'minimum_length' => (int) trim($minimumLength),
-                    ];
-                }, explode(',', $_ENV['MOST_RELEVANT_WORDS_FIELDS']))
-                : $config['fields'],
+            'apisearch_plugin.most_relevant_words.fields' => $config['fields'],
         ];
     }
 

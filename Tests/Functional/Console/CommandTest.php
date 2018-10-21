@@ -46,16 +46,6 @@ abstract class CommandTest extends HttpFunctionalTest
     }
 
     /**
-     * Save logs.
-     *
-     * @return bool
-     */
-    protected static function saveLogs(): bool
-    {
-        return false;
-    }
-
-    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */

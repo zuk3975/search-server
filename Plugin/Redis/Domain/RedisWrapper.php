@@ -17,7 +17,6 @@ namespace Apisearch\Plugin\Redis\Domain;
 
 use Redis;
 use RedisCluster;
-use RSQueue\RedisFactory;
 
 /**
  * Class RedisWrapper.
@@ -39,13 +38,24 @@ class RedisWrapper
     private $redisFactory;
 
     /**
+     * @var RedisConfig
+     *
+     * Redis config
+     */
+    private $redisConfig;
+
+    /**
      * RedisWrapper constructor.
      *
      * @param RedisFactory $redisFactory
+     * @param RedisConfig  $redisConfig
      */
-    public function __construct(RedisFactory $redisFactory)
-    {
+    public function __construct(
+        RedisFactory $redisFactory,
+        RedisConfig $redisConfig
+    ) {
         $this->redisFactory = $redisFactory;
+        $this->redisConfig = $redisConfig;
     }
 
     /**
@@ -58,7 +68,7 @@ class RedisWrapper
         if (is_null($this->redisClient)) {
             $this->redisClient = $this
                 ->redisFactory
-                ->create();
+                ->create($this->redisConfig);
         }
 
         return $this->redisClient;

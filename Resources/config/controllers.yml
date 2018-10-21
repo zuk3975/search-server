@@ -89,18 +89,6 @@ services:
         tags:
             - 'controller.service_arguments'
 
-    apisearch_server.events_controller:
-        class: Apisearch\Server\Controller\EventsController
-        parent: apisearch_server.controller_with_query_bus
-        tags:
-            - 'controller.service_arguments'
-
-    apisearch_server.logs_controller:
-        class: Apisearch\Server\Controller\LogsController
-        parent: apisearch_server.controller_with_query_bus
-        tags:
-            - 'controller.service_arguments'
-
     apisearch_server.configure_index_controller:
         class: Apisearch\Server\Controller\ConfigureIndexController
         parent: apisearch_server.controller_with_query_bus

@@ -19,6 +19,7 @@ use Apisearch\Plugin\Elastica\DependencyInjection\CompilerPass\ElasticaConfigPat
 use Apisearch\Plugin\Elastica\DependencyInjection\ElasticaPluginExtension;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Domain\Plugin\Plugin;
+use Apisearch\Server\Domain\Plugin\SearchEnginePlugin;
 use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class ElasticaPluginBundle.
  */
-class ElasticaPluginBundle extends BaseBundle implements Plugin
+class ElasticaPluginBundle extends BaseBundle implements Plugin, SearchEnginePlugin
 {
     /**
      * Return all bundle dependencies.

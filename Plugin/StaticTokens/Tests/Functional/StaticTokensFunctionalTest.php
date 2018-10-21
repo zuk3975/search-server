@@ -73,14 +73,4 @@ abstract class StaticTokensFunctionalTest extends HttpFunctionalTest
     {
         return false;
     }
-
-    /**
-     * Save logs.
-     *
-     * @return bool
-     */
-    protected static function saveLogs(): bool
-    {
-        return false;
-    }
 }

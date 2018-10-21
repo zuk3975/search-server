@@ -88,9 +88,11 @@ class IndexWasConfigured extends DomainEvent
      */
     public static function stringToPayload(string $data): array
     {
+        $payload = json_decode($data, true);
+
         return [
-            IndexUUID::createFromArray($data['index_uuid']),
-            Config::createFromArray($data['config']),
+            IndexUUID::createFromArray($payload['index_uuid']),
+            Config::createFromArray($payload['config']),
         ];
     }
 }

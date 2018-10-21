@@ -19,6 +19,7 @@ use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\Event\CollectInMemoryDomainEventSubscriber;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\EventPublisher;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -59,6 +60,8 @@ abstract class DomainEventsMiddleware
      * @param callable                $next
      *
      * @return mixed
+     *
+     * @throws Exception
      */
     public function execute($command, callable $next)
     {
@@ -66,17 +69,30 @@ abstract class DomainEventsMiddleware
             ->eventSubscriber
             ->flushEvents();
 
-        $result = $next($command);
+        $thrownException = null;
+        $result = null;
 
-        foreach ($this
-                     ->eventSubscriber
-                     ->getEvents() as $domainEventWithRepositoryReference) {
+        try {
+            $result = $next($command);
+        } catch (Exception $exception) {
+            $thrownException = $exception;
+        }
+
+        $events = $this
+             ->eventSubscriber
+             ->getEvents();
+
+        foreach ($events as $domainEventWithRepositoryReference) {
             $this->processEvent($domainEventWithRepositoryReference);
         }
 
         $this
             ->eventSubscriber
             ->flushEvents();
+
+        if ($thrownException instanceof Exception) {
+            throw $thrownException;
+        }
 
         return $result;
     }

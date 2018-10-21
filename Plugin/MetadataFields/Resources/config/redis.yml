@@ -1,9 +1,0 @@
-services:
-
-    #
-    # Repositories
-    #
-    apisearch_plugin.metadata_fields.redis_repository:
-        class: Apisearch\Plugin\MetadataFields\Redis\Repository\RedisMetadataRepository
-        arguments:
-            - "@apisearch_plugin.redis.redis_wrapper"

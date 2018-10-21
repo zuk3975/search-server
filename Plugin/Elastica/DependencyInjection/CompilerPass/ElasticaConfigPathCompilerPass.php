@@ -28,12 +28,12 @@ class ElasticaConfigPathCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $elasticRepositoryConfigPath = $container->getParameter('elastica_plugin.repository_config_path');
+        $elasticRepositoryConfigPath = $container->getParameter('apisearch_plugin.elastica.repository_config_path');
         $elasticRepositoryConfigPath = str_replace(
             '{root}',
             realpath($container->getParameter('kernel.root_dir').'/../'),
             $elasticRepositoryConfigPath
         );
-        $container->setParameter('elastica_plugin.repository_config_path', $elasticRepositoryConfigPath);
+        $container->setParameter('apisearch_plugin.elastica.repository_config_path', $elasticRepositoryConfigPath);
     }
 }

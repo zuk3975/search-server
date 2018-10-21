@@ -26,10 +26,10 @@ use Apisearch\Model\Token;
 use Apisearch\Model\TokenUUID;
 use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
-use Apisearch\Plugin\Redis\RedisPluginBundle;
+use Apisearch\Plugin\RedisStorage\RedisStoragePluginBundle;
+use Apisearch\Plugin\RSQueue\RSQueuePluginBundle;
 use Apisearch\Query\Query as QueryModel;
 use Apisearch\Result\Events;
-use Apisearch\Result\Logs;
 use Apisearch\Result\Result;
 use Apisearch\Server\ApisearchServerBundle;
 use Apisearch\Server\Exception\ErrorException;
@@ -103,7 +103,7 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
      */
     protected static function getKernel(): KernelInterface
     {
-        self::loadEnv();
+        static::loadEnv();
         self::$godToken = $_ENV['APISEARCH_GOD_TOKEN'];
         self::$pingToken = $_ENV['APISEARCH_PING_TOKEN'];
         self::$readonlyToken = $_ENV['APISEARCH_READONLY_TOKEN'];
@@ -124,7 +124,8 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             BaseBundle::class,
             ApisearchServerBundle::class,
             ElasticaPluginBundle::class,
-            RedisPluginBundle::class,
+            RedisStoragePluginBundle::class,
+            RSQueuePluginBundle::class,
             CallbacksPluginBundle::class,
         ];
 
@@ -145,28 +146,18 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
             ],
             'apisearch_server' => [
                 'middleware_domain_events_service' => static::saveEvents()
-                    ? 'apisearch_server.middleware.inline_events'
+                    ? (
+                        static::asynchronousEvents()
+                            ? 'apisearch_server.middleware.enqueue_events'
+                            : 'apisearch_server.middleware.inline_events'
+                    )
                     : 'apisearch_server.middleware.ignore_events',
-                'middleware_logs_service' => static::saveLogs()
-                    ? 'apisearch_server.middleware.inline_logs'
-                    : 'apisearch_server.middleware.ignore_logs',
                 'command_bus_service' => static::asynchronousCommands()
                     ? 'apisearch_server.command_bus.asynchronous'
                     : 'apisearch_server.command_bus.inline',
                 'god_token' => self::$godToken,
                 'ping_token' => self::$pingToken,
                 'readonly_token' => self::$readonlyToken,
-            ],
-            'rs_queue' => [
-                'collector' => [
-                    'enable' => false,
-                ],
-                'server' => [
-                    'redis' => [
-                        'host' => $_ENV['REDIS_HOST'],
-                        'port' => $_ENV['REDIS_PORT'],
-                    ],
-                ],
             ],
             'elastica_plugin' => [
                 'cluster' => [
@@ -193,12 +184,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
                         ],
                         'user' => [
                             'repository_service' => 'apisearch_server.user_repository',
-                        ],
-                        'event' => [
-                            'repository_service' => 'apisearch_server.events_repository',
-                        ],
-                        'log' => [
-                            'repository_service' => 'apisearch_server.logs_repository',
                         ],
                         'indexes' => [
                             self::$index => self::$index,
@@ -295,13 +280,13 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
     }
 
     /**
-     * Save logs.
+     * Save asynchronous events.
      *
      * @return bool
      */
-    protected static function saveLogs(): bool
+    protected static function asynchronousEvents(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -716,48 +701,6 @@ abstract class ApisearchServerBundleFunctionalTest extends BaseFunctionalTest
         string $appId,
         Token  $token = null
     );
-
-    /**
-     * Query events.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Events
-     */
-    abstract public function queryEvents(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Events;
-
-    /**
-     * Query logs.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Logs
-     */
-    abstract public function queryLogs(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Logs;
 
     /**
      * Add interaction.

@@ -300,54 +300,6 @@ abstract class HttpFunctionalTest extends ApisearchServerBundleFunctionalTest
     }
 
     /**
-     * Query events.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Events
-     */
-    public function queryEvents(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Events {
-        return self::configureEventsRepository($appId, $index, $token)
-            ->query($query, $from, $to);
-    }
-
-    /**
-     * Query logs.
-     *
-     * @param QueryModel $query
-     * @param int|null   $from
-     * @param int|null   $to
-     * @param string     $appId
-     * @param string     $index
-     * @param Token      $token
-     *
-     * @return Logs
-     */
-    public function queryLogs(
-        QueryModel $query,
-        ?int $from = null,
-        ?int $to = null,
-        string $appId = null,
-        string $index = null,
-        Token $token = null
-    ): Logs {
-        return self::configureLogsRepository($appId, $index, $token)
-            ->query($query, $from, $to);
-    }
-
-    /**
      * Add interaction.
      *
      * @param string $userId

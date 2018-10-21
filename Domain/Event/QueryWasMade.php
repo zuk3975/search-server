@@ -104,6 +104,9 @@ class QueryWasMade extends DomainEvent
             'filters' => array_map(function (Filter $filter) {
                 return $filter->toArray();
             }, $this->appliedFilters),
+            'sort_by' => $this
+                ->sortBy
+                ->toArray(),
         ];
     }
 
@@ -118,7 +121,6 @@ class QueryWasMade extends DomainEvent
             'q' => $this->queryText,
             'q_empty' => empty($this->queryText),
             'q_length' => strlen($this->queryText),
-            'sort_by' => $this->sortBy->toArray(),
             'size' => $this->size,
             'result_ids' => $this->resultIds,
             'result_length' => count($this->resultIds),

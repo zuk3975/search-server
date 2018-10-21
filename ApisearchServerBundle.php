@@ -90,10 +90,7 @@ class ApisearchServerBundle extends BaseBundle
     {
         return [
             new CompilerPass\ItemRepositoriesCompilerPass(),
-            new CompilerPass\EventRepositoriesCompilerPass(),
-            new CompilerPass\LogRepositoriesCompilerPass(),
             new CompilerPass\DomainEventsMiddlewareCompilerPass(),
-            new CompilerPass\LogsMiddlewareCompilerPass(),
             new CompilerPass\AppRepositoriesCompilerPass(),
             new CompilerPass\UserRepositoriesCompilerPass(),
             new CompilerPass\CommandBusCompilerPass(),

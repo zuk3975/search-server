@@ -17,7 +17,8 @@ namespace Apisearch\Server\Tests\Functional\Http;
 
 use Apisearch\Plugin\Callbacks\CallbacksPluginBundle;
 use Apisearch\Plugin\Elastica\ElasticaPluginBundle;
-use Apisearch\Plugin\Redis\RedisPluginBundle;
+use Apisearch\Plugin\RedisStorage\RedisStoragePluginBundle;
+use Apisearch\Plugin\RSQueue\RSQueuePluginBundle;
 use Apisearch\Server\Tests\Functional\HttpFunctionalTest;
 
 /**
@@ -67,7 +68,8 @@ class HealthTest extends HttpFunctionalTest
                 [
                     'callbacks' => CallbacksPluginBundle::class,
                     'elastica' => ElasticaPluginBundle::class,
-                    'redis' => RedisPluginBundle::class,
+                    'redis_storage' => RedisStoragePluginBundle::class,
+                    'rsqueue' => RSQueuePluginBundle::class,
                 ],
                 $content['info']['plugins']
             );

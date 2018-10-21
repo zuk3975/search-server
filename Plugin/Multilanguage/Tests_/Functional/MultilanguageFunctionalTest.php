@@ -48,16 +48,6 @@ abstract class MultilanguageFunctionalTest extends AsynchronousFunctionalTest
     }
 
     /**
-     * Save logs.
-     *
-     * @return bool
-     */
-    protected static function saveLogs(): bool
-    {
-        return false;
-    }
-
-    /**
      * Get items file path.
      *
      * @return string

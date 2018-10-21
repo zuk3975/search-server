@@ -76,17 +76,4 @@ class TransactionElasticaMiddleware implements PluginMiddleware
             WriteCommand::class,
         ];
     }
-
-    /**
-     * Command should implement these interfaces in order to be used inside
-     * the middleware. Otherwise will be discarted.
-     *
-     * @return string[]
-     */
-    public function getFilteredInterfaces(): array
-    {
-        return [
-            WriteCommand::class,
-        ];
-    }
 }
