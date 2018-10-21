@@ -29,8 +29,10 @@ class CommandBusCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $container
-            ->addAliases([
-                'apisearch_server.command_bus' => $container->getParameter('apisearch_server.command_bus_service'),
-            ]);
+            ->setAlias(
+                'apisearch_server.command_bus',
+                $container->getParameter('apisearch_server.command_bus_service')
+            )
+            ->setPublic(true);
     }
 }

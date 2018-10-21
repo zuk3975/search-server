@@ -3,6 +3,7 @@ services:
     apisearch_plugin.redis.redis_wrapper:
         class: Apisearch\Plugin\Redis\Domain\RedisWrapper
         lazy: true
+        public: true
         arguments:
             - "@rs_queue.redis_factory"
 
@@ -14,4 +15,3 @@ services:
         tags:
             - { name: "apisearch_server.app_repository" }
             - { name: "apisearch_server.token_locator" }
-
