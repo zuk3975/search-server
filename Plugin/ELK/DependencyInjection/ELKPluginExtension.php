@@ -92,7 +92,7 @@ class ELKPluginExtension extends BaseExtension
     {
         $host = $_ENV['REDIS_ELK_HOST'] ?? $config['host'];
         if (is_null($host)) {
-            $exception = new InvalidConfigurationException();
+            $exception = new InvalidConfigurationException('Please provide a host for redis elk plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'host'));
 
             throw $exception;
@@ -100,18 +100,18 @@ class ELKPluginExtension extends BaseExtension
 
         $port = $_ENV['REDIS_ELK_PORT'] ?? $config['port'];
         if (is_null($port)) {
-            $exception = new InvalidConfigurationException();
+            $exception = new InvalidConfigurationException('Please provide a post for redis elk plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'port'));
 
             throw $exception;
         }
 
         return [
-            'apisearch_plugin.elk.host' => strval($host),
-            'apisearch_plugin.elk.port' => intval($port),
-            'apisearch_plugin.elk.is_cluster' => boolval($_ENV['REDIS_ELK_IS_CLUSTER'] ?? $config['is_cluster']),
-            'apisearch_plugin.elk.database' => strval($_ENV['REDIS_ELK_DATABASE'] ?? $config['database']),
-            'apisearch_plugin.elk.key' => strval($_ENV['REDIS_ELK_KEY'] ?? $config['key']),
+            'apisearch_plugin.elk.host' => (string)$host,
+            'apisearch_plugin.elk.port' => (int)$port,
+            'apisearch_plugin.elk.is_cluster' => (bool)($_ENV['REDIS_ELK_IS_CLUSTER'] ?? $config['is_cluster']),
+            'apisearch_plugin.elk.database' => (string)($_ENV['REDIS_ELK_DATABASE'] ?? $config['database']),
+            'apisearch_plugin.elk.key' => (string)($_ENV['REDIS_ELK_KEY'] ?? $config['key']),
         ];
     }
 

@@ -109,26 +109,26 @@ class RSQueuePluginExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         $redisHost = $_ENV['REDIS_QUEUE_HOST'] ?? $config['host'];
-        if (is_null($redisHost)) {
-            $exception = new InvalidConfigurationException();
+        if ($redisHost === null) {
+            $exception = new InvalidConfigurationException('Please provide a host for the rs queue plugin');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'host'));
 
             throw $exception;
         }
 
         $redisPort = $_ENV['REDIS_QUEUE_PORT'] ?? $config['port'];
-        if (is_null($redisPort)) {
-            $exception = new InvalidConfigurationException();
+        if ($redisPort === null) {
+            $exception = new InvalidConfigurationException('Please provide a port for the rs queue plugin');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'port'));
 
             throw $exception;
         }
-
+        
         return [
-            'apisearch_plugin.rsqueue.host' => strval($redisHost),
-            'apisearch_plugin.rsqueue.port' => intval($redisPort),
-            'apisearch_plugin.rsqueue.is_cluster' => boolval($_ENV['REDIS_QUEUE_IS_CLUSTER'] ?? $config['is_cluster']),
-            'apisearch_plugin.rsqueue.database' => strval($_ENV['REDIS_QUEUE_DATABASE'] ?? $config['database']),
+            'apisearch_plugin.rsqueue.host' => (string)$redisHost,
+            'apisearch_plugin.rsqueue.port' => (int)$redisPort,
+            'apisearch_plugin.rsqueue.is_cluster' => (bool)($_ENV['REDIS_QUEUE_IS_CLUSTER'] ?? $config['is_cluster']),
+            'apisearch_plugin.rsqueue.database' => (string)($_ENV['REDIS_QUEUE_DATABASE'] ?? $config['database']),
             'apisearch_plugin.rsqueue.commands_queue_name' => $_ENV['COMMANDS_QUEUE_NAME'] ?? $config['commands_queue_name'],
             'apisearch_plugin.rsqueue.events_queue_name' => $_ENV['EVENTS_QUEUE_NAME'] ?? $config['events_queue_name'],
         ];

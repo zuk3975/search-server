@@ -108,16 +108,16 @@ class RedisStoragePluginExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         $storageHost = $_ENV['REDIS_STORAGE_HOST'] ?? $config['host'];
-        if (is_null($storageHost)) {
-            $exception = new InvalidConfigurationException();
+        if ($storageHost === null) {
+            $exception = new InvalidConfigurationException('Please provide a host for redis storage plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'host'));
 
             throw $exception;
         }
 
         $storagePort = $_ENV['REDIS_STORAGE_PORT'] ?? $config['port'];
-        if (is_null($storageHost)) {
-            $exception = new InvalidConfigurationException();
+        if ($storageHost === null) {
+            $exception = new InvalidConfigurationException('Please provide a port for redis storage plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'port'));
 
             throw $exception;
@@ -125,10 +125,10 @@ class RedisStoragePluginExtension extends BaseExtension
 
         return [
             'apisearch_plugin.redis_storage.locator_enabled' => $config['locator_enabled'],
-            'apisearch_plugin.redis_storage.host' => strval($storageHost),
-            'apisearch_plugin.redis_storage.port' => intval($storagePort),
-            'apisearch_plugin.redis_storage.is_cluster' => boolval($_ENV['REDIS_STORAGE_IS_CLUSTER'] ?? $config['is_cluster']),
-            'apisearch_plugin.redis_storage.database' => strval($_ENV['REDIS_STORAGE_DATABASE'] ?? $config['database']),
+            'apisearch_plugin.redis_storage.host' => (string)$storageHost,
+            'apisearch_plugin.redis_storage.port' => (int)$storagePort,
+            'apisearch_plugin.redis_storage.is_cluster' => (bool)($_ENV['REDIS_STORAGE_IS_CLUSTER'] ?? $config['is_cluster']),
+            'apisearch_plugin.redis_storage.database' => (string)($_ENV['REDIS_STORAGE_DATABASE'] ?? $config['database']),
         ];
     }
 }
