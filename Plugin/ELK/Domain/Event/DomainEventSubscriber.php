@@ -24,7 +24,7 @@ use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryPeakUsageProcessor;
 use Monolog\Processor\MemoryUsageProcessor;
-use Monolog\Processor\WebProcessor;
+use RedisException;
 
 /**
  * Class DomainEventSubscriber.
@@ -53,20 +53,37 @@ class DomainEventSubscriber implements EventSubscriber
     private $key;
 
     /**
+     * @var string
+     *
+     * Service
+     */
+    private $service;
+
+    /**
+     * @var Logger
+     *
+     * Logger
+     */
+    private $logger;
+
+    /**
      * RedisMetadataRepository constructor.
      *
      * @param RedisWrapper      $redisWrapper
      * @param TimeFormatBuilder $timeFormatBuilder
      * @param string            $key
+     * @param string            $service
      */
     public function __construct(
         RedisWrapper $redisWrapper,
         TimeFormatBuilder $timeFormatBuilder,
-        string $key
+        string $key,
+        string $service
     ) {
         $this->redisWrapper = $redisWrapper;
         $this->timeFormatBuilder = $timeFormatBuilder;
         $this->key = $key;
+        $this->service = $service;
     }
 
     /**
@@ -82,12 +99,16 @@ class DomainEventSubscriber implements EventSubscriber
     }
 
     /**
-     * Handle event.
+     * Get logger.
      *
-     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
+     * @return Logger
      */
-    public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
+    public function getLogger()
     {
+        if ($this->logger instanceof Logger) {
+            return $this->logger;
+        }
+
         $redisHandler = new RedisHandler(
             $this
                 ->redisWrapper
@@ -97,24 +118,43 @@ class DomainEventSubscriber implements EventSubscriber
 
         $formatter = new LogstashFormatter('apisearch');
         $redisHandler->setFormatter($formatter);
-        $logger = new Logger('apisearch_to_logstash', [$redisHandler], [
+        $this->logger = new Logger('apisearch_to_logstash', [$redisHandler], [
             new MemoryUsageProcessor(),
             new MemoryPeakUsageProcessor(),
-            new WebProcessor(),
         ]);
+
+        return $this->logger;
+    }
+
+    /**
+     * Handle event.
+     *
+     * @param DomainEventWithRepositoryReference $domainEventWithRepositoryReference
+     */
+    public function handle(DomainEventWithRepositoryReference $domainEventWithRepositoryReference)
+    {
         $event = $domainEventWithRepositoryReference->getDomainEvent();
-        $reducedArray = $event->toReducedArray();
+        $reducedArray = $event->toLogger();
         $reducedArray['occurred_on'] = $this
             ->timeFormatBuilder
             ->formatTimeFromMillisecondsToBasicDateTime(
                 $event->occurredOn()
             );
 
-        $logger->info(json_encode([
-            'repository_reference' => $domainEventWithRepositoryReference
-                ->getRepositoryReference()
-                ->compose(),
-            'time_cost' => $domainEventWithRepositoryReference->getTimeCost(),
-        ] + $reducedArray));
+        try {
+            $this
+                ->getLogger()
+                ->info(
+                    json_encode([
+                            'service' => $this->service,
+                            'repository_reference' => $domainEventWithRepositoryReference
+                                ->getRepositoryReference()
+                                ->compose(),
+                            'time_cost' => $domainEventWithRepositoryReference->getTimeCost(),
+                        ] + $reducedArray)
+                );
+        } catch (RedisException $exception) {
+            // Nothing to do.
+        }
     }
 }

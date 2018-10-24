@@ -39,11 +39,11 @@ class TokenWasAdded extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
             'token' => $this
@@ -53,26 +53,16 @@ class TokenWasAdded extends DomainEvent
     }
 
     /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [];
-    }
-
-    /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
         return [
-            Token::createFromArray(json_decode($data, true)['token']),
+            Token::createFromArray($arrayPayload['token']),
         ];
     }
 }

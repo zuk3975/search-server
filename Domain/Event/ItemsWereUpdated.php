@@ -53,48 +53,36 @@ class ItemsWereUpdated extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
-            'filters' => array_map(function (Filter $filter) {
+            'filters' => \json_encode(array_map(function (Filter $filter) {
                 return $filter->toArray();
-            }, $this->appliedFilters),
-            'changes' => $this->changes->toArray(),
+            }, $this->appliedFilters)),
+            'changes' => \json_encode($this->changes->toArray()),
         ];
-    }
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [];
     }
 
     /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
-        $payload = json_decode($data, true);
-
         return [
             array_values(
                 array_map(function (array $filter) {
                     return Filter::createFromArray($filter);
-                }, ($payload['filters'] ?? []))
+                }, (\json_decode($arrayPayload['filters'], true)))
             ),
-            Changes::createFromArray($payload['changes'] ?? []),
+            Changes::createFromArray(\json_decode($arrayPayload['changes'], true)),
         ];
     }
 }
