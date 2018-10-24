@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Middleware;
 
+use Apisearch\Repository\RepositoryReference;
+use Apisearch\Repository\WithRepositoryReference;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\EventPublisher;
 use Apisearch\Server\Domain\Event\ExceptionWasCached;
@@ -60,7 +62,9 @@ class ExceptionsMiddleware implements Middleware
             $this
                 ->eventPublisher
                 ->publish(new DomainEventWithRepositoryReference(
-                    $command->getRepositoryReference(),
+                    $command instanceof WithRepositoryReference
+                        ? $command->getRepositoryReference()
+                        : RepositoryReference::create(),
                     new ExceptionWasCached(new StorableException(
                         $exception->getMessage(),
                         (int) $exception->getCode(),

@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Event;
 
-use Apisearch\Model\Item;
+use Apisearch\Model\ItemUUID;
 
 /**
  * Class ItemsWereIndexed.
@@ -23,64 +23,53 @@ use Apisearch\Model\Item;
 class ItemsWereIndexed extends DomainEvent
 {
     /**
-     * @var Item[]
+     * @var ItemUUID[]
      *
-     * Items
+     * Items UUID
      */
-    private $items;
+    private $itemsUUID;
 
     /**
      * ItemsWasIndexed constructor.
      *
-     * @param Item[] $items
+     * @param ItemUUID[] $itemsUUID
      */
-    public function __construct(array $items)
+    public function __construct(array $itemsUUID)
     {
-        $this->items = $items;
+        $this->itemsUUID = $itemsUUID;
         $this->setNow();
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
-            'items' => array_values(
-                array_map(function (Item $item) {
-                    return $item->toArray();
-                }, $this->items)
+            'nb_items' => count($this->itemsUUID),
+            'item_uuid' => array_values(
+                array_map(function (ItemUUID $itemUUID) {
+                    return $itemUUID->composeUUID();
+                }, $this->itemsUUID)
             ),
-        ];
-    }
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [
-            'nb_items' => count($this->items),
         ];
     }
 
     /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
         return [
-            array_map(function (array $item) {
-                return Item::createFromArray($item);
-            }, json_decode($data, true)['items']),
+            array_map(function (string $composedItemUUID) {
+                return ItemUUID::createByComposedUUID($composedItemUUID);
+            }, $arrayPayload['item_uuid']),
         ];
     }
 }

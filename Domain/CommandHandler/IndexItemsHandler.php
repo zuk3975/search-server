@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\CommandHandler;
 
+use Apisearch\Model\Item;
 use Apisearch\Server\Domain\Command\IndexItems;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\ItemsWereIndexed;
@@ -47,7 +48,9 @@ class IndexItemsHandler extends WithRepositoryAndEventPublisher
             ->eventPublisher
             ->publish(new DomainEventWithRepositoryReference(
                 $repositoryReference,
-                new ItemsWereIndexed($items)
+                new ItemsWereIndexed(array_map(function (Item $item) {
+                    return $item->getUUID();
+                }, $items))
             ));
     }
 }
