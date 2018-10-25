@@ -40,7 +40,9 @@ class ResultBuilder
         $aggregations = new ResultAggregations($resultAggregations['doc_count']);
         unset($resultAggregations['doc_count']);
         foreach ($resultAggregations as $aggregationName => $resultAggregation) {
-            $queryAggregation = $query->getAggregation($aggregationName);
+            if (!$queryAggregation = $query->getAggregation($aggregationName)) {
+                continue;
+            }
             $relatedFilter = $query->getFilter($aggregationName);
             $relatedFilterValues = $relatedFilter instanceof Filter
                 ? $relatedFilter->getValues()
