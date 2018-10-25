@@ -39,11 +39,11 @@ class InteractionWasAdded extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
             'interaction' => $this
@@ -53,26 +53,16 @@ class InteractionWasAdded extends DomainEvent
     }
 
     /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [];
-    }
-
-    /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
         return [
-            Interaction::createFromArray(json_decode($data, true)['interaction']),
+            Interaction::createFromArray($arrayPayload['interaction']),
         ];
     }
 }

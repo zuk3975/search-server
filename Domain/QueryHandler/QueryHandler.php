@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Apisearch\Server\Domain\QueryHandler;
 
 use Apisearch\Model\Item;
-use Apisearch\Query\Filter;
 use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Event\DomainEventWithRepositoryReference;
 use Apisearch\Server\Domain\Event\QueryWasMade;
@@ -55,40 +54,16 @@ class QueryHandler extends WithRepositoryAndEventPublisher
                 $repositoryReference,
                 new QueryWasMade(
                     $searchQuery->getQueryText(),
-                    $this->filterFiltersByType($searchQuery->getFilters(), Filter::TYPE_FIELD),
-                    $searchQuery->getSortBy(),
                     $searchQuery->getSize(),
                     array_map(function (Item $item) {
-                        return $item->composeUUID();
+                        return $item->getUUID();
                     }, $result->getItems()),
-                    $searchQuery->getUser()
+                    $searchQuery->getUser(),
+                    json_encode($query->getQuery()->toArray())
                 ),
                 (int) ((microtime(true) - $from) * 1000)
             ));
 
         return $result;
-    }
-
-    /**
-     * Filter filters by type.
-     *
-     * @param Filter[] $filters
-     * @param string   $filterType
-     *
-     * @return Filter[]
-     */
-    private function filterFiltersByType(
-        array $filters,
-        string $filterType
-    ): array {
-        return
-            array_values(
-                array_filter(
-                    $filters,
-                    function (Filter $filter) use ($filterType) {
-                        return $filter->getFilterType() === $filterType;
-                    }
-                )
-            );
     }
 }

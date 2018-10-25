@@ -1,8 +1,0 @@
-services:
-
-    #
-    # Repositories
-    #
-    apisearch_plugin.metadata_fields.in_memory_repository:
-        class: Apisearch\Plugin\MetadataFields\Domain\Repository\InMemoryMetadataRepository
-        public: true

@@ -109,4 +109,35 @@ class ItemRelevantWordsTest extends TestCase
             $field2
         );
     }
+
+    /**
+     * Simple multiple fields.
+     */
+    public function testMultipleFieldsNoKeepRelative()
+    {
+        $itemRelevantWords = new ItemRelevantWords([
+            'field1' => [
+                'maximum_words' => 5,
+                'minimum_frequency' => 3,
+                'minimum_length' => 1,
+                'keep_relative_positions' => false,
+            ],
+        ]);
+
+        $item = Item::create(
+            ItemUUID::createByComposedUUID('1~item'),
+            [],
+            [],
+            [
+                'field1' => $this->text1,
+            ]
+        );
+
+        $itemRelevantWords->reduceItemSearchableFields($item);
+        $field1 = $item->getSearchableMetadata()['field1'];
+        $this->assertEquals(
+            'house my wife',
+            $field1
+        );
+    }
 }

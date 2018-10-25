@@ -15,9 +15,8 @@ declare(strict_types=1);
 
 namespace Apisearch\Server\Domain\Event;
 
+use Apisearch\Model\ItemUUID;
 use Apisearch\Model\User;
-use Apisearch\Query\Filter;
-use Apisearch\Query\SortBy;
 
 /**
  * Class QueryWasMade.
@@ -32,20 +31,6 @@ class QueryWasMade extends DomainEvent
     private $queryText;
 
     /**
-     * @var Filter[]
-     *
-     * Applied filters
-     */
-    private $appliedFilters;
-
-    /**
-     * @var SortBy
-     *
-     * Sort by
-     */
-    private $sortBy;
-
-    /**
      * @var int
      *
      * Size
@@ -53,11 +38,11 @@ class QueryWasMade extends DomainEvent
     private $size;
 
     /**
-     * @var string[]
+     * @var ItemUUID[]
      *
-     * Result ids
+     * Items UUID
      */
-    private $resultIds;
+    private $itemsUUID;
 
     /**
      * @var User|null
@@ -67,93 +52,80 @@ class QueryWasMade extends DomainEvent
     private $user;
 
     /**
+     * @var string
+     *
+     * Query serialized
+     */
+    private $querySerialized;
+
+    /**
      * QueryWasMade constructor.
      *
-     * @param string    $queryText
-     * @param Filter[]  $appliedFilters
-     * @param SortBy    $sortBy
-     * @param int       $size
-     * @param string[]  $resultIds
-     * @param User|null $user
+     * @param string     $queryText
+     * @param int        $size
+     * @param ItemUUID[] $itemsUUID
+     * @param User|null  $user
+     * @param string     $querySerialized
      */
     public function __construct(
         string $queryText,
-        array $appliedFilters,
-        SortBy $sortBy,
         int $size,
-        array $resultIds,
-        ? User $user
+        array $itemsUUID,
+        ? User $user,
+        string $querySerialized
     ) {
         $this->queryText = $queryText;
-        $this->appliedFilters = $appliedFilters;
-        $this->sortBy = $sortBy;
         $this->size = $size;
-        $this->resultIds = $resultIds;
+        $this->itemsUUID = $itemsUUID;
         $this->user = $user;
         $this->setNow();
+        $this->querySerialized = $querySerialized;
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
-    {
-        return [
-            'filters' => array_map(function (Filter $filter) {
-                return $filter->toArray();
-            }, $this->appliedFilters),
-            'sort_by' => $this
-                ->sortBy
-                ->toArray(),
-        ];
-    }
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
+    public function toArrayPayload(): array
     {
         return [
             'q' => $this->queryText,
             'q_empty' => empty($this->queryText),
             'q_length' => strlen($this->queryText),
             'size' => $this->size,
-            'result_ids' => $this->resultIds,
-            'result_length' => count($this->resultIds),
+            'item_uuid' => array_values(
+                array_map(function (ItemUUID $itemUUID) {
+                    return $itemUUID->composeUUID();
+                }, $this->itemsUUID)
+            ),
+            'result_length' => count($this->itemsUUID),
             'user' => ($this->user instanceof User)
                 ? $this->user->toArray()
                 : null,
+            'query_serialized' => $this->querySerialized,
         ];
     }
 
     /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
-        $payload = json_decode($data, true);
-
         return [
-            $payload['q'],
-            array_values(
-                array_map(function (array $filter) {
-                    return Filter::createFromArray($filter);
-                }, ($payload['filters'] ?? []))
-            ),
-            SortBy::createFromArray($payload['sort_by']),
-            $payload['size'],
-            $payload['result_ids'] ?? [],
-            isset($payload['user'])
-                ? User::createFromArray($payload['user'])
+            $arrayPayload['q'],
+            $arrayPayload['size'],
+            array_map(function (string $composedItemUUID) {
+                return ItemUUID::createByComposedUUID($composedItemUUID);
+            }, $arrayPayload['item_uuid']),
+            isset($arrayPayload['user'])
+                ? User::createFromArray($arrayPayload['user'])
                 : null,
+            $arrayPayload['query_serialized'],
         ];
     }
 }
