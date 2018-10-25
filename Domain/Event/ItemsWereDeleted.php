@@ -41,46 +41,35 @@ class ItemsWereDeleted extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
-            'items' => array_values(
+            'nb_items' => count($this->itemsUUID),
+            'item_uuid' => array_values(
                 array_map(function (ItemUUID $itemUUID) {
-                    return $itemUUID->toArray();
+                    return $itemUUID->composeUUID();
                 }, $this->itemsUUID)
             ),
         ];
     }
 
     /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [
-            'nb_items' => count($this->itemsUUID),
-        ];
-    }
-
-    /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
         return [
-            array_map(function (array $itemUUID) {
-                return ItemUUID::createFromArray($itemUUID);
-            }, json_decode($data, true)['items']),
+            array_map(function (string $composedItemUUID) {
+                return ItemUUID::createByComposedUUID($composedItemUUID);
+            }, $arrayPayload['item_uuid']),
         ];
     }
 }

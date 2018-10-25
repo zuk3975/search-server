@@ -113,7 +113,13 @@ class ItemRelevantWords
         }, ARRAY_FILTER_USE_BOTH);
         arsort($wordsCounted);
         $wordsCounted = array_slice($wordsCounted, 0, $config['maximum_words']);
-        $wordsToKeep = array_intersect($words, array_keys($wordsCounted));
+        $wordsCountedKeys = array_keys($wordsCounted);
+        $wordsToKeep = (
+            !isset($config['keep_relative_positions']) ||
+            true === $config['keep_relative_positions']
+        )
+            ? array_intersect($words, $wordsCountedKeys)
+            : array_slice($wordsCountedKeys, 0, $config['maximum_words']);
 
         return implode(' ', $wordsToKeep);
     }

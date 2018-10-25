@@ -107,11 +107,12 @@ class ELKPluginExtension extends BaseExtension
         }
 
         return [
-            'apisearch_plugin.elk.host' => (string)$host,
-            'apisearch_plugin.elk.port' => (int)$port,
-            'apisearch_plugin.elk.is_cluster' => (bool)($_ENV['REDIS_ELK_IS_CLUSTER'] ?? $config['is_cluster']),
-            'apisearch_plugin.elk.database' => (string)($_ENV['REDIS_ELK_DATABASE'] ?? $config['database']),
-            'apisearch_plugin.elk.key' => (string)($_ENV['REDIS_ELK_KEY'] ?? $config['key']),
+            'apisearch_plugin.elk.host' => (string) $host,
+            'apisearch_plugin.elk.port' => (int) $port,
+            'apisearch_plugin.elk.is_cluster' => (bool) ($_ENV['REDIS_ELK_IS_CLUSTER'] ?? $config['is_cluster']),
+            'apisearch_plugin.elk.database' => (string) ($_ENV['REDIS_ELK_DATABASE'] ?? $config['database']),
+            'apisearch_plugin.elk.key' => (string) ($_ENV['REDIS_ELK_KEY'] ?? $config['key']),
+            'apisearch_plugin.elk.service' => (string) ($_ENV['REDIS_ELK_SERVICE'] ?? $config['service']),
         ];
     }
 

@@ -43,5 +43,4 @@ RUN cd /var/www/apisearch && \
 COPY docker/* /
 
 EXPOSE 8200
-HEALTHCHECK --interval=5s --timeout=3s CMD php /var/www/apisearch/bin/console apisearch-server:check-health --env=prod --no-debug --no-interaction > /dev/null 2>&1
 ENTRYPOINT ["/server-entrypoint.sh"]

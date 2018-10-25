@@ -108,7 +108,7 @@ class RedisStoragePluginExtension extends BaseExtension
     protected function getParametrizationValues(array $config): array
     {
         $storageHost = $_ENV['REDIS_STORAGE_HOST'] ?? $config['host'];
-        if ($storageHost === null) {
+        if (null === $storageHost) {
             $exception = new InvalidConfigurationException('Please provide a host for redis storage plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'host'));
 
@@ -116,7 +116,7 @@ class RedisStoragePluginExtension extends BaseExtension
         }
 
         $storagePort = $_ENV['REDIS_STORAGE_PORT'] ?? $config['port'];
-        if ($storageHost === null) {
+        if (null === $storageHost) {
             $exception = new InvalidConfigurationException('Please provide a port for redis storage plugin.');
             $exception->setPath(sprintf('%s.%s', $this->getAlias(), 'port'));
 
@@ -125,10 +125,10 @@ class RedisStoragePluginExtension extends BaseExtension
 
         return [
             'apisearch_plugin.redis_storage.locator_enabled' => $config['locator_enabled'],
-            'apisearch_plugin.redis_storage.host' => (string)$storageHost,
-            'apisearch_plugin.redis_storage.port' => (int)$storagePort,
-            'apisearch_plugin.redis_storage.is_cluster' => (bool)($_ENV['REDIS_STORAGE_IS_CLUSTER'] ?? $config['is_cluster']),
-            'apisearch_plugin.redis_storage.database' => (string)($_ENV['REDIS_STORAGE_DATABASE'] ?? $config['database']),
+            'apisearch_plugin.redis_storage.host' => (string) $storageHost,
+            'apisearch_plugin.redis_storage.port' => (int) $storagePort,
+            'apisearch_plugin.redis_storage.is_cluster' => (bool) ($_ENV['REDIS_STORAGE_IS_CLUSTER'] ?? $config['is_cluster']),
+            'apisearch_plugin.redis_storage.database' => (string) ($_ENV['REDIS_STORAGE_DATABASE'] ?? $config['database']),
         ];
     }
 }
