@@ -43,6 +43,9 @@ class MostRelevantWordsPluginConfiguration extends BaseConfiguration
                             ->end()
                             ->integerNode('minimum_length')
                                 ->isRequired()
+                            ->end()
+                            ->booleanNode('keep_relative_positions')
+                                ->defaultTrue()
                             ->end();
     }
 }
