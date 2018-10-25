@@ -74,70 +74,6 @@ abstract class DomainEvent
     }
 
     /**
-     * Create by plain values.
-     *
-     * @param int    $occurredOn
-     * @param string $payload
-     *
-     * @return static
-     */
-    public static function createByPlainValues(
-        int $occurredOn,
-        string $payload
-    ) {
-        $reflector = new ReflectionClass(static::class);
-        $instance = $reflector->newInstanceArgs(static::stringToPayload($payload));
-        $instance->occurredOn = $occurredOn;
-
-        return $instance;
-    }
-
-    /**
-     * Payload transformation.
-     */
-
-    /**
-     * Payload to array.
-     *
-     * @return array
-     */
-    public function payloadToArray(): array
-    {
-        return array_merge(
-            $this->readableOnlyToArray(),
-            $this->indexableToArray()
-        );
-    }
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    abstract public function readableOnlyToArray(): array;
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    abstract public function indexableToArray(): array;
-
-    /**
-     * To payload.
-     *
-     * @param string $data
-     *
-     * @return array
-     *
-     * @throws Exception
-     */
-    public static function stringToPayload(string $data): array
-    {
-        throw new Exception('Your domain event MUST implement the method fromJson');
-    }
-
-    /**
      * From array.
      *
      * @param array $data
@@ -155,6 +91,46 @@ abstract class DomainEvent
     }
 
     /**
+     * Create by plain values.
+     *
+     * @param int   $occurredOn
+     * @param array $payload
+     *
+     * @return static
+     */
+    public static function createByPlainValues(
+        int $occurredOn,
+        array $payload
+    ) {
+        $reflector = new ReflectionClass(static::class);
+        $instance = $reflector->newInstanceArgs(static::fromArrayPayload($payload));
+        $instance->occurredOn = $occurredOn;
+
+        return $instance;
+    }
+
+    /**
+     * to array payload.
+     *
+     * @return array
+     */
+    abstract public function toArrayPayload(): array;
+
+    /**
+     * To payload.
+     *
+     * @param array $arrayPayload
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function fromArrayPayload(array $arrayPayload): array
+    {
+        throw new Exception('Your domain event MUST implement the method fromArrayPayload');
+    }
+
+    /**
      * To plan values.
      *
      * @return array
@@ -164,21 +140,20 @@ abstract class DomainEvent
         return [
             'type' => str_replace('Apisearch\Server\Domain\Event\\', '', get_class($this)),
             'occurred_on' => $this->occurredOn(),
-            'payload' => json_encode($this->payloadToArray()),
+            'payload' => $this->toArrayPayload(),
         ];
     }
 
     /**
-     * To plan values with only reduced values.
+     * To logger.
      *
      * @return array
      */
-    public function toReducedArray(): array
+    public function toLogger(): array
     {
         return [
             'type' => str_replace('Apisearch\Server\Domain\Event\\', '', get_class($this)),
             'occurred_on' => $this->occurredOn(),
-            'payload' => json_encode($this->indexableToArray()),
-        ];
+        ] + $this->toArrayPayload();
     }
 }

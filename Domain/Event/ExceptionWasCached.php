@@ -41,11 +41,11 @@ class ExceptionWasCached extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
+    public function toArrayPayload(): array
     {
         return [
             'exception' => [
@@ -59,36 +59,21 @@ class ExceptionWasCached extends DomainEvent
     }
 
     /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
-    {
-        return [
-            'message' => $this->exception->getMessage(),
-            'code' => $this->exception->getCode(),
-        ];
-    }
-
-    /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
-        $payload = json_decode($data, true);
-
         return [
             new StorableException(
-                $payload['exception']['message'],
-                $payload['exception']['code'],
-                $payload['exception']['trace_as_string'],
-                $payload['exception']['file'],
-                $payload['exception']['line']
+                $arrayPayload['exception']['message'],
+                $arrayPayload['exception']['code'],
+                $arrayPayload['exception']['trace_as_string'],
+                $arrayPayload['exception']['file'],
+                $arrayPayload['exception']['line']
             ),
         ];
     }

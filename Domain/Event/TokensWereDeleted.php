@@ -29,21 +29,11 @@ class TokensWereDeleted extends DomainEvent
     }
 
     /**
-     * Indexable to array.
+     * to array payload.
      *
      * @return array
      */
-    public function readableOnlyToArray(): array
-    {
-        return [];
-    }
-
-    /**
-     * Indexable to array.
-     *
-     * @return array
-     */
-    public function indexableToArray(): array
+    public function toArrayPayload(): array
     {
         return [];
     }
@@ -51,11 +41,11 @@ class TokensWereDeleted extends DomainEvent
     /**
      * To payload.
      *
-     * @param string $data
+     * @param array $arrayPayload
      *
      * @return array
      */
-    public static function stringToPayload(string $data): array
+    public static function fromArrayPayload(array $arrayPayload): array
     {
         return [];
     }

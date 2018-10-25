@@ -32,9 +32,6 @@ class ELKPluginConfiguration extends BaseConfiguration
     {
         $rootNode
             ->children()
-                ->booleanNode('locator_enabled')
-                    ->defaultTrue()
-                ->end()
                 ->scalarNode('host')
                     ->defaultNull()
                 ->end()
@@ -48,7 +45,10 @@ class ELKPluginConfiguration extends BaseConfiguration
                     ->defaultNull()
                 ->end()
                 ->scalarNode('key')
-                    ->defaultValue('logstash:apisearch-domain-events')
+                    ->defaultValue('logstash.apisearch')
+                ->end()
+                ->scalarNode('service')
+                    ->defaultValue('apisearch')
                 ->end();
     }
 }
