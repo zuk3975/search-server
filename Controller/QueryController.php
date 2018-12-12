@@ -72,7 +72,6 @@ class QueryController extends ControllerWithBus
                 QueryModel::createFromArray($queryAsArray)
             ))
             ->toArray();
-
         if ($query->has(Http::PURGE_QUERY_FROM_RESPONSE_FIELD)) {
             unset($responseAsArray[Http::QUERY_FIELD]);
         }

@@ -4,6 +4,8 @@ bundles:
     - Apisearch\Plugin\RedisStorage\RedisStoragePluginBundle
     - Apisearch\Plugin\RSQueue\RSQueuePluginBundle
     - Apisearch\Server\ApisearchPluginsBundle
+    - Apisearch\Plugin\ELK\ELKPluginBundle
+
 routes:
     - "@ApisearchServerBundle/Resources/config/routing.yml"
 config:

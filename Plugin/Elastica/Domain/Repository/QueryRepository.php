@@ -29,7 +29,6 @@ use Apisearch\Result\Result;
 use Apisearch\Server\Domain\Repository\Repository\QueryRepository as QueryRepositoryInterface;
 use Carbon\Carbon;
 use Elastica\Query as ElasticaQuery;
-use Elastica\Result as ElasticaResult;
 use Elastica\Suggest;
 use Exception;
 
@@ -122,6 +121,12 @@ class QueryRepository extends ElasticaWrapperWithRepositoryReference implements 
                     ? $query->getSize()
                     : 0
             );
+
+        $rawQ = $mainQuery->toArray();
+        $rawQ['from'] = $query->areResultsEnabled() ? $query->getFrom() : 0;
+        $rawQ['sort'] = $query->getSortBy()->toArray()['sortBy'] ?? ['_score' => 'desc'];
+        $rawQ['size'] = $query->areResultsEnabled() ? $query->getSize() : 0;
+        $query->setRawQuery($rawQ);
 
         return $this->elasticaResultToResult(
             $query,
